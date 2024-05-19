@@ -12,11 +12,10 @@ export default getRequestConfig(async ({ locale }) => {
     const baseUrl = process.env.VERCEL_URL
       ? `https://${process.env.VERCEL_URL}`
       : "http://localhost:3000";
-
+    const apiUrl = `${baseUrl}/api/translations/${locale}?cb=${Date.now()}`;
+    console.log("Fetching translations from:", apiUrl);
     // Fetch translations from the API
-    const response = await fetch(
-      `${baseUrl}/api/translations/${locale}?cb=${Date.now()}`
-    );
+    const response = await fetch(apiUrl);
     const translations = await response.json();
 
     if (!translations) {
