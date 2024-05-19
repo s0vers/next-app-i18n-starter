@@ -9,8 +9,8 @@ export default getRequestConfig(async ({ locale }) => {
   if (!locales.includes(locale as any)) notFound();
 
   try {
-    const baseUrl = process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
+    const baseUrl = process.env.SERVER_URL
+      ? `https://${process.env.SERVER_URL}`
       : "http://localhost:3000";
     const apiUrl = `${baseUrl}/api/translations/${locale}`;
     console.log("Fetching translations from:", apiUrl);
