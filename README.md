@@ -16,7 +16,7 @@ This is a boilerplate project for Next.js applications that includes basic inter
 Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/next-boilerplate.git
+https://github.com/S0vers/i18n-Nextjs-BoilerPlate.git
 ```
 
 Install dependencies:
