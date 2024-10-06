@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useLocale } from "next-intl";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import {
   DropdownMenu,
@@ -14,16 +14,11 @@ import {
 export function LocalSwitcher() {
   const [isPending, startTransition] = React.useTransition();
   const router = useRouter();
-  const pathname = usePathname();
   const localActive = useLocale();
 
   const onSelectChange = (nextLocale: string) => {
-    const segments = pathname.split("/");
-    segments[1] = nextLocale; // Replace the current locale with the next one
-    const newPath = segments.join("/");
-
     startTransition(() => {
-      router.replace(newPath);
+      router.replace(`/${nextLocale}`);
     });
   };
 
@@ -40,10 +35,7 @@ export function LocalSwitcher() {
           English
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => onSelectChange("ar")}>
-          العربية
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => onSelectChange("fr")}>
-          Français
+          Arabic
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
