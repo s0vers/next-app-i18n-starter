@@ -4,12 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Globe, Github, Copy, Check, Star } from "lucide-react";
-import { use, useState } from "react";
+import { use, useEffect, useState } from "react";
 
 import { ModeToggle } from "../ModeToggle";
 import LocalSwitcher from "../LanguageToggle";
-import OmitRTL from "../OmmitRlt";
 import { useTranslations } from "next-intl";
+import OmitRTL from "../OmmitRlt";
 
 function CopyableCode({ children }: { children: string }) {
   const [isCopied, setIsCopied] = useState(false);
@@ -44,7 +44,13 @@ function CopyableCode({ children }: { children: string }) {
 
 export default function HomeIndex() {
   const t = useTranslations("Index");
+
   const f = useTranslations("Footer");
+  const [isRTL, setIsRTL] = useState(false);
+
+  useEffect(() => {
+    setIsRTL(document.documentElement.dir === "rtl");
+  }, []);
   return (
     <div className="flex flex-col min-h-screen">
       <header className="px-4 lg:px-6 h-16 flex items-center justify-between border-b">
@@ -103,7 +109,11 @@ export default function HomeIndex() {
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-12">
               {t("howToUse")}
             </h2>
-            <Tabs defaultValue="install" className="max-w-3xl mx-auto">
+            <Tabs
+              defaultValue="install"
+              className="max-w-3xl mx-auto"
+              dir={isRTL ? "rtl" : "ltr"}
+            >
               <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger
                   value="install"
@@ -130,23 +140,30 @@ export default function HomeIndex() {
                     <CardTitle>{t("gettingStarted")}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <ol className="list-decimal list-inside space-y-4">
-                      <li>
-                        {t("installationSteps.cloneRepository")}
-                        <CopyableCode>
-                          git clone
-                          https://github.com/S0vers/i18n-Nextjs-BoilerPlate.git
-                        </CopyableCode>
-                      </li>
-                      <li>
-                        {t("installationSteps.installDependencies")}
-                        <CopyableCode>npm install</CopyableCode>
-                      </li>
-                      <li>
-                        {t("installationSteps.startDevServer")}
-                        <CopyableCode>npm run dev</CopyableCode>
-                      </li>
-                    </ol>
+                    <div className="space-y-4">
+                      <div className="space-y-4">
+                        <p>{t("installationSteps.cloneRepository")}</p>
+                        <OmitRTL>
+                          <CopyableCode>
+                            git clone
+                            https://github.com/S0vers/i18n-Nextjs-BoilerPlate.git
+                          </CopyableCode>
+                        </OmitRTL>
+                      </div>
+
+                      <div className="space-y-4">
+                        <p> {t("installationSteps.installDependencies")}</p>
+                        <OmitRTL>
+                          <CopyableCode>npm install</CopyableCode>
+                        </OmitRTL>
+                      </div>
+                      <div className="space-y-4">
+                        <p> {t("installationSteps.startDevServer")}</p>
+                        <OmitRTL omitRTL={true}>
+                          <CopyableCode>npm run dev</CopyableCode>
+                        </OmitRTL>
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
               </TabsContent>
@@ -157,8 +174,9 @@ export default function HomeIndex() {
                   </CardHeader>
                   <CardContent>
                     <p className="mb-4">{t("OmitRTLInstruction")}</p>
-                    <CopyableCode>
-                      {`import OmitRTL from './OmitRTL';
+                    <OmitRTL>
+                      <CopyableCode>
+                        {`import OmitRTL from './OmitRTL';
 
 function MyComponent() {
   return (
@@ -174,7 +192,8 @@ function MyComponent() {
     </div>
   );
 }`}
-                    </CopyableCode>
+                      </CopyableCode>
+                    </OmitRTL>
                   </CardContent>
                 </Card>
               </TabsContent>
@@ -184,28 +203,38 @@ function MyComponent() {
                     <CardTitle>{t("howToContribute")}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <ol className="list-decimal list-inside space-y-4">
-                      <li>{t("contributeSteps.fork")}</li>
-                      <li>
-                        {t("contributeSteps.createBranch")}:
-                        <CopyableCode>
-                          git checkout -b feature/your-feature
-                        </CopyableCode>
-                      </li>
-                      <li>
-                        {t("contributeSteps.commit")}:
-                        <CopyableCode>
-                          git commit -am &apos;Add some feature&apos;
-                        </CopyableCode>
-                      </li>
-                      <li>
-                        {t("contributeSteps.push")}:
-                        <CopyableCode>
-                          git push origin feature/your-feature
-                        </CopyableCode>
-                      </li>
-                      <li>{t("contributeSteps.pullRequest")}</li>
-                    </ol>
+                    <div className="space-y-4">
+                      <div className="space-y-4">
+                        <p>{t("contributeSteps.fork")}</p>
+                      </div>
+                      <div className="space-y-4">
+                        <p> {t("contributeSteps.createBranch")}</p>
+                        <OmitRTL>
+                          <CopyableCode>
+                            git checkout -b feature/your-feature
+                          </CopyableCode>
+                        </OmitRTL>
+                      </div>
+                      <div className="space-y-4">
+                        <p> {t("contributeSteps.commit")}</p>
+                        <OmitRTL>
+                          <CopyableCode>
+                            git commit -am &apos;Add some feature&apos;
+                          </CopyableCode>
+                        </OmitRTL>
+                      </div>
+                      <div className="space-y-4">
+                        <p> {t("contributeSteps.push")}</p>
+                        <OmitRTL>
+                          <CopyableCode>
+                            git push origin feature/your-feature
+                          </CopyableCode>
+                        </OmitRTL>
+                      </div>
+                      <div className="space-y-4">
+                        <p>{t("contributeSteps.pullRequest")}</p>
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
               </TabsContent>

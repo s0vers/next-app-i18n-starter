@@ -5,7 +5,7 @@ interface OmitRTLProps {
   omitRTL?: boolean;
 }
 
-const OmitRTL: React.FC<OmitRTLProps> = ({ children, omitRTL = false }) => {
+const OmitRTL: React.FC<OmitRTLProps> = ({ children, omitRTL = true }) => {
   const dir = omitRTL ? "ltr" : "inherit";
 
   return (
