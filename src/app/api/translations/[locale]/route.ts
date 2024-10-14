@@ -1,5 +1,3 @@
-// /app/api/translations/[locale]/route.ts
-
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
@@ -9,18 +7,112 @@ type Params = {
 
 type Translations = {
   en: {
-    Index: { title: string };
-    Metadata: { title: string; description: string };
+    Index: {
+      boilerplateName: string;
+      title: string;
+      description: string;
+      cloneRepository: string;
+      leaveStar: string;
+      howToUse: string;
+      installation: string;
+      gettingStarted: string;
+      omitrtlUsage: string;
+      OmitRTLInstruction: string;
+      contribute: string;
+      installationSteps: {
+        cloneRepository: string;
+        installDependencies: string;
+        startDevServer: string;
+      };
+      contributeSteps: {
+        fork: string;
+        createBranch: string;
+        commit: string;
+        push: string;
+        pullRequest: string;
+      };
+    };
+    Footer: {
+      copyright: string;
+      githubLink: string;
+    };
+    Metadata: {
+      title: string;
+      description: string;
+    };
   };
   ar: {
-    Index: { title: string };
-    Metadata: { title: string; description: string };
+    Index: {
+      boilerplateName: string;
+      description: string;
+      title: string;
+      cloneRepository: string;
+      leaveStar: string;
+      howToUse: string;
+      gettingStarted: string;
+      installation: string;
+      omitrtlUsage: string;
+      OmitRTLInstruction: string;
+      contribute: string;
+      installationSteps: {
+        cloneRepository: string;
+        installDependencies: string;
+        startDevServer: string;
+      };
+      contributeSteps: {
+        fork: string;
+        createBranch: string;
+        commit: string;
+        push: string;
+        pullRequest: string;
+      };
+    };
+    Footer: {
+      copyright: string;
+      githubLink: string;
+    };
+    Metadata: {
+      title: string;
+      description: string;
+    };
   };
 };
 
 const translations: Translations = {
   en: {
-    Index: { title: "Hello world!" },
+    Index: {
+      boilerplateName: "Next.js i18n Boilerplate",
+      title: "Next.js Boilerplate with i18n and Shadcn UI",
+      description:
+        "A powerful starting point for your next multilingual, accessible web application.",
+      cloneRepository: "Clone Repository",
+      leaveStar: "Leave a Star",
+      howToUse: "How to Use",
+      installation: "Installation",
+      gettingStarted: "Getting Started",
+      omitrtlUsage: "How to Use OmitRTL",
+      OmitRTLInstruction:
+        "Wrap components you want to exclude from RTL rendering:",
+      contribute: "Contribute",
+      installationSteps: {
+        cloneRepository: "Clone the repository:",
+        installDependencies: "Install dependencies:",
+        startDevServer: "Start the development server:",
+      },
+      contributeSteps: {
+        fork: "Fork the repository",
+        createBranch: "Create a new branch:",
+        commit: "Commit your changes:",
+        push: "Push to the branch:",
+        pullRequest: "Create a new Pull Request",
+      },
+    },
+
+    Footer: {
+      copyright:
+        "© 2024 Next.js i18n Boilerplate. Open source under MIT license.",
+      githubLink: "GitHub",
+    },
     Metadata: {
       title: "Simple BoilerPlate",
       description:
@@ -28,7 +120,36 @@ const translations: Translations = {
     },
   },
   ar: {
-    Index: { title: "مرحبا بالعالم!" },
+    Index: {
+      boilerplateName: "قالب i18n لـ Next.js",
+      description: "نقطة انطلاق قوية لتطبيق الويب متعدد اللغات وسهل الوصول.",
+      title: "قالب Next.js مع i18n و Shadcn UI",
+      cloneRepository: "استنساخ المستودع",
+      leaveStar: "اترك نجمة",
+      howToUse: "كيفية الاستخدام",
+      installation: "التثبيت",
+      gettingStarted: "البدء",
+      omitrtlUsage: "كيفية استخدام OmitRTL",
+      OmitRTLInstruction:
+        "قم بتغليف العناصر التي تريد استبعادها من التقديم من اليمين إلى اليسار:",
+      contribute: "المساهمة",
+      installationSteps: {
+        cloneRepository: "استنساخ المستودع:",
+        installDependencies: "تثبيت الاعتمادات:",
+        startDevServer: "بدء خادم التطوير:",
+      },
+      contributeSteps: {
+        fork: "قم بتقسيم المستودع",
+        createBranch: "إنشاء فرع جديد:",
+        commit: "تأكيد التغييرات:",
+        push: "دفع إلى الفرع:",
+        pullRequest: "إنشاء طلب سحب جديد",
+      },
+    },
+    Footer: {
+      copyright: "© 2024 قالب i18n لـ Next.js. مفتوح المصدر تحت رخصة MIT.",
+      githubLink: "GitHub",
+    },
     Metadata: {
       title: "قالب بسيط",
       description: "قالب بسيط لمفتاح تبديل اللغة ومفتاح تبديل السمة",
@@ -41,7 +162,6 @@ export async function GET(
   { params }: { params: Params }
 ) {
   const { locale } = params;
-
   const translation = translations[locale as keyof Translations];
 
   if (!translation) {

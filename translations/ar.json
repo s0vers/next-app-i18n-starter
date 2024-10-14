@@ -1,6 +1,32 @@
 {
-  "Index": {
-    "title": "مرحبا بالعالم!"
+  " Index": {
+    "boilerplateName": "قالب i18n لـ Next.js",
+    "title": "قالب Next.js مع i18n و Shadcn UI",
+    "description": "نقطة انطلاق قوية لتطبيق الويب متعدد اللغات وسهل الوصول.",
+    "cloneRepository": "استنساخ المستودع",
+    "leaveStar": "اترك نجمة",
+    "howToUse": "كيفية الاستخدام",
+    "gettingStarted": "البدء",
+    "installation": "التثبيت",
+    "omitrtlUsage": "كيفية استخدام OmitRTL",
+    "OmitRTLInstruction": "لاستخدام OmitRTL، قم ببساطة بتغليف العنصر الذي تريد استبعاد دعم RTL له بعنصر OmitRTL.",
+    "contribute": "المساهمة",
+    "installationSteps": {
+      "cloneRepository": "استنساخ المستودع:",
+      "installDependencies": "تثبيت الاعتمادات:",
+      "startDevServer": "بدء خادم التطوير:"
+    },
+    "contributeSteps": {
+      "fork": "قم بتقسيم المستودع",
+      "createBranch": "إنشاء فرع جديد:",
+      "commit": "تأكيد التغييرات:",
+      "push": "دفع إلى الفرع:",
+      "pullRequest": "إنشاء طلب سحب جديد"
+    }
+  },
+  "Footer": {
+    "copyright": "© 2024 قالب i18n لـ Next.js. مفتوح المصدر تحت رخصة MIT.",
+    "githubLink": "GitHub"
   },
   "Metadata": {
     "title": "قالب بسيط",

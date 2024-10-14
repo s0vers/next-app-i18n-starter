@@ -1,6 +1,33 @@
 {
   "Index": {
-    "title": "Hello world!"
+    "boilerplateName": "Next.js i18n Boilerplate",
+    "title": "Next.js Boilerplate with i18n and Shadcn UI",
+    "description": "A powerful starting point for your next multilingual, accessible web application.",
+    "cloneRepository": "Clone Repository",
+    "leaveStar": "Leave a Star",
+    "howToUse": "How to Use",
+    "gettingStarted": "Getting Started",
+    "installation": "Installation",
+    "omitrtlUsage": "How to Use OmitRTL",
+    "OmitRTLInstruction": "To use OmitRTL, simply wrap the component you want to omit RTL support for with the OmitRTL component.",
+    "contribute": "Contribute",
+    "installationSteps": {
+      "cloneRepository": "Clone the repository:",
+      "installDependencies": "Install dependencies:",
+      "startDevServer": "Start the development server:"
+    },
+    "contributeSteps": {
+      "fork": "Fork the repository",
+      "createBranch": "Create a new branch:",
+      "commit": "Commit your changes:",
+      "push": "Push to the branch:",
+      "pullRequest": "Create a new Pull Request"
+    }
+  },
+
+  "Footer": {
+    "copyright": "© 2024 Next.js i18n Boilerplate. Open source under MIT license.",
+    "githubLink": "GitHub"
   },
   "Metadata": {
     "title": "Simple BoilerPlate",
