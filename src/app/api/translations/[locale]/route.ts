@@ -15,6 +15,7 @@ type Translations = {
       leaveStar: string;
       howToUse: string;
       installation: string;
+      howToContribute: string;
       gettingStarted: string;
       omitrtlUsage: string;
       OmitRTLInstruction: string;
@@ -51,6 +52,7 @@ type Translations = {
       howToUse: string;
       gettingStarted: string;
       installation: string;
+      howToContribute: string;
       omitrtlUsage: string;
       OmitRTLInstruction: string;
       contribute: string;
@@ -89,6 +91,7 @@ const translations: Translations = {
       leaveStar: "Leave a Star",
       howToUse: "How to Use",
       installation: "Installation",
+      howToContribute: "How to Contribute",
       gettingStarted: "Getting Started",
       omitrtlUsage: "How to Use OmitRTL",
       OmitRTLInstruction:
@@ -128,6 +131,7 @@ const translations: Translations = {
       leaveStar: "اترك نجمة",
       howToUse: "كيفية الاستخدام",
       installation: "التثبيت",
+      howToContribute: "كيفية المساهمة",
       gettingStarted: "البدء",
       omitrtlUsage: "كيفية استخدام OmitRTL",
       OmitRTLInstruction:

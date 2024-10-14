@@ -8,6 +8,7 @@
     "howToUse": "كيفية الاستخدام",
     "gettingStarted": "البدء",
     "installation": "التثبيت",
+    "howToContribute": "كيفية المساهمة",
     "omitrtlUsage": "كيفية استخدام OmitRTL",
     "OmitRTLInstruction": "لاستخدام OmitRTL، قم ببساطة بتغليف العنصر الذي تريد استبعاد دعم RTL له بعنصر OmitRTL.",
     "contribute": "المساهمة",
