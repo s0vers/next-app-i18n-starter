@@ -9,7 +9,7 @@
     "gettingStarted": "Getting Started",
     "installation": "Installation",
     "howToContribute": "How to Contribute",
-    "omitrtlUsage": "How to Use OmitRTL",
+    "omitrtlUsage": "OmitRTL Usage",
     "OmitRTLInstruction": "To use OmitRTL, simply wrap the component you want to omit RTL support for with the OmitRTL component.",
     "contribute": "Contribute",
     "installationSteps": {

@@ -93,7 +93,7 @@ const translations: Translations = {
       installation: "Installation",
       howToContribute: "How to Contribute",
       gettingStarted: "Getting Started",
-      omitrtlUsage: "How to Use OmitRTL",
+      omitrtlUsage: "OmitRTL Usage",
       OmitRTLInstruction:
         "Wrap components you want to exclude from RTL rendering:",
       contribute: "Contribute",
@@ -133,7 +133,7 @@ const translations: Translations = {
       installation: "التثبيت",
       howToContribute: "كيفية المساهمة",
       gettingStarted: "البدء",
-      omitrtlUsage: "كيفية استخدام OmitRTL",
+      omitrtlUsage: "استخدام OmitRTL",
       OmitRTLInstruction:
         "قم بتغليف العناصر التي تريد استبعادها من التقديم من اليمين إلى اليسار:",
       contribute: "المساهمة",
