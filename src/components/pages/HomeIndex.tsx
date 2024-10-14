@@ -181,7 +181,7 @@ function MyComponent() {
               <TabsContent value="contribute">
                 <Card>
                   <CardHeader>
-                    <CardTitle>How to Contribute</CardTitle>
+                    <CardTitle>{t("howToContribute")}</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <ol className="list-decimal list-inside space-y-4">
