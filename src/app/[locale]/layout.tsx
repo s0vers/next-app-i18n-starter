@@ -77,7 +77,7 @@ export async function generateMetadata({
     title: t("title"),
     description: t("description"),
     other: {
-      "google-site-verification": process.env.GOOGLE_CLIENT_ID || "",
+      "google-site-verification": "sVYBYfSJfXdBca3QoqsZtD6lsWVH6sk02RCH4YAbcm8",
     },
     openGraph: {
       title: t("title"),
