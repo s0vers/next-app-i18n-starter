@@ -117,9 +117,9 @@ const translations: Translations = {
       githubLink: "GitHub",
     },
     Metadata: {
-      title: "Simple BoilerPlate",
+      title: "Next.js i18n Boilerplate with Themes",
       description:
-        "Simple BoilerPlate for language switcher and theme switcher",
+        "Modern Next.js starter with i18n, shadcn UI, light/dark themes, and RTL support. Perfect for multilingual, accessible web applications.",
     },
   },
   ar: {
@@ -155,8 +155,9 @@ const translations: Translations = {
       githubLink: "GitHub",
     },
     Metadata: {
-      title: "قالب بسيط",
-      description: "قالب بسيط لمفتاح تبديل اللغة ومفتاح تبديل السمة",
+      title: "قالب Next.js مع السمات",
+      description:
+        "قالب Next.js الحديث مع i18n و Shadcn UI وسمات فاتحة وداكنة ودعم RTL. مثالي لتطبيقات الويب متعددة اللغات وسهلة الوصول.",
     },
   },
 };
