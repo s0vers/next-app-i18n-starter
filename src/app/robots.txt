@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://i18n-nextjs-boilerplate.vercel.app/sitemap.xml
