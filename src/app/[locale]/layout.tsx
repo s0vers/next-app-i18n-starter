@@ -30,7 +30,7 @@ export default async function RootLayout({
       <head>
         <link
           rel="canonical"
-          href={`https://i18n-nextjs-boilerplate.vercel.app/${locale}`}
+          href={`https://i18n-nextjs-boilerplate.vercel.app`}
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <script
