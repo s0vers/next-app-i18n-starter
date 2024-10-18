@@ -103,8 +103,8 @@ export async function generateMetadata({
     alternates: {
       canonical: `https://i18n-nextjs-boilerplate.vercel.app`,
       languages: {
-        en: "https://i18n-nextjs-boilerplate.vercel.app/en",
-        ar: "https://i18n-nextjs-boilerplate.vercel.app/ar",
+        en: "https://i18n-nextjs-boilerplate.vercel.app",
+        ar: "https://i18n-nextjs-boilerplate.vercel.app",
       },
     },
     robots: {
