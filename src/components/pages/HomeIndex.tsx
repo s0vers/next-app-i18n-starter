@@ -32,6 +32,7 @@ function CopyableCode({ children }: { children: string }) {
         className="absolute top-2 right-2"
         onClick={copyToClipboard}
       >
+        <p className="sr-only">Cope code button</p>
         {isCopied ? (
           <Check className="h-4 w-4" />
         ) : (
