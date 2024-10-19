@@ -1,10 +1,10 @@
-# Next.js Boilerplate with i18n and Shadcn UI
+# Next.js Template with i18n and Shadcn UI
 
-This is a boilerplate project for Next.js applications that includes basic internationalization (i18n) support, shadcn UI components, and functionality to toggle between light and dark themes and different languages. It also includes an `OmitRTL` utility function to help control elements that should be omitted from RTL (right-to-left) rendering.
+This is a template project for Next.js applications that includes basic internationalization (i18n) support, shadcn UI components, and functionality to toggle between light and dark themes and different languages. It also includes an `OmitRTL` utility function to help control elements that should be omitted from RTL (right-to-left) rendering.
 
 ## Features
 
-- **Next.js**: The boilerplate is built on the [Next.js](https://nextjs.org/) React framework.
+- **Next.js**: The template is built on the [Next.js](https://nextjs.org/) React framework.
 - **i18n**: Basic internationalization support using the [next-intl](https://github.com/vinissimus/next-intl) library.
 - **Shadcn UI**: Includes the [shadcn UI](https://shadcn.com/) component library for a modern and accessible UI.
 - **Theme Toggling**: Ability to toggle between light and dark themes.
@@ -80,7 +80,7 @@ export default App;
 
 # Contributing
 
-If you'd like to contribute to this boilerplate, please follow these steps:
+If you'd like to contribute to this template, please follow these steps:
 
 - Fork the repository
 - Create a new branch (git checkout -b feature/your-feature)
