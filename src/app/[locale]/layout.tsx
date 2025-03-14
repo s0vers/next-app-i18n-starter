@@ -42,7 +42,7 @@ export default async function RootLayout({
       <head>
         <link
           rel="canonical"
-          href={`https://i18n-nextjs-boilerplate.vercel.app`}
+          href={`https://next-app-i18n-starter.vercel.app`}
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <script
@@ -52,7 +52,7 @@ export default async function RootLayout({
             name: "Next.js i18n Boilerplate",
             description:
               "A humble Next 15 starter with i18n, shadcn UI, light/dark themes, and language switch.",
-            url: "https://i18n-nextjs-boilerplate.vercel.app",
+            url: "https://next-app-i18n-starter.vercel.app",
           })}
         />
       </head>
@@ -96,11 +96,11 @@ export async function generateMetadata({
     openGraph: {
       title: t("title"),
       description: t("description"),
-      url: `https://i18n-nextjs-boilerplate.vercel.app`,
+      url: `https://next-app-i18n-starter.vercel.app`,
       siteName: "Next.js i18n Boilerplate",
       images: [
         {
-          url: "https://i18n-nextjs-boilerplate.vercel.app/og-image.png",
+          url: "https://next-app-i18n-starter.vercel.app/og-image.png",
           width: 1200,
           height: 630,
         },
@@ -112,13 +112,13 @@ export async function generateMetadata({
       card: "summary_large_image",
       title: t("title"),
       description: t("description"),
-      images: ["https://i18n-nextjs-boilerplate.vercel.app/og-image.png"],
+      images: ["https://next-app-i18n-starter.vercel.app/og-image.png"],
     },
     alternates: {
-      canonical: `https://i18n-nextjs-boilerplate.vercel.app`,
+      canonical: `https://next-app-i18n-starter.vercel.app`,
       languages: {
-        en: "https://i18n-nextjs-boilerplate.vercel.app",
-        ar: "https://i18n-nextjs-boilerplate.vercel.app",
+        en: "https://next-app-i18n-starter.vercel.app",
+        ar: "https://next-app-i18n-starter.vercel.app",
       },
     },
     robots: {
