@@ -54,7 +54,7 @@ export default function HomeIndex() {
     setIsRTL(document.documentElement.dir === "rtl");
   }, []);
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen w-full">
       <header className="px-4 lg:px-6 h-16 flex items-center justify-between border-b">
         <Link className="flex items-center justify-center" href="#">
           <Globe className="h-6 w-6 m-2 text-primary" />
@@ -66,8 +66,8 @@ export default function HomeIndex() {
         </nav>
       </header>
       <main className="flex-1">
-        <section className="w-full py-12 md:py-24 lg:py-40">
-          <div className="container px-4 md:px-6">
+        <section className="w-full py-8 md:py-12 lg:py-20">
+          <div className=" px-4 md:px-6">
             <div className="flex flex-col items-center space-y-4 text-center">
               <div className="space-y-2">
                 <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
@@ -107,7 +107,7 @@ export default function HomeIndex() {
           </div>
         </section>
         <section className="w-full py-12">
-          <div className="container px-4 md:px-6">
+          <div className="px-4 md:px-6">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-12">
               {t("howToUse")}
             </h2>

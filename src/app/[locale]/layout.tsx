@@ -38,7 +38,7 @@ export default async function RootLayout({
   const isArabic = locale === "ar";
 
   return (
-    <html lang={locale} dir={isArabic ? "rtl" : "ltr"}>
+    <html lang={locale} dir={isArabic ? "rtl" : "ltr"} suppressHydrationWarning>
       <head>
         <link
           rel="canonical"
@@ -51,7 +51,7 @@ export default async function RootLayout({
             "@type": "WebSite",
             name: "Next.js i18n Boilerplate",
             description:
-              "A humble Next.js starter with i18n, shadcn UI, light/dark themes, and language switch.",
+              "A humble Next 15 starter with i18n, shadcn UI, light/dark themes, and language switch.",
             url: "https://i18n-nextjs-boilerplate.vercel.app",
           })}
         />

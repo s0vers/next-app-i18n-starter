@@ -1,74 +1,57 @@
 "use client";
 
-import { memo } from "react";
-import { useTransition } from "react";
-
-import { useParams } from "next/navigation";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { useEffect, useState } from "react";
+import { Button } from "./ui/button";
 import { usePathname, useRouter } from "@/i18n/navigation";
 
-// Define language options as a constant to avoid recreating on each render
-const LANGUAGE_OPTIONS = [
-  { value: "en", label: "EN" },
-  { value: "ar", label: "AR" },
-] as const;
-
-type Locale = (typeof LANGUAGE_OPTIONS)[number]["value"];
-
-// Memoized language option component
-const LanguageOption = memo(({ label }: { label: string }) => (
-  <div className="flex gap-2 items-center">
-    <span className=" font-normal">{label}</span>
-  </div>
-));
-
-LanguageOption.displayName = "LanguageOption";
-
-function LanguageSwitcher() {
+const LocalSwitcher = () => {
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
   const pathname = usePathname();
-  const params = useParams();
-  const currentLocale = params.locale as Locale;
+  const [currentLanguage, setCurrentLanguage] = useState("en");
 
-  const handleLocaleChange = (nextLocale: string) => {
-    startTransition(() => {
-      router.replace({ pathname }, { locale: nextLocale as Locale });
-    });
+  useEffect(() => {
+    // Check cookies for saved language preference (NEXT_LOCALE)
+    const savedLanguage =
+      document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("NEXT_LOCALE="))
+        ?.split("=")[1] || "en";
+    setCurrentLanguage(savedLanguage);
+
+    // Set initial language based on URL
+    const urlLanguage = pathname.split("/")[1];
+    if (urlLanguage === "en" || urlLanguage === "ar") {
+      setCurrentLanguage(urlLanguage);
+    }
+  }, [pathname]);
+
+  const toggleLanguage = () => {
+    const newLanguage = currentLanguage === "en" ? "ar" : "en";
+    setCurrentLanguage(newLanguage);
+
+    // Set the NEXT_LOCALE cookie
+    document.cookie = `NEXT_LOCALE=${newLanguage}; path=/;`;
+
+    // Preserve the full path structure when changing languages
+    const segments = pathname.split("/");
+    if (segments[1] === "en" || segments[1] === "ar") {
+      segments[1] = newLanguage;
+    } else {
+      segments.splice(1, 0, newLanguage);
+    }
+    const newPath = segments.join("/");
+
+    // Refresh the page by navigating to the new path
+    router.push(newPath);
+    router.refresh(); // Forces a page reload to apply the new language
   };
 
   return (
-    <Select
-      defaultValue={currentLocale}
-      onValueChange={handleLocaleChange}
-      disabled={isPending}
-    >
-      <SelectTrigger
-        className={`bg-transparent gap-x-4 border-none h-auto ${
-          isPending ? "opacity-50" : ""
-        }`}
-      >
-        <SelectValue placeholder="Select Language" />
-      </SelectTrigger>
-
-      <SelectContent>
-        <SelectGroup>
-          {LANGUAGE_OPTIONS.map(({ value, label }) => (
-            <SelectItem key={value} value={value}>
-              <LanguageOption label={label} />
-            </SelectItem>
-          ))}
-        </SelectGroup>
-      </SelectContent>
-    </Select>
+    <Button variant="ghost" size="icon" onClick={toggleLanguage} className="">
+      {currentLanguage === "ar" ? "EN" : "عر"}
+      <span className="sr-only">Toggle language</span>
+    </Button>
   );
-}
+};
 
-export default memo(LanguageSwitcher);
+export default LocalSwitcher;
