@@ -165,7 +165,6 @@ function App() {
 export default App;
 ```
 
-Here's just the SEO optimization part from the README:
 
 ## 🔍 SEO Optimization
 
