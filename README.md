@@ -165,32 +165,95 @@ function App() {
 export default App;
 ```
 
+Here's just the SEO optimization part from the README:
+
 ## 🔍 SEO Optimization
 
-Next.js 15 provides powerful SEO capabilities through the Metadata API. This template includes:
+The template provides comprehensive SEO features with the Next.js 15 Metadata API:
 
 ```jsx
-// In app/[locale]/layout.tsx
-export async function generateMetadata({ params }): Metadata {
-  const { locale } = params;
-  
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Metadata" });
+
   return {
-    title: {
-      template: '%s | My App',
-      default: 'My Multilingual Next.js 15 App',
+    title: t("title"),
+    description: t("description"),
+    other: {
+      "google-site-verification": "********",
     },
-    description: 'A modern web application built with Next.js 15, i18n, and shadcn UI',
+    openGraph: {
+      title: t("title"),
+      description: t("description"),
+      url: `https://i18n-nextjs-boilerplate.vercel.app`,
+      siteName: "Next.js i18n Boilerplate",
+      images: [
+        {
+          url: "https://i18n-nextjs-boilerplate.vercel.app/og-image.png",
+          width: 1200,
+          height: 630,
+        },
+      ],
+      locale: locale,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("title"),
+      description: t("description"),
+      images: ["https://i18n-nextjs-boilerplate.vercel.app/og-image.png"],
+    },
     alternates: {
-      canonical: '/',
+      canonical: `https://i18n-nextjs-boilerplate.vercel.app`,
       languages: {
-        'en-US': '/en',
-        'ar-SA': '/ar',
+        en: "https://i18n-nextjs-boilerplate.vercel.app",
+        ar: "https://i18n-nextjs-boilerplate.vercel.app",
       },
     },
-    // More metadata options...
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
   };
 }
 ```
+
+Additionally, structured data is implemented using react-schemaorg for better search engine understanding:
+
+```jsx
+<script
+  {...jsonLdScriptProps<WebSite>({
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Next.js i18n Boilerplate",
+    description: "A humble Next 15 starter with i18n, shadcn UI, light/dark themes, and language switch.",
+    url: "https://i18n-nextjs-boilerplate.vercel.app",
+  })}
+/>
+```
+
+Other SEO features included in the template:
+
+- Canonical URLs to prevent duplicate content issues
+- Language-specific metadata with translations
+- Proper HTML lang attribute based on current locale
+- Dynamic sitemap generation
+- Robots.txt configuration
+- Google site verification
+- Optimized OpenGraph and Twitter card images
+
+These features work together to help search engines better understand, index, and display your content to potential visitors across different languages and regions.
 
 ## 🤝 Contributing
 
