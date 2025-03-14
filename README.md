@@ -1,42 +1,131 @@
-# Next.js Template with i18n and Shadcn UI
+# Next.js 15 Template with i18n and Shadcn UI
 
-This is a template project for Next.js applications that includes basic internationalization (i18n) support, shadcn UI components, and functionality to toggle between light and dark themes and different languages. It also includes an `OmitRTL` utility function to help control elements that should be omitted from RTL (right-to-left) rendering.
+A modern, SEO-optimized template for Next.js 15 applications featuring server components, internationalization support, shadcn UI components, and theme switching capabilities. Perfect for building performant, accessible, and multilingual web applications.
 
-## Features
+## ✨ Features
 
-- **Next.js**: The template is built on the [Next.js](https://nextjs.org/) React framework.
-- **i18n**: Basic internationalization support using the [next-intl](https://github.com/vinissimus/next-intl) library.
-- **Shadcn UI**: Includes the [shadcn UI](https://shadcn.com/) component library for a modern and accessible UI.
-- **Theme Toggling**: Ability to toggle between light and dark themes.
-- **Language Switching**: Allows users to switch between different languages (e.g., English and Arabic).
-- **OmitRTL Function**: A utility function to omit specific elements from RTL rendering, ensuring they always display in LTR (left-to-right) mode.
+- **Next.js 15**: Built on the latest [Next.js 15](https://nextjs.org/) React framework with App Router and Server Components for optimal performance
+- **SEO Optimization**: Includes metadata API, structured data, and optimized page loading strategies
+- **Internationalization**: Full i18n support using middleware-based routing with [next-intl](https://next-intl-docs.vercel.app/)
+- **Shadcn UI**: Pre-configured [shadcn UI](https://ui.shadcn.com/) components using the new React Server Components pattern
+- **Theme System**: CSS Variables-based theme system with light/dark mode toggle and system preference detection
+- **Language Switching**: Seamless switching between languages (including RTL support for Arabic and other RTL languages)
+- **OmitRTL Utility**: Helper component to control elements that should maintain LTR (left-to-right) rendering in RTL contexts
+- **TypeScript**: Type-safe codebase with TypeScript configuration optimized for Next.js 15
+- **Metadata API**: Built-in SEO metadata management using Next.js 15's metadata API
 
-## Getting Started
+## 🚀 Getting Started
 
 Clone the repository:
 
 ```bash
-https://github.com/S0vers/i18n-Nextjs-BoilerPlate.git
+git clone https://github.com/S0vers/i18n-Nextjs-BoilerPlate.git
 ```
 
 Install dependencies:
 
 ```bash
 npm install
+# or
+yarn
+# or
+pnpm install
+# or
+bun install
 ```
 
 Start the development server:
 
 ```bash
 npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-<!-- How to use the OmitRtl function tutorial -->
+Open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
 
-# How to use the function:
+## 📋 Project Structure
+
+The project follows Next.js 15's recommended App Router structure with additions for internationalization:
 
 ```
-import OmitRTL from './OmitRTL';
+├── .next                                 # Next.js build output
+├── messages                              # i18n translation files
+│   ├── ar.json                           # Arabic translations
+│   └── en.json                           # English translations
+├── node_modules                          # Dependencies
+├── public                                # Static assets
+├── src                                   # Source code
+│   ├── app                               # Next.js App Router 
+│   │   ├── [locale]                      # Dynamic locale routing
+│   │   │   ├── layout.tsx                # Root layout with direction handling
+│   │   │   ├── page.tsx                  # Home page
+│   │   │   ├── error.tsx                 # Error handling
+│   │   │   ├── favicon.ico               # Favicon
+│   │   │   ├── globals.css               # Global styles
+│   │   │   ├── not-found.tsx             # 404 page
+│   │   │   ├── robots.txt                # SEO robots file
+│   │   │   └── sitemap.ts                # Dynamic sitemap generation
+│   │   └── components                    # Application components
+│   │       ├── ui                        # shadcn UI components
+│   │       ├── LanguageSwitcher.tsx      # Language toggle component
+│   │       ├── ModeToggle.tsx            # Theme toggle component
+│   │       ├── OmitRTL.tsx               # RTL handling utility
+│   │       └── theme-provider.tsx        # Theme context provider
+│   ├── i18n                              # Internationalization utilities
+│   │   ├── navigation.ts                 # Localized navigation helpers
+│   │   ├── requests.ts                   # i18n-aware API request helpers
+│   │   └── routing.ts                    # Locale routing utilities
+│   ├── lib                               # Utility functions and shared code
+│   │   └── middleware.ts                 # i18n middleware for route handling
+│   └── components.json                   # shadcn UI component configuration
+├── .eslintrc.json                        # ESLint configuration
+├── global.d.ts                           # Global TypeScript declarations
+├── LICENSE                               # Project license
+├── next-env.d.ts                         # Next.js TypeScript declarations
+├── next.config.js                        # Next.js configuration
+├── package.json                          # Project dependencies and scripts
+├── package-lock.json                     # Dependency lock file
+├── pnpm-lock.yaml                        # PNPM lock file
+├── postcss.config.js                     # PostCSS configuration
+├── README.md                             # Project documentation
+└── tsconfig.json                         # TypeScript configuration
+```
+
+## 🌐 Internationalization
+
+This template uses middleware-based i18n routing with Next.js 15. Language files are stored in the `messages/` directory.
+
+### Adding a New Language
+
+1. Create a new JSON file in the `messages/` directory (e.g., `fr.json`)
+2. Add the language to the supported locales in `middleware.ts` and `lib/i18n.ts`
+3. Add language option to the `LanguageSwitcher` component
+
+## 🎨 Shadcn UI Components
+
+Shadcn UI components are configured to work with Next.js 15 Server Components. Import them from the `components/ui/` directory:
+
+```jsx
+import { Button } from "@/components/ui/button";
+
+export default function Home() {
+  return <Button>Click me</Button>;
+}
+```
+
+## 🔄 OmitRTL Utility
+
+The `OmitRTL` utility helps you control which elements should maintain LTR direction even when the site is in RTL mode.
+
+### How to use the function:
+
+```jsx
+import { OmitRTL } from "@/components/OmitRTL";
 
 function MyComponent() {
   return (
@@ -54,17 +143,15 @@ function MyComponent() {
 }
 ```
 
-If you just need the OmitRTL function it is also available as a npm package
+### NPM Package
 
-# Installation
+If you just need the OmitRTL function, it's also available as an npm package:
 
 ```bash
 npm i react-omit-rtl
 ```
 
-## Usage
-
-```
+```jsx
 import React from "react";
 import OmitRTL from "react-omit-rtl";
 
@@ -78,12 +165,105 @@ function App() {
 export default App;
 ```
 
-# Contributing
 
-If you'd like to contribute to this template, please follow these steps:
+## 🔍 SEO Optimization
 
-- Fork the repository
-- Create a new branch (git checkout -b feature/your-feature)
-- Commit your changes (git commit -am 'Add some feature')
-- Push to the branch (git push origin feature/your-feature)
-- Create a new Pull Request
+The template provides comprehensive SEO features with the Next.js 15 Metadata API:
+
+```jsx
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Metadata" });
+
+  return {
+    title: t("title"),
+    description: t("description"),
+    other: {
+      "google-site-verification": "********",
+    },
+    openGraph: {
+      title: t("title"),
+      description: t("description"),
+      url: `https://i18n-nextjs-boilerplate.vercel.app`,
+      siteName: "Next.js i18n Boilerplate",
+      images: [
+        {
+          url: "https://i18n-nextjs-boilerplate.vercel.app/og-image.png",
+          width: 1200,
+          height: 630,
+        },
+      ],
+      locale: locale,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("title"),
+      description: t("description"),
+      images: ["https://i18n-nextjs-boilerplate.vercel.app/og-image.png"],
+    },
+    alternates: {
+      canonical: `https://i18n-nextjs-boilerplate.vercel.app`,
+      languages: {
+        en: "https://i18n-nextjs-boilerplate.vercel.app",
+        ar: "https://i18n-nextjs-boilerplate.vercel.app",
+      },
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
+  };
+}
+```
+
+Additionally, structured data is implemented using react-schemaorg for better search engine understanding:
+
+```jsx
+<script
+  {...jsonLdScriptProps<WebSite>({
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Next.js i18n Boilerplate",
+    description: "A humble Next 15 starter with i18n, shadcn UI, light/dark themes, and language switch.",
+    url: "https://i18n-nextjs-boilerplate.vercel.app",
+  })}
+/>
+```
+
+Other SEO features included in the template:
+
+- Canonical URLs to prevent duplicate content issues
+- Language-specific metadata with translations
+- Proper HTML lang attribute based on current locale
+- Dynamic sitemap generation
+- Robots.txt configuration
+- Google site verification
+- Optimized OpenGraph and Twitter card images
+
+These features work together to help search engines better understand, index, and display your content to potential visitors across different languages and regions.
+
+## 🤝 Contributing
+
+We welcome contributions to improve this template! Here's how you can help:
+
+1. Fork the repository
+2. Create a new branch (`git checkout -b feature/your-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin feature/your-feature`)
+5. Create a new Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
