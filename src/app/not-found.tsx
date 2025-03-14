@@ -1,4 +1,4 @@
-"use client";
+import Link from "next/link";
 
 export default function NotFound() {
   return (
@@ -29,12 +29,12 @@ export default function NotFound() {
             looking for. Please check the URL or go back to the homepage.
           </p>
           <div className="flex justify-center">
-            <a
+            <Link
               href="/"
               className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-3 px-6 rounded-full transition duration-200 ease-in-out hover:scale-105"
             >
               Go Back Home
-            </a>
+            </Link>
           </div>
         </div>
       </body>

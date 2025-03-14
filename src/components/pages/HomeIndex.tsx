@@ -4,12 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Globe, Github, Copy, Check, Star } from "lucide-react";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { ModeToggle } from "../ModeToggle";
-import LocalSwitcher from "../LanguageToggle";
+
 import { useTranslations } from "next-intl";
 import OmitRTL from "../OmmitRlt";
+import LanguageSwitcher from "../LanguageSwitcher";
 
 function CopyableCode({ children }: { children: string }) {
   const [isCopied, setIsCopied] = useState(false);
@@ -60,7 +61,7 @@ export default function HomeIndex() {
           <span className="font-bold text-xl">{t("boilerplateName")}</span>
         </Link>
         <nav className="flex gap-4 sm:gap-6">
-          <LocalSwitcher />
+          <LanguageSwitcher />
           <ModeToggle />
         </nav>
       </header>

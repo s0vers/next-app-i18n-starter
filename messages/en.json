@@ -23,6 +23,12 @@
       "commit": "Commit your changes:",
       "push": "Push to the branch:",
       "pullRequest": "Create a new Pull Request"
+    },
+    "error": {
+      "server": "Internal Server Error",
+      "sorry": "Sorry, we encountered an unexpected issue on our server.",
+      "tryAgain": " Try again later.",
+      "returnHome": "Return home"
     }
   },
 
