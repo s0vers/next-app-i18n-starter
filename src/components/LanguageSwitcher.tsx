@@ -52,7 +52,7 @@ const LanguageSwitcher = () => {
   };
 
   return (
-    <DropdownMenu>
+    <DropdownMenu dir={currentLanguage === "ar" ? "rtl" : "ltr"}>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="sm">
           {languageLabels[currentLanguage as keyof typeof languageLabels]}
