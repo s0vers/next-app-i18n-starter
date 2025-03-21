@@ -1,16 +1,22 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Button } from "./ui/button";
-import { usePathname, useRouter } from "@/i18n/navigation";
 
-const LocalSwitcher = () => {
+import { usePathname, useRouter } from "@/i18n/navigation";
+import { Button } from "./ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+
+const LanguageSwitcher = () => {
   const router = useRouter();
   const pathname = usePathname();
   const [currentLanguage, setCurrentLanguage] = useState("en");
 
   useEffect(() => {
-    // Check cookies for saved language preference (NEXT_LOCALE)
     const savedLanguage =
       document.cookie
         .split("; ")
@@ -18,40 +24,53 @@ const LocalSwitcher = () => {
         ?.split("=")[1] || "en";
     setCurrentLanguage(savedLanguage);
 
-    // Set initial language based on URL
     const urlLanguage = pathname.split("/")[1];
-    if (urlLanguage === "en" || urlLanguage === "ar") {
+    if (["en", "ar", "zh"].includes(urlLanguage)) {
       setCurrentLanguage(urlLanguage);
     }
   }, [pathname]);
 
-  const toggleLanguage = () => {
-    const newLanguage = currentLanguage === "en" ? "ar" : "en";
+  const changeLanguage = (newLanguage: string) => {
     setCurrentLanguage(newLanguage);
-
-    // Set the NEXT_LOCALE cookie
     document.cookie = `NEXT_LOCALE=${newLanguage}; path=/;`;
 
-    // Preserve the full path structure when changing languages
     const segments = pathname.split("/");
-    if (segments[1] === "en" || segments[1] === "ar") {
+    if (["en", "ar", "zh"].includes(segments[1])) {
       segments[1] = newLanguage;
     } else {
       segments.splice(1, 0, newLanguage);
     }
-    const newPath = segments.join("/");
 
-    // Refresh the page by navigating to the new path
-    router.push(newPath);
-    router.refresh(); // Forces a page reload to apply the new language
+    router.push(segments.join("/"));
+    router.refresh();
+  };
+
+  const languageLabels = {
+    en: "English",
+    ar: "العربية",
+    zh: "中文",
   };
 
   return (
-    <Button variant="ghost" size="icon" onClick={toggleLanguage} className="">
-      {currentLanguage === "ar" ? "EN" : "عر"}
-      <span className="sr-only">Toggle language</span>
-    </Button>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" size="sm">
+          {languageLabels[currentLanguage as keyof typeof languageLabels]}
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={() => changeLanguage("en")}>
+          English
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => changeLanguage("ar")}>
+          العربية
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => changeLanguage("zh")}>
+          中文
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 
-export default LocalSwitcher;
+export default LanguageSwitcher;

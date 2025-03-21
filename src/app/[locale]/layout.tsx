@@ -36,7 +36,7 @@ export default async function RootLayout({
   setRequestLocale(locale);
 
   const isArabic = locale === "ar";
-
+  const t = await getTranslations({ locale, namespace: "Metadata" });
   return (
     <html lang={locale} dir={isArabic ? "rtl" : "ltr"} suppressHydrationWarning>
       <head>
@@ -44,15 +44,36 @@ export default async function RootLayout({
           rel="canonical"
           href={`https://next-app-i18n-starter.vercel.app`}
         />
+        <link
+          rel="alternate"
+          hrefLang="x-default"
+          href="https://next-app-i18n-starter.vercel.app"
+        />
+        <link
+          rel="alternate"
+          hrefLang="en"
+          href="https://next-app-i18n-starter.vercel.app/en"
+        />
+        <link
+          rel="alternate"
+          hrefLang="ar"
+          href="https://next-app-i18n-starter.vercel.app/ar"
+        />
+        <link
+          rel="alternate"
+          hrefLang="zh"
+          href="https://next-app-i18n-starter.vercel.app/zh"
+        />
+        <meta name="keywords" content={t("keywords")} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <script
           {...jsonLdScriptProps<WebSite>({
             "@context": "https://schema.org",
             "@type": "WebSite",
-            name: "Next.js i18n Boilerplate",
-            description:
-              "A humble Next 15 starter with i18n, shadcn UI, light/dark themes, and language switch.",
+            name: t("title"),
+            description: t("description"),
             url: "https://next-app-i18n-starter.vercel.app",
+            inLanguage: locale,
           })}
         />
       </head>
@@ -73,7 +94,7 @@ export default async function RootLayout({
   );
 }
 
-const locales = ["en", "ar"];
+const locales = ["en", "ar", "zh"];
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -90,6 +111,7 @@ export async function generateMetadata({
   return {
     title: t("title"),
     description: t("description"),
+    keywords: t("keywords"),
     other: {
       "google-site-verification": "sVYBYfSJfXdBca3QoqsZtD6lsWVH6sk02RCH4YAbcm8",
     },
@@ -117,8 +139,9 @@ export async function generateMetadata({
     alternates: {
       canonical: `https://next-app-i18n-starter.vercel.app`,
       languages: {
-        en: "https://next-app-i18n-starter.vercel.app",
-        ar: "https://next-app-i18n-starter.vercel.app",
+        en: "https://next-app-i18n-starter.vercel.app/en",
+        ar: "https://next-app-i18n-starter.vercel.app/ar",
+        zh: "https://next-app-i18n-starter.vercel.app/zh",
       },
     },
     robots: {

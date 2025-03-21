@@ -37,7 +37,8 @@
     "githubLink": "GitHub"
   },
   "Metadata": {
-    "title": "Simple BoilerPlate",
-    "description": "Simple BoilerPlate for language switcher and theme switcher"
+    "title": "Next.js i18n Boilerplate - Multilingual Starter Template",
+    "description": "Next.js internationalization (i18n) starter kit with Arabic, Chinese & English support. Includes shadcn UI, theme switching, and RTL support.",
+    "keywords": "Next.js, i18n, internationalization, Arabic, Chinese, multilingual, boilerplate, starter template, shadcn UI, RTL support"
   }
 }
