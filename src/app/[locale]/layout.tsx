@@ -98,7 +98,7 @@ export default async function RootLayout({
   );
 }
 
-const locales = ["en", "ar", "zh"];
+const locales = ["en", "ar", "zh", "es", "jp"] as const;
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));

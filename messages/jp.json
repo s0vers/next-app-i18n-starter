@@ -1,0 +1,43 @@
+{
+  "Index": {
+    "boilerplateName": "Next.js i18n 定型",
+    "title": "i18nとShadcn UIを備えたNext 15 定型",
+    "description": "次世代の多言語対応でアクセシブルなウェブアプリケーションのための強力な出発点。",
+    "cloneRepository": "リポジトリをクローン",
+    "leaveStar": "スターを付ける",
+    "howToUse": "使い方",
+    "gettingStarted": "はじめに",
+    "installation": "インストール",
+    "howToContribute": "貢献方法",
+    "omitrtlUsage": "OmitRTLの使用",
+    "OmitRTLInstruction": "OmitRTLを使用するには、RTLサポートを省略したいコンポーネントをOmitRTLコンポーネントでラップするだけです。",
+    "contribute": "貢献",
+    "installationSteps": {
+      "cloneRepository": "リポジトリをクローン:",
+      "installDependencies": "依存関係をインストール:",
+      "startDevServer": "開発サーバーを起動:"
+    },
+    "contributeSteps": {
+      "fork": "リポジトリをフォーク",
+      "createBranch": "新しいブランチを作成:",
+      "commit": "変更をコミット:",
+      "push": "ブランチにプッシュ:",
+      "pullRequest": "新しいプルリクエストを作成"
+    },
+    "error": {
+      "server": "内部サーバーエラー",
+      "sorry": "申し訳ありません。サーバーで予期しない問題が発生しました。",
+      "tryAgain": "後でもう一度お試しください。",
+      "returnHome": "ホームに戻る"
+    }
+  },
+  "Footer": {
+    "copyright": "© 2024 Next.js i18n 定型。MITライセンスの下でオープンソース。",
+    "githubLink": "GitHub"
+  },
+  "Metadata": {
+    "title": "Next.js i18n 定型 - 多言語スターターテンプレート",
+    "description": "アラビア語、中国語、英語をサポートするNext.js国際化（i18n）スターターキット。shadcn UI、テーマ切り替え、RTLサポートが含まれています。",
+    "keywords": "Next.js, i18n, 国際化, アラビア語, 中国語, 多言語, 定型, スターターテンプレート, shadcn UI, RTLサポート"
+  }
+}

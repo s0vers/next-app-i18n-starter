@@ -1,0 +1,43 @@
+{
+  "Index": {
+    "boilerplateName": "Plantilla i18n de Next.js",
+    "title": "Plantilla Next 15 con i18n y Shadcn UI",
+    "description": "Un potente punto de partida para tu próxima aplicación web multilingüe y accesible.",
+    "cloneRepository": "Clonar repositorio",
+    "leaveStar": "Dejar una estrella",
+    "howToUse": "Cómo usar",
+    "gettingStarted": "Empezar",
+    "installation": "Instalación",
+    "howToContribute": "Cómo contribuir",
+    "omitrtlUsage": "Omitir uso de RTL",
+    "OmitRTLInstruction": "Para usar OmitRTL, simplemente envuelve el componente para el que deseas omitir la compatibilidad con RTL con el componente OmitRTL.",
+    "contribute": "Contribuir",
+    "installationSteps": {
+      "cloneRepository": "Clonar el repositorio:",
+      "installDependencies": "Instalar dependencias:",
+      "startDevServer": "Iniciar el servidor de desarrollo:"
+    },
+    "contributeSteps": {
+      "fork": "Bifurcar el repositorio",
+      "createBranch": "Crear una rama nueva:",
+      "commit": "Confirmar tus cambios:",
+      "push": "Subir a la rama:",
+      "pullRequest": "Crear una nueva solicitud de extracción"
+    },
+    "error": {
+      "server": "Error interno del servidor",
+      "sorry": "Lo sentimos, encontramos un problema inesperado en nuestro servidor.",
+      "tryAgain": "Inténtalo de nuevo más tarde.",
+      "returnHome": "Volver a la página principal"
+    }
+  },
+  "Footer": {
+    "copyright": "© 2024 Plantilla i18n de Next.js. Código abierto bajo licencia MIT.",
+    "githubLink": "GitHub"
+  },
+  "Metadata": {
+    "title": "Plantilla i18n de Next.js - Plantilla de inicio multilingüe",
+    "description": "Kit de inicio de internacionalización (i18n) de Next.js con soporte para árabe, chino e inglés. Incluye shadcn UI, cambio de tema y soporte RTL.",
+    "keywords": "Next.js, i18n, internacionalización, árabe, chino, multilingüe, plantilla, plantilla de inicio, shadcn UI, soporte RTL"
+  }
+}
