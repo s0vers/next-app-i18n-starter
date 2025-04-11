@@ -33,12 +33,12 @@
   },
 
   "Footer": {
-    "copyright": "© 2024 Next.js 多语言模板。基于MIT协议开源。",
+    "copyright": "© 2025 Next.js 多语言模板。基于MIT协议开源。",
     "githubLink": "GitHub仓库"
   },
   "Metadata": {
     "title": "Next.js 国际化模板 - 多语言启动套件",
-    "description": "支持中文、英文、阿拉伯语的Next.js国际化(i18n)入门套件，包含shadcn UI、主题切换和RTL支持",
-    "keywords": "Next.js, i18n, 国际化, 中文, 阿拉伯语, 多语言, 模板, shadcn UI, RTL支持"
+    "description": "Next.js 国际化(i18n)入门套件，支持中文、英文、阿拉伯语、西班牙语和日语。包含 shadcn UI、主题切换和 RTL 支持。",
+    "keywords": "Next.js, i18n, 国际化, 中文, 英文, 阿拉伯语, 西班牙语, 日语, 多语言, 模板, shadcn UI, RTL支持"
   }
 }

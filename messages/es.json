@@ -32,12 +32,12 @@
     }
   },
   "Footer": {
-    "copyright": "© 2024 Plantilla i18n de Next.js. Código abierto bajo licencia MIT.",
+    "copyright": "© 2025 Plantilla i18n de Next.js. Código abierto bajo licencia MIT.",
     "githubLink": "GitHub"
   },
   "Metadata": {
     "title": "Plantilla i18n de Next.js - Plantilla de inicio multilingüe",
-    "description": "Kit de inicio de internacionalización (i18n) de Next.js con soporte para árabe, chino e inglés. Incluye shadcn UI, cambio de tema y soporte RTL.",
-    "keywords": "Next.js, i18n, internacionalización, árabe, chino, multilingüe, plantilla, plantilla de inicio, shadcn UI, soporte RTL"
+    "description": "Kit de inicio para internacionalización (i18n) de Next.js con soporte para árabe, chino, inglés, español y japonés. Incluye shadcn UI, cambio de tema y soporte para RTL.",
+    "keywords": "Next.js, i18n, internacionalización, árabe, chino, inglés, español, japonés, multilingüe, plantilla, plantilla de inicio, shadcn UI, soporte RTL"
   }
 }

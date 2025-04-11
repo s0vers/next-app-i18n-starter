@@ -1,7 +1,7 @@
 {
   "Index": {
-    "boilerplateName": "Next.js i18n 定型",
-    "title": "i18nとShadcn UIを備えたNext 15 定型",
+    "boilerplateName": "Next.js i18n テンプレート",
+    "title": "i18nとShadcn UIを備えたNext 15 テンプレート",
     "description": "次世代の多言語対応でアクセシブルなウェブアプリケーションのための強力な出発点。",
     "cloneRepository": "リポジトリをクローン",
     "leaveStar": "スターを付ける",
@@ -32,12 +32,12 @@
     }
   },
   "Footer": {
-    "copyright": "© 2024 Next.js i18n 定型。MITライセンスの下でオープンソース。",
+    "copyright": "© 2025 Next.js i18n テンプレート。MITライセンスの下でオープンソース。",
     "githubLink": "GitHub"
   },
   "Metadata": {
-    "title": "Next.js i18n 定型 - 多言語スターターテンプレート",
-    "description": "アラビア語、中国語、英語をサポートするNext.js国際化（i18n）スターターキット。shadcn UI、テーマ切り替え、RTLサポートが含まれています。",
-    "keywords": "Next.js, i18n, 国際化, アラビア語, 中国語, 多言語, 定型, スターターテンプレート, shadcn UI, RTLサポート"
+    "title": "Next.js i18n テンプレート - 多言語スターターテンプレート",
+    "description": "Next.jsの国際化（i18n）スターターキット。アラビア語、中国語、英語、スペイン語、日本語に対応。shadcn UI、テーマ切り替え、RTLサポートを含む。",
+    "keywords": "Next.js, i18n, 国際化, アラビア語, 中国語, 英語, スペイン語, 日本語, 多言語, テンプレート, スターターテンプレート, shadcn UI, RTLサポート"
   }
 }

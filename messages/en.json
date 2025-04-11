@@ -1,7 +1,7 @@
 {
   "Index": {
-    "boilerplateName": "Next.js i18n Boilerplate",
-    "title": "Next 15 Boilerplate with i18n and Shadcn UI",
+    "boilerplateName": "Next.js i18n Template",
+    "title": "Next 15 Template with i18n and Shadcn UI",
     "description": "A powerful starting point for your next multilingual, accessible web application.",
     "cloneRepository": "Clone Repository",
     "leaveStar": "Leave a Star",
@@ -33,12 +33,12 @@
   },
 
   "Footer": {
-    "copyright": "© 2024 Next.js i18n Boilerplate. Open source under MIT license.",
+    "copyright": "© 2025 Next.js i18n Template. Open source under MIT license.",
     "githubLink": "GitHub"
   },
   "Metadata": {
-    "title": "Next.js i18n Boilerplate - Multilingual Starter Template",
-    "description": "Next.js internationalization (i18n) starter kit with Arabic, Chinese & English support. Includes shadcn UI, theme switching, and RTL support.",
-    "keywords": "Next.js, i18n, internationalization, Arabic, Chinese, multilingual, boilerplate, starter template, shadcn UI, RTL support"
+    "title": "Next.js i18n Template - Multilingual Starter Template",
+    "description": "Next.js internationalization (i18n) starter kit with Arabic, Chinese, English, Spanish, and Japanese support. Includes shadcn UI, theme switching, and RTL support.",
+    "keywords": "Next.js, i18n, internationalization, Arabic, Chinese, Spanish, Japanese, multilingual, template, starter template, shadcn UI, RTL support"
   }
 }
