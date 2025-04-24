@@ -89,8 +89,7 @@ The project follows Next.js 15's recommended App Router structure with additions
 ├── next-env.d.ts                         # Next.js TypeScript declarations
 ├── next.config.js                        # Next.js configuration
 ├── package.json                          # Project dependencies and scripts
-├── package-lock.json                     # Dependency lock file
-├── pnpm-lock.yaml                        # PNPM lock file
+├── bun.lock                              # Bun lock file
 ├── postcss.config.js                     # PostCSS configuration
 ├── README.md                             # Project documentation
 └── tsconfig.json                         # TypeScript configuration
