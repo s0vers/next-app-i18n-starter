@@ -19,7 +19,7 @@ A modern, SEO-optimized template for Next.js 15 applications featuring server co
 Clone the repository:
 
 ```bash
-git clone https://github.com/S0vers/i18n-Nextjs-BoilerPlate.git
+git clone https://github.com/S0vers/next-app-i18n-starter.git
 ```
 
 Install dependencies:

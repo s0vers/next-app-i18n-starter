@@ -148,7 +148,7 @@ export default function HomeIndex() {
                         <OmitRTL>
                           <CopyableCode>
                             git clone
-                            https://github.com/S0vers/i18n-Nextjs-BoilerPlate.git
+                            https://github.com/S0vers/next-app-i18n-starter.git
                           </CopyableCode>
                         </OmitRTL>
                       </div>
