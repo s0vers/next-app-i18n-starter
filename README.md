@@ -60,7 +60,7 @@ The project follows Next.js 15's recommended App Router structure with additions
 ├── node_modules                          # Dependencies
 ├── public                                # Static assets
 ├── src                                   # Source code
-│   ├── app                               # Next.js App Router 
+│   ├── app                               # Next.js App Router
 │   │   ├── [locale]                      # Dynamic locale routing
 │   │   │   ├── layout.tsx                # Root layout with direction handling
 │   │   │   ├── page.tsx                  # Home page
@@ -165,7 +165,6 @@ function App() {
 export default App;
 ```
 
-
 ## 🔍 SEO Optimization
 
 The template provides comprehensive SEO features with the Next.js 15 Metadata API:
@@ -174,7 +173,7 @@ The template provides comprehensive SEO features with the Next.js 15 Metadata AP
 export async function generateMetadata({
   params,
 }: {
-  params: { locale: string };
+  params: { locale: string },
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "Metadata" });
@@ -188,11 +187,11 @@ export async function generateMetadata({
     openGraph: {
       title: t("title"),
       description: t("description"),
-      url: `https://i18n-nextjs-boilerplate.vercel.app`,
+      url: `next-app-i18n-starter.vercel.app`,
       siteName: "Next.js i18n Boilerplate",
       images: [
         {
-          url: "https://i18n-nextjs-boilerplate.vercel.app/og-image.png",
+          url: "next-app-i18n-starter.vercel.app/og-image.png",
           width: 1200,
           height: 630,
         },
@@ -204,13 +203,13 @@ export async function generateMetadata({
       card: "summary_large_image",
       title: t("title"),
       description: t("description"),
-      images: ["https://i18n-nextjs-boilerplate.vercel.app/og-image.png"],
+      images: ["next-app-i18n-starter.vercel.app/og-image.png"],
     },
     alternates: {
-      canonical: `https://i18n-nextjs-boilerplate.vercel.app`,
+      canonical: `next-app-i18n-starter.vercel.app`,
       languages: {
-        en: "https://i18n-nextjs-boilerplate.vercel.app",
-        ar: "https://i18n-nextjs-boilerplate.vercel.app",
+        en: "next-app-i18n-starter.vercel.app",
+        ar: "next-app-i18n-starter.vercel.app",
       },
     },
     robots: {
@@ -232,13 +231,16 @@ Additionally, structured data is implemented using react-schemaorg for better se
 
 ```jsx
 <script
-  {...jsonLdScriptProps<WebSite>({
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: "Next.js i18n Boilerplate",
-    description: "A humble Next 15 starter with i18n, shadcn UI, light/dark themes, and language switch.",
-    url: "https://i18n-nextjs-boilerplate.vercel.app",
-  })}
+  {...(jsonLdScriptProps <
+    WebSite >
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: "Next.js i18n Boilerplate",
+      description:
+        "A humble Next 15 starter with i18n, shadcn UI, light/dark themes, and language switch.",
+      url: "next-app-i18n-starter.vercel.app",
+    })}
 />
 ```
 
