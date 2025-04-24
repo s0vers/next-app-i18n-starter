@@ -84,7 +84,7 @@ export default function HomeIndex() {
                   className="bg-primary hover:bg-primary/90 transition-colors duration-200"
                 >
                   <Link
-                    href="https://github.com/S0vers/i18n-Nextjs-BoilerPlate"
+                    href="https://github.com/S0vers/next-app-i18n-starter"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -94,7 +94,7 @@ export default function HomeIndex() {
                 </Button>
                 <Button asChild size="lg" variant={"outline"}>
                   <Link
-                    href="https://github.com/S0vers/i18n-Nextjs-BoilerPlate"
+                    href="https://github.com/S0vers/next-app-i18n-starter"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -252,7 +252,7 @@ function MyComponent() {
         <nav className=" flex gap-4 sm:gap-6">
           <Link
             className="text-xs hover:underline underline-offset-4 hover:text-primary transition-colors duration-200"
-            href="https://github.com/S0vers/i18n-Nextjs-BoilerPlate"
+            href="https://github.com/S0vers/next-app-i18n-starter"
             target="_blank"
             rel="noopener noreferrer"
           >

@@ -187,7 +187,7 @@ export async function generateMetadata({
       title: t("title"),
       description: t("description"),
       url: `next-app-i18n-starter.vercel.app`,
-      siteName: "Next.js i18n Boilerplate",
+      siteName: "Next.js i18n Template",
       images: [
         {
           url: "next-app-i18n-starter.vercel.app/og-image.png",
@@ -235,7 +235,7 @@ Additionally, structured data is implemented using react-schemaorg for better se
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
-      name: "Next.js i18n Boilerplate",
+      name: "Next.js i18n Template",
       description:
         "A humble Next 15 starter with i18n, shadcn UI, light/dark themes, and language switch.",
       url: "next-app-i18n-starter.vercel.app",

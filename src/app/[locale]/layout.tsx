@@ -123,7 +123,7 @@ export async function generateMetadata({
       title: t("title"),
       description: t("description"),
       url: `https://next-app-i18n-starter.vercel.app`,
-      siteName: "Next.js i18n Boilerplate",
+      siteName: "Next.js i18n Template",
       images: [
         {
           url: "https://next-app-i18n-starter.vercel.app/og-image.png",
