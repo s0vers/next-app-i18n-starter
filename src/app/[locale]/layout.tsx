@@ -146,6 +146,8 @@ export async function generateMetadata({
         en: "https://next-app-i18n-starter.vercel.app/en",
         ar: "https://next-app-i18n-starter.vercel.app/ar",
         zh: "https://next-app-i18n-starter.vercel.app/zh",
+        es: "https://next-app-i18n-starter.vercel.app/es",
+        ja: "https://next-app-i18n-starter.vercel.app/jp",
       },
     },
     robots: {
