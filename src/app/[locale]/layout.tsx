@@ -75,7 +75,6 @@ export default async function RootLayout({
           href="https://next-app-i18n-starter.vercel.app/zh"
         />
         <meta name="keywords" content={t("keywords")} />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="author" content="Sovers Tonmoy Pandey" />
         <meta name="robots" content="index, follow" />
         <script
@@ -172,10 +171,6 @@ export async function generateMetadata({
         "max-image-preview": "large",
         "max-snippet": -1,
       },
-    },
-    viewport: {
-      width: "device-width",
-      initialScale: 1,
     },
   };
 }
