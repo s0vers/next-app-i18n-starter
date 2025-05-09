@@ -42,6 +42,14 @@ export default async function RootLayout({
   return (
     <html lang={locale} dir={isArabic ? "rtl" : "ltr"} suppressHydrationWarning>
       <head>
+        <link rel="icon" href="/favicon.ico" />
+        <meta name="theme-color" content="#000000" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
         <link
           rel="canonical"
           href={`https://next-app-i18n-starter.vercel.app`}
@@ -68,6 +76,8 @@ export default async function RootLayout({
         />
         <meta name="keywords" content={t("keywords")} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="author" content="Sovers Tonmoy Pandey" />
+        <meta name="robots" content="index, follow" />
         <script
           {...jsonLdScriptProps<WebSite>({
             "@context": "https://schema.org",
@@ -129,6 +139,7 @@ export async function generateMetadata({
           url: "https://next-app-i18n-starter.vercel.app/og-image.png",
           width: 1200,
           height: 630,
+          alt: t("title"),
         },
       ],
       locale: locale,
@@ -139,6 +150,7 @@ export async function generateMetadata({
       title: t("title"),
       description: t("description"),
       images: ["https://next-app-i18n-starter.vercel.app/og-image.png"],
+      creator: "@s0ver5",
     },
     alternates: {
       canonical: `https://next-app-i18n-starter.vercel.app`,
@@ -160,6 +172,10 @@ export async function generateMetadata({
         "max-image-preview": "large",
         "max-snippet": -1,
       },
+    },
+    viewport: {
+      width: "device-width",
+      initialScale: 1,
     },
   };
 }
