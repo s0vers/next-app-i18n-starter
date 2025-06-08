@@ -167,6 +167,23 @@ export default function HomeIndex() {
     setIsRTL(document.documentElement.dir === "rtl");
   }, []);
 
+  useEffect(() => {
+    // Prevent scroll during initial render
+    document.documentElement.style.overflow = "hidden";
+  }, []);
+
+  useEffect(() => {
+    // Remove overflow-hidden after initial animations complete
+    const timer = setTimeout(() => {
+      document.documentElement.style.overflow = "auto";
+    }, 1000); // Adjust timing based on your longest animation delay
+
+    return () => {
+      clearTimeout(timer);
+      document.documentElement.style.overflow = "auto";
+    };
+  }, []);
+
   // Memoize animation variants
   const containerVariants = useMemo(
     () => ({
@@ -271,7 +288,7 @@ function MyComponent() {
   );
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen overflow-hidden">
       {/* Responsive Header with container constraints */}
       <motion.header
         initial={{ opacity: 0, y: -10 }}
@@ -318,8 +335,8 @@ function MyComponent() {
       </motion.header>
 
       {/* Main Content with responsive container and ultrawide optimization */}
-      <main className="flex-1 w-full">
-        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-full">
+      <main className="flex-1 w-full overflow-hidden">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-full max-h-screen">
           {/* Responsive grid layout */}
           <div className="h-full py-4 sm:py-6 lg:py-8">
             {/* Mobile and Tablet Layout (< lg) */}
