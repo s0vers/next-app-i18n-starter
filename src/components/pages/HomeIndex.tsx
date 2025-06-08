@@ -287,73 +287,42 @@ export default function HomeIndex() {
   const f = useTranslations("Footer");
   const [isRTL, setIsRTL] = useState(false);
 
-  // Memoize translations to prevent unnecessary re-renders
-  const translations = useMemo(
-    () => ({
-      boilerplateName: t("boilerplateName"),
-      title: t("title"),
-      description: t("description"),
-      cloneRepository: t("cloneRepository"),
-      leaveStar: t("leaveStar"),
-      howToUse: t("howToUse"),
-      installation: t("installation"),
-      omitrtlUsage: t("omitrtlUsage"),
-      contribute: t("contribute"),
-      gettingStarted: t("gettingStarted"),
-      howToContribute: t("howToContribute"),
-      OmitRTLInstruction: t("OmitRTLInstruction"),
-      installationSteps: {
-        cloneRepository: t("installationSteps.cloneRepository"),
-        installDependencies: t("installationSteps.installDependencies"),
-        startDevServer: t("installationSteps.startDevServer"),
-      },
-      contributeSteps: {
-        fork: t("contributeSteps.fork"),
-        createBranch: t("contributeSteps.createBranch"),
-        commit: t("contributeSteps.commit"),
-        push: t("contributeSteps.push"),
-        pullRequest: t("contributeSteps.pullRequest"),
-      },
-    }),
-    [t]
-  );
+  // Translations object (no need for useMemo)
+  const translations = {
+    boilerplateName: t("boilerplateName"),
+    title: t("title"),
+    description: t("description"),
+    cloneRepository: t("cloneRepository"),
+    leaveStar: t("leaveStar"),
+    howToUse: t("howToUse"),
+    installation: t("installation"),
+    omitrtlUsage: t("omitrtlUsage"),
+    contribute: t("contribute"),
+    gettingStarted: t("gettingStarted"),
+    howToContribute: t("howToContribute"),
+    OmitRTLInstruction: t("OmitRTLInstruction"),
+    installationSteps: {
+      cloneRepository: t("installationSteps.cloneRepository"),
+      installDependencies: t("installationSteps.installDependencies"),
+      startDevServer: t("installationSteps.startDevServer"),
+    },
+    contributeSteps: {
+      fork: t("contributeSteps.fork"),
+      createBranch: t("contributeSteps.createBranch"),
+      commit: t("contributeSteps.commit"),
+      push: t("contributeSteps.push"),
+      pullRequest: t("contributeSteps.pullRequest"),
+    },
+  };
 
-  const footerTranslations = useMemo(
-    () => ({
-      copyright: f("copyright"),
-      githubLink: f("githubLink"),
-    }),
-    [f]
-  );
+  // Footer translations (no need for useMemo)
+  const footerTranslations = {
+    copyright: f("copyright"),
+    githubLink: f("githubLink"),
+  };
 
-  // Memoize code examples
-  const codeExamples = useMemo(
-    () => ({
-      clone: "git clone https://github.com/S0vers/next-app-i18n-starter.git",
-      install: "npm install",
-      dev: "npm run dev",
-      branch: "git checkout -b feature/your-feature",
-      commit: "git commit -am 'Add some feature'",
-      push: "git push origin feature/your-feature",
-      omitRTLExample: `import OmitRTL from './OmitRTL';
-
-function MyComponent() {
-  return (
-    <div>
-      <p>This text follows the website's direction.</p>
-      <OmitRTL omitRTL={true}>
-        <img src="/logo.png" alt="Logo" />
-        <div>
-          <h2>This content is always LTR</h2>
-          <p>Regardless of website direction.</p>
-        </div>
-      </OmitRTL>
-    </div>
-  );
-}`,
-    }),
-    []
-  );
+  // Code examples (define as constant outside component)
+  const codeExamples = CODE_EXAMPLES;
 
   // Simplified RTL detection
   useEffect(() => {
@@ -713,3 +682,29 @@ const TabsSection = memo<{
 ));
 
 TabsSection.displayName = "TabsSection";
+
+// At the bottom of the file, outside the component:
+const CODE_EXAMPLES = {
+  clone: "git clone https://github.com/S0vers/next-app-i18n-starter.git",
+  install: "npm install",
+  dev: "npm run dev",
+  branch: "git checkout -b feature/your-feature",
+  commit: "git commit -am 'Add some feature'",
+  push: "git push origin feature/your-feature",
+  omitRTLExample: `import OmitRTL from './OmitRTL';
+
+function MyComponent() {
+  return (
+    <div>
+      <p>This text follows the website's direction.</p>
+      <OmitRTL omitRTL={true}>
+        <img src="/logo.png" alt="Logo" />
+        <div>
+          <h2>This content is always LTR</h2>
+          <p>Regardless of website direction.</p>
+        </div>
+      </OmitRTL>
+    </div>
+  );
+}`,
+};
