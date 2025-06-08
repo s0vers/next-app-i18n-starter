@@ -62,7 +62,6 @@ The project follows Next.js 15's recommended App Router structure with additions
 ├── src                                   # Source code
 │   ├── app                               # Next.js App Router
 │   │   ├── [locale]                      # Dynamic locale routing
-│   │   │   ├── layout.tsx                # Root layout with direction handling
 │   │   │   ├── page.tsx                  # Home page
 │   │   │   ├── error.tsx                 # Error handling
 │   │   │   ├── favicon.ico               # Favicon
