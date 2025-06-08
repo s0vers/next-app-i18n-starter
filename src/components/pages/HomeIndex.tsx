@@ -14,46 +14,80 @@ import { useTranslations } from "next-intl";
 import OmitRTL from "../OmmitRlt";
 import LanguageSwitcher from "../LanguageSwitcher";
 
-// Responsive CopyableCode component
-const CopyableCode = memo(function CopyableCode({
-  children,
-}: {
-  children: string;
-}) {
+// Constants moved outside component to prevent recreation
+const GITHUB_URL = "https://github.com/S0vers/next-app-i18n-starter";
+const ANIMATION_DURATION = 0.2;
+const COPY_TIMEOUT = 2000;
+
+// Animation variants - memoized outside component
+const ANIMATION_VARIANTS = {
+  container: {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05,
+        delayChildren: 0.1,
+      },
+    },
+  },
+  item: {
+    hidden: { opacity: 0, y: 10 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.4,
+        ease: "easeOut",
+      },
+    },
+  },
+  icon: {
+    initial: { scale: 0, rotate: 180 },
+    animate: { scale: 1, rotate: 0 },
+    exit: { scale: 0, rotate: -180 },
+    transition: { duration: ANIMATION_DURATION },
+  },
+  check: {
+    initial: { scale: 0, rotate: -180 },
+    animate: { scale: 1, rotate: 0 },
+    exit: { scale: 0, rotate: 180 },
+    transition: { duration: ANIMATION_DURATION },
+  },
+  card: {
+    initial: { opacity: 0, y: 10 },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -10 },
+    transition: { duration: ANIMATION_DURATION },
+  },
+};
+
+// Custom hook for copy functionality
+const useCopyToClipboard = (text: string) => {
   const [isCopied, setIsCopied] = useState(false);
 
-  const copyToClipboard = useCallback(() => {
-    navigator.clipboard.writeText(children).then(() => {
+  const copy = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(text);
       setIsCopied(true);
-      setTimeout(() => setIsCopied(false), 2000);
-    });
-  }, [children]);
+      setTimeout(() => setIsCopied(false), COPY_TIMEOUT);
+    } catch (error) {
+      console.error("Failed to copy text:", error);
+    }
+  }, [text]);
 
-  const iconVariants = useMemo(
-    () => ({
-      initial: { scale: 0, rotate: 180 },
-      animate: { scale: 1, rotate: 0 },
-      exit: { scale: 0, rotate: -180 },
-      transition: { duration: 0.2 },
-    }),
-    []
-  );
+  return { isCopied, copy };
+};
 
-  const checkVariants = useMemo(
-    () => ({
-      initial: { scale: 0, rotate: -180 },
-      animate: { scale: 1, rotate: 0 },
-      exit: { scale: 0, rotate: 180 },
-      transition: { duration: 0.2 },
-    }),
-    []
-  );
+// Optimized CopyableCode component
+const CopyableCode = memo<{ children: string }>(({ children }) => {
+  const { isCopied, copy } = useCopyToClipboard(children);
 
   return (
     <motion.div
       className="relative group"
       whileHover={{ scale: 1.01 }}
-      transition={{ duration: 0.2 }}
+      transition={{ duration: ANIMATION_DURATION }}
     >
       <pre className="bg-gray-100 dark:bg-gray-700 p-2 sm:p-3 rounded text-xs sm:text-sm overflow-x-auto transition-all duration-300 group-hover:bg-gray-200 dark:group-hover:bg-gray-600">
         <code className="font-mono">{children}</code>
@@ -69,16 +103,16 @@ const CopyableCode = memo(function CopyableCode({
           variant="outline"
           size="icon"
           className="h-6 w-6 sm:h-7 sm:w-7 backdrop-blur-sm bg-background/80 border-border/50 hover:bg-background/90 transition-all duration-200"
-          onClick={copyToClipboard}
+          onClick={copy}
+          aria-label="Copy code"
         >
-          <span className="sr-only">Copy code button</span>
           <AnimatePresence mode="wait" initial={false}>
             {isCopied ? (
-              <motion.div key="check-icon" {...checkVariants}>
+              <motion.div key="check" {...ANIMATION_VARIANTS.check}>
                 <Check className="h-3 w-3 sm:h-4 sm:w-4" />
               </motion.div>
             ) : (
-              <motion.div key="copy-icon" {...iconVariants}>
+              <motion.div key="copy" {...ANIMATION_VARIANTS.icon}>
                 <Copy className="h-3 w-3 sm:h-4 sm:w-4" />
               </motion.div>
             )}
@@ -89,18 +123,15 @@ const CopyableCode = memo(function CopyableCode({
   );
 });
 
-// Responsive InstallationStep component
-const InstallationStep = memo(function InstallationStep({
-  description,
-  code,
-  delay = 0,
-  omitRTL = false,
-}: {
+CopyableCode.displayName = "CopyableCode";
+
+// Optimized InstallationStep component
+const InstallationStep = memo<{
   description: string;
   code: string;
   delay?: number;
   omitRTL?: boolean;
-}) {
+}>(({ description, code, delay = 0, omitRTL = false }) => {
   const stepVariants = useMemo(
     () => ({
       initial: { opacity: 0, x: -20 },
@@ -122,99 +153,141 @@ const InstallationStep = memo(function InstallationStep({
   );
 });
 
-// Responsive TabCard component
-const TabCard = memo(function TabCard({
-  title,
-  children,
-  contentKey,
-}: {
+InstallationStep.displayName = "InstallationStep";
+
+// Optimized TabCard component
+const TabCard = memo<{
   title: string;
   children: React.ReactNode;
   contentKey: string;
-}) {
-  const cardVariants = useMemo(
-    () => ({
-      initial: { opacity: 0, y: 10 },
-      animate: { opacity: 1, y: 0 },
-      exit: { opacity: 0, y: -10 },
-      transition: { duration: 0.2 },
-    }),
-    []
-  );
+}>(({ title, children, contentKey }) => (
+  <motion.div key={contentKey} {...ANIMATION_VARIANTS.card}>
+    <Card className="border-border/50 shadow-md hover:shadow-lg transition-shadow duration-300 h-full">
+      <CardHeader className="pb-2 sm:pb-3">
+        <CardTitle className="text-sm sm:text-base font-semibold">
+          {title}
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="pt-0 space-y-3 sm:space-y-4">
+        {children}
+      </CardContent>
+    </Card>
+  </motion.div>
+));
 
-  return (
-    <motion.div key={contentKey} {...cardVariants}>
-      <Card className="border-border/50 shadow-md hover:shadow-lg transition-shadow duration-300 h-full">
-        <CardHeader className="pb-2 sm:pb-3">
-          <CardTitle className="text-sm sm:text-base font-semibold">
-            {title}
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="pt-0 space-y-3 sm:space-y-4">
-          {children}
-        </CardContent>
-      </Card>
+TabCard.displayName = "TabCard";
+
+// Hero section component
+const HeroSection = memo<{
+  translations: Translations;
+  isMobile: boolean;
+}>(({ translations, isMobile }) => (
+  <motion.div
+    className={`${
+      isMobile
+        ? "text-center space-y-4 sm:space-y-6"
+        : "lg:col-span-1 xl:col-span-2 2xl:col-span-3 flex flex-col justify-center space-y-6"
+    }`}
+    variants={ANIMATION_VARIANTS.container}
+    initial="hidden"
+    animate="visible"
+  >
+    <motion.div
+      className={`space-y-3 sm:space-y-4 ${
+        isMobile ? "text-center" : "text-left"
+      }`}
+      variants={ANIMATION_VARIANTS.item}
+    >
+      <motion.h1
+        className={`font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text ${
+          isMobile
+            ? "text-2xl sm:text-3xl md:text-4xl"
+            : "text-3xl xl:text-4xl 2xl:text-5xl"
+        }`}
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.6, delay: 0.1 }}
+      >
+        {translations.title}
+      </motion.h1>
+      <motion.p
+        className={`text-gray-500 dark:text-gray-400 leading-relaxed ${
+          isMobile
+            ? "text-sm sm:text-base max-w-2xl mx-auto"
+            : "text-base xl:text-lg max-w-lg"
+        }`}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+      >
+        {translations.description}
+      </motion.p>
     </motion.div>
-  );
-});
 
+    <motion.div
+      className={`flex gap-3 sm:gap-4 ${
+        isMobile ? "justify-center flex-wrap" : "flex-wrap"
+      }`}
+      variants={ANIMATION_VARIANTS.item}
+    >
+      <ActionButton href={GITHUB_URL} variant="primary" icon={Github}>
+        <span className={isMobile ? "hidden xs:inline" : ""}>
+          {translations.cloneRepository}
+        </span>
+        {isMobile && <span className="xs:hidden">Clone</span>}
+      </ActionButton>
+
+      <ActionButton href={GITHUB_URL} variant="outline" icon={Star}>
+        <span className={isMobile ? "hidden xs:inline" : ""}>
+          {translations.leaveStar}
+        </span>
+        {isMobile && <span className="xs:hidden">Star</span>}
+      </ActionButton>
+    </motion.div>
+  </motion.div>
+));
+
+HeroSection.displayName = "HeroSection";
+
+// Action button component
+const ActionButton = memo<{
+  href: string;
+  variant: "primary" | "outline";
+  icon: React.ComponentType<{ className?: string }>;
+  children: React.ReactNode;
+}>(({ href, variant, icon: Icon, children }) => (
+  <motion.div
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    transition={{ duration: ANIMATION_DURATION }}
+  >
+    <Button
+      asChild
+      size="sm"
+      variant={variant === "outline" ? "outline" : undefined}
+      className={`sm:size-default transition-all duration-300 ${
+        variant === "primary"
+          ? "bg-primary hover:bg-primary/90 shadow-lg hover:shadow-xl"
+          : "hover:shadow-md"
+      }`}
+    >
+      <Link href={href} target="_blank" rel="noopener noreferrer">
+        <Icon className="mr-2 h-4 w-4" />
+        {children}
+      </Link>
+    </Button>
+  </motion.div>
+));
+
+ActionButton.displayName = "ActionButton";
+
+// Main component
 export default function HomeIndex() {
   const t = useTranslations("Index");
   const f = useTranslations("Footer");
   const [isRTL, setIsRTL] = useState(false);
 
-  useEffect(() => {
-    setIsRTL(document.documentElement.dir === "rtl");
-  }, []);
-
-  useEffect(() => {
-    // Prevent scroll during initial render
-    document.documentElement.style.overflow = "hidden";
-  }, []);
-
-  useEffect(() => {
-    // Remove overflow-hidden after initial animations complete
-    const timer = setTimeout(() => {
-      document.documentElement.style.overflow = "auto";
-    }, 1000); // Adjust timing based on your longest animation delay
-
-    return () => {
-      clearTimeout(timer);
-      document.documentElement.style.overflow = "auto";
-    };
-  }, []);
-
-  // Memoize animation variants
-  const containerVariants = useMemo(
-    () => ({
-      hidden: { opacity: 0 },
-      visible: {
-        opacity: 1,
-        transition: {
-          staggerChildren: 0.05,
-          delayChildren: 0.1,
-        },
-      },
-    }),
-    []
-  );
-
-  const itemVariants = useMemo(
-    () => ({
-      hidden: { opacity: 0, y: 10 },
-      visible: {
-        opacity: 1,
-        y: 0,
-        transition: {
-          duration: 0.4,
-          ease: "easeOut",
-        },
-      },
-    }),
-    []
-  );
-
-  // Memoize translations
+  // Memoize translations to prevent unnecessary re-renders
   const translations = useMemo(
     () => ({
       boilerplateName: t("boilerplateName"),
@@ -253,12 +326,7 @@ export default function HomeIndex() {
     [f]
   );
 
-  // Memoize constants
-  const githubUrl = useMemo(
-    () => "https://github.com/S0vers/next-app-i18n-starter",
-    []
-  );
-
+  // Memoize code examples
   const codeExamples = useMemo(
     () => ({
       clone: "git clone https://github.com/S0vers/next-app-i18n-starter.git",
@@ -287,9 +355,29 @@ function MyComponent() {
     []
   );
 
+  // Simplified RTL detection
+  useEffect(() => {
+    setIsRTL(document.documentElement.dir === "rtl");
+  }, []);
+
+  // Optimized scroll management
+  useEffect(() => {
+    const originalOverflow = document.documentElement.style.overflow;
+    document.documentElement.style.overflow = "hidden";
+
+    const timer = setTimeout(() => {
+      document.documentElement.style.overflow = originalOverflow || "auto";
+    }, 1000);
+
+    return () => {
+      clearTimeout(timer);
+      document.documentElement.style.overflow = originalOverflow || "auto";
+    };
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">
-      {/* Responsive Header with container constraints */}
+      {/* Header */}
       <motion.header
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -300,9 +388,13 @@ function MyComponent() {
           <div className="h-12 sm:h-14 lg:h-16 flex items-center justify-between">
             <motion.div
               whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: ANIMATION_DURATION }}
             >
-              <Link className="flex items-center justify-center group" href="#">
+              <Link
+                className="flex items-center justify-center group"
+                href="#"
+                aria-label="Home"
+              >
                 <motion.div
                   whileHover={{ rotate: 360 }}
                   transition={{ duration: 0.6 }}
@@ -334,98 +426,14 @@ function MyComponent() {
         </div>
       </motion.header>
 
-      {/* Main Content with responsive container and ultrawide optimization */}
+      {/* Main Content */}
       <main className="flex-1 w-full overflow-hidden">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-full max-h-screen">
-          {/* Responsive grid layout */}
           <div className="h-full py-4 sm:py-6 lg:py-8">
-            {/* Mobile and Tablet Layout (< lg) */}
+            {/* Mobile and Tablet Layout */}
             <div className="lg:hidden space-y-6 sm:space-y-8">
-              {/* Hero Section - Mobile/Tablet */}
-              <motion.div
-                className="text-center space-y-4 sm:space-y-6"
-                variants={containerVariants}
-                initial="hidden"
-                animate="visible"
-              >
-                <motion.div
-                  className="space-y-3 sm:space-y-4"
-                  variants={itemVariants}
-                >
-                  <motion.h1
-                    className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text"
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.6, delay: 0.1 }}
-                  >
-                    {translations.title}
-                  </motion.h1>
-                  <motion.p
-                    className="text-sm sm:text-base text-gray-500 dark:text-gray-400 leading-relaxed max-w-2xl mx-auto"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.6, delay: 0.2 }}
-                  >
-                    {translations.description}
-                  </motion.p>
-                </motion.div>
+              <HeroSection translations={translations} isMobile={true} />
 
-                <motion.div
-                  className="flex justify-center gap-3 sm:gap-4 flex-wrap"
-                  variants={itemVariants}
-                >
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <Button
-                      asChild
-                      size="sm"
-                      className="sm:size-default bg-primary hover:bg-primary/90 transition-all duration-300 shadow-lg hover:shadow-xl"
-                    >
-                      <Link
-                        href={githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Github className="mr-2 h-4 w-4" />
-                        <span className="hidden xs:inline">
-                          {translations.cloneRepository}
-                        </span>
-                        <span className="xs:hidden">Clone</span>
-                      </Link>
-                    </Button>
-                  </motion.div>
-
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <Button
-                      asChild
-                      size="sm"
-                      variant="outline"
-                      className="sm:size-default transition-all duration-300 hover:shadow-md"
-                    >
-                      <Link
-                        href={githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Star className="mr-2 h-4 w-4" />
-                        <span className="hidden xs:inline">
-                          {translations.leaveStar}
-                        </span>
-                        <span className="xs:hidden">Star</span>
-                      </Link>
-                    </Button>
-                  </motion.div>
-                </motion.div>
-              </motion.div>
-
-              {/* Tabs Section - Mobile/Tablet */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -440,229 +448,19 @@ function MyComponent() {
                   {translations.howToUse}
                 </motion.h2>
 
-                <Tabs
-                  defaultValue="install"
-                  className="w-full"
-                  dir={isRTL ? "rtl" : "ltr"}
-                >
-                  <TabsList className="grid w-full grid-cols-3 bg-muted/50 backdrop-blur-sm mb-4">
-                    <TabsTrigger
-                      value="install"
-                      className="text-xs sm:text-sm transition-all duration-300 hover:bg-background/80 data-[state=active]:bg-background data-[state=active]:shadow-sm"
-                    >
-                      {translations.installation}
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="omitrtl"
-                      className="text-xs sm:text-sm transition-all duration-300 hover:bg-background/80 data-[state=active]:bg-background data-[state=active]:shadow-sm"
-                    >
-                      {translations.omitrtlUsage}
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="contribute"
-                      className="text-xs sm:text-sm transition-all duration-300 hover:bg-background/80 data-[state=active]:bg-background data-[state=active]:shadow-sm"
-                    >
-                      {translations.contribute}
-                    </TabsTrigger>
-                  </TabsList>
-
-                  <AnimatePresence mode="wait" initial={false}>
-                    <TabsContent
-                      value="install"
-                      key="install-tab"
-                      className="mt-0"
-                    >
-                      <TabCard
-                        title={translations.gettingStarted}
-                        contentKey="install-content"
-                      >
-                        <div className="space-y-3 sm:space-y-4">
-                          <InstallationStep
-                            description={
-                              translations.installationSteps.cloneRepository
-                            }
-                            code={codeExamples.clone}
-                            delay={0.05}
-                          />
-                          <InstallationStep
-                            description={
-                              translations.installationSteps.installDependencies
-                            }
-                            code={codeExamples.install}
-                            delay={0.1}
-                          />
-                          <InstallationStep
-                            description={
-                              translations.installationSteps.startDevServer
-                            }
-                            code={codeExamples.dev}
-                            delay={0.15}
-                            omitRTL={true}
-                          />
-                        </div>
-                      </TabCard>
-                    </TabsContent>
-
-                    <TabsContent
-                      value="omitrtl"
-                      key="omitrtl-tab"
-                      className="mt-0"
-                    >
-                      <TabCard
-                        title={translations.omitrtlUsage}
-                        contentKey="omitrtl-content"
-                      >
-                        <div className="space-y-3 sm:space-y-4">
-                          <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                            {translations.OmitRTLInstruction}
-                          </p>
-                          <OmitRTL>
-                            <CopyableCode>
-                              {codeExamples.omitRTLExample}
-                            </CopyableCode>
-                          </OmitRTL>
-                        </div>
-                      </TabCard>
-                    </TabsContent>
-
-                    <TabsContent
-                      value="contribute"
-                      key="contribute-tab"
-                      className="mt-0"
-                    >
-                      <TabCard
-                        title={translations.howToContribute}
-                        contentKey="contribute-content"
-                      >
-                        <div className="space-y-3 sm:space-y-4">
-                          <motion.div
-                            className="space-y-1 sm:space-y-2"
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.05 }}
-                          >
-                            <p className="text-xs sm:text-sm font-medium text-muted-foreground">
-                              {translations.contributeSteps.fork}
-                            </p>
-                          </motion.div>
-
-                          <InstallationStep
-                            description={
-                              translations.contributeSteps.createBranch
-                            }
-                            code={codeExamples.branch}
-                            delay={0.1}
-                          />
-
-                          <InstallationStep
-                            description={translations.contributeSteps.commit}
-                            code={codeExamples.commit}
-                            delay={0.15}
-                          />
-
-                          <InstallationStep
-                            description={translations.contributeSteps.push}
-                            code={codeExamples.push}
-                            delay={0.2}
-                          />
-
-                          <motion.div
-                            className="space-y-1 sm:space-y-2"
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.25 }}
-                          >
-                            <p className="text-xs sm:text-sm font-medium text-muted-foreground">
-                              {translations.contributeSteps.pullRequest}
-                            </p>
-                          </motion.div>
-                        </div>
-                      </TabCard>
-                    </TabsContent>
-                  </AnimatePresence>
-                </Tabs>
+                <TabsSection
+                  translations={translations}
+                  codeExamples={codeExamples}
+                  isRTL={isRTL}
+                  isMobile={true}
+                />
               </motion.div>
             </div>
 
-            {/* Desktop and Ultrawide Layout (>= lg) */}
+            {/* Desktop Layout */}
             <div className="hidden lg:grid lg:grid-cols-2 xl:grid-cols-5 2xl:grid-cols-7 gap-6 xl:gap-8 h-full">
-              {/* Hero Section - Desktop/Ultrawide */}
-              <motion.div
-                className="lg:col-span-1 xl:col-span-2 2xl:col-span-3 flex flex-col justify-center space-y-6"
-                variants={containerVariants}
-                initial="hidden"
-                animate="visible"
-              >
-                <motion.div
-                  className="space-y-4 text-left"
-                  variants={itemVariants}
-                >
-                  <motion.h1
-                    className="text-3xl xl:text-4xl 2xl:text-5xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text"
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.6, delay: 0.1 }}
-                  >
-                    {translations.title}
-                  </motion.h1>
-                  <motion.p
-                    className="text-base xl:text-lg text-gray-500 dark:text-gray-400 leading-relaxed max-w-lg"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.6, delay: 0.2 }}
-                  >
-                    {translations.description}
-                  </motion.p>
-                </motion.div>
+              <HeroSection translations={translations} isMobile={false} />
 
-                <motion.div
-                  className="flex gap-4 flex-wrap"
-                  variants={itemVariants}
-                >
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <Button
-                      asChild
-                      className="bg-primary hover:bg-primary/90 transition-all duration-300 shadow-lg hover:shadow-xl"
-                    >
-                      <Link
-                        href={githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Github className="mr-2 h-4 w-4" />
-                        {translations.cloneRepository}
-                      </Link>
-                    </Button>
-                  </motion.div>
-
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <Button
-                      asChild
-                      variant="outline"
-                      className="transition-all duration-300 hover:shadow-md"
-                    >
-                      <Link
-                        href={githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Star className="mr-2 h-4 w-4" />
-                        {translations.leaveStar}
-                      </Link>
-                    </Button>
-                  </motion.div>
-                </motion.div>
-              </motion.div>
-
-              {/* Tabs Section - Desktop/Ultrawide */}
               <motion.div
                 className="lg:col-span-1 xl:col-span-3 2xl:col-span-4 flex flex-col"
                 initial={{ opacity: 0, x: 20 }}
@@ -684,152 +482,12 @@ function MyComponent() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: 0.5 }}
                 >
-                  <Tabs
-                    defaultValue="install"
-                    className="h-full flex flex-col"
-                    dir={isRTL ? "rtl" : "ltr"}
-                  >
-                    <TabsList className="grid w-full grid-cols-3 bg-muted/50 backdrop-blur-sm mb-4 h-12">
-                      <TabsTrigger
-                        value="install"
-                        className="text-sm transition-all duration-300 hover:bg-background/80 data-[state=active]:bg-background data-[state=active]:shadow-sm"
-                      >
-                        {translations.installation}
-                      </TabsTrigger>
-                      <TabsTrigger
-                        value="omitrtl"
-                        className="text-sm transition-all duration-300 hover:bg-background/80 data-[state=active]:bg-background data-[state=active]:shadow-sm"
-                      >
-                        {translations.omitrtlUsage}
-                      </TabsTrigger>
-                      <TabsTrigger
-                        value="contribute"
-                        className="text-sm transition-all duration-300 hover:bg-background/80 data-[state=active]:bg-background data-[state=active]:shadow-sm"
-                      >
-                        {translations.contribute}
-                      </TabsTrigger>
-                    </TabsList>
-
-                    <div className="flex-1 overflow-hidden">
-                      <AnimatePresence mode="wait" initial={false}>
-                        <TabsContent
-                          value="install"
-                          key="install-tab"
-                          className="h-full mt-0"
-                        >
-                          <TabCard
-                            title={translations.gettingStarted}
-                            contentKey="install-content"
-                          >
-                            <div className="space-y-4">
-                              <InstallationStep
-                                description={
-                                  translations.installationSteps.cloneRepository
-                                }
-                                code={codeExamples.clone}
-                                delay={0.05}
-                              />
-                              <InstallationStep
-                                description={
-                                  translations.installationSteps
-                                    .installDependencies
-                                }
-                                code={codeExamples.install}
-                                delay={0.1}
-                              />
-                              <InstallationStep
-                                description={
-                                  translations.installationSteps.startDevServer
-                                }
-                                code={codeExamples.dev}
-                                delay={0.15}
-                                omitRTL={true}
-                              />
-                            </div>
-                          </TabCard>
-                        </TabsContent>
-
-                        <TabsContent
-                          value="omitrtl"
-                          key="omitrtl-tab"
-                          className="h-full mt-0"
-                        >
-                          <TabCard
-                            title={translations.omitrtlUsage}
-                            contentKey="omitrtl-content"
-                          >
-                            <div className="space-y-4">
-                              <p className="text-sm text-muted-foreground leading-relaxed">
-                                {translations.OmitRTLInstruction}
-                              </p>
-                              <OmitRTL>
-                                <CopyableCode>
-                                  {codeExamples.omitRTLExample}
-                                </CopyableCode>
-                              </OmitRTL>
-                            </div>
-                          </TabCard>
-                        </TabsContent>
-
-                        <TabsContent
-                          value="contribute"
-                          key="contribute-tab"
-                          className="h-full mt-0"
-                        >
-                          <TabCard
-                            title={translations.howToContribute}
-                            contentKey="contribute-content"
-                          >
-                            <div className="space-y-4">
-                              <motion.div
-                                className="space-y-2"
-                                initial={{ opacity: 0, x: -10 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: 0.05 }}
-                              >
-                                <p className="text-sm font-medium text-muted-foreground">
-                                  {translations.contributeSteps.fork}
-                                </p>
-                              </motion.div>
-
-                              <InstallationStep
-                                description={
-                                  translations.contributeSteps.createBranch
-                                }
-                                code={codeExamples.branch}
-                                delay={0.1}
-                              />
-
-                              <InstallationStep
-                                description={
-                                  translations.contributeSteps.commit
-                                }
-                                code={codeExamples.commit}
-                                delay={0.15}
-                              />
-
-                              <InstallationStep
-                                description={translations.contributeSteps.push}
-                                code={codeExamples.push}
-                                delay={0.2}
-                              />
-
-                              <motion.div
-                                className="space-y-2"
-                                initial={{ opacity: 0, x: -10 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: 0.25 }}
-                              >
-                                <p className="text-sm font-medium text-muted-foreground">
-                                  {translations.contributeSteps.pullRequest}
-                                </p>
-                              </motion.div>
-                            </div>
-                          </TabCard>
-                        </TabsContent>
-                      </AnimatePresence>
-                    </div>
-                  </Tabs>
+                  <TabsSection
+                    translations={translations}
+                    codeExamples={codeExamples}
+                    isRTL={isRTL}
+                    isMobile={false}
+                  />
                 </motion.div>
               </motion.div>
             </div>
@@ -837,7 +495,7 @@ function MyComponent() {
         </div>
       </main>
 
-      {/* Responsive Footer */}
+      {/* Footer */}
       <motion.footer
         className="w-full border-t backdrop-blur-sm bg-background/95 flex-shrink-0"
         initial={{ opacity: 0, y: 10 }}
@@ -852,11 +510,11 @@ function MyComponent() {
             <nav>
               <motion.div
                 whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.2 }}
+                transition={{ duration: ANIMATION_DURATION }}
               >
                 <Link
                   className="text-xs sm:text-sm hover:underline underline-offset-4 hover:text-primary transition-all duration-300"
-                  href={githubUrl}
+                  href={GITHUB_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -870,3 +528,188 @@ function MyComponent() {
     </div>
   );
 }
+
+// Separate TabsSection component to reduce complexity
+type Translations = {
+  boilerplateName: string;
+  title: string;
+  description: string;
+  cloneRepository: string;
+  leaveStar: string;
+  howToUse: string;
+  installation: string;
+  omitrtlUsage: string;
+  contribute: string;
+  gettingStarted: string;
+  howToContribute: string;
+  OmitRTLInstruction: string;
+  installationSteps: {
+    cloneRepository: string;
+    installDependencies: string;
+    startDevServer: string;
+  };
+  contributeSteps: {
+    fork: string;
+    createBranch: string;
+    commit: string;
+    push: string;
+    pullRequest: string;
+  };
+};
+
+type CodeExamples = {
+  clone: string;
+  install: string;
+  dev: string;
+  branch: string;
+  commit: string;
+  push: string;
+  omitRTLExample: string;
+};
+
+const TabsSection = memo<{
+  translations: Translations;
+  codeExamples: CodeExamples;
+  isRTL: boolean;
+  isMobile: boolean;
+}>(({ translations, codeExamples, isRTL, isMobile }) => (
+  <Tabs
+    defaultValue="install"
+    className={`w-full ${isMobile ? "" : "h-full flex flex-col"}`}
+    dir={isRTL ? "rtl" : "ltr"}
+  >
+    <TabsList
+      className={`grid w-full grid-cols-3 bg-muted/50 backdrop-blur-sm mb-4 ${
+        isMobile ? "" : "h-12"
+      }`}
+    >
+      <TabsTrigger
+        value="install"
+        className="text-xs sm:text-sm transition-all duration-300 hover:bg-background/80 data-[state=active]:bg-background data-[state=active]:shadow-sm"
+      >
+        {translations.installation}
+      </TabsTrigger>
+      <TabsTrigger
+        value="omitrtl"
+        className="text-xs sm:text-sm transition-all duration-300 hover:bg-background/80 data-[state=active]:bg-background data-[state=active]:shadow-sm"
+      >
+        {translations.omitrtlUsage}
+      </TabsTrigger>
+      <TabsTrigger
+        value="contribute"
+        className="text-xs sm:text-sm transition-all duration-300 hover:bg-background/80 data-[state=active]:bg-background data-[state=active]:shadow-sm"
+      >
+        {translations.contribute}
+      </TabsTrigger>
+    </TabsList>
+
+    <div className={`${isMobile ? "" : "flex-1 overflow-hidden"}`}>
+      <AnimatePresence mode="wait" initial={false}>
+        <TabsContent
+          value="install"
+          key="install-tab"
+          className={`${isMobile ? "mt-0" : "h-full mt-0"}`}
+        >
+          <TabCard
+            title={translations.gettingStarted}
+            contentKey="install-content"
+          >
+            <div className="space-y-3 sm:space-y-4">
+              <InstallationStep
+                description={translations.installationSteps.cloneRepository}
+                code={codeExamples.clone}
+                delay={0.05}
+              />
+              <InstallationStep
+                description={translations.installationSteps.installDependencies}
+                code={codeExamples.install}
+                delay={0.1}
+              />
+              <InstallationStep
+                description={translations.installationSteps.startDevServer}
+                code={codeExamples.dev}
+                delay={0.15}
+                omitRTL={true}
+              />
+            </div>
+          </TabCard>
+        </TabsContent>
+
+        <TabsContent
+          value="omitrtl"
+          key="omitrtl-tab"
+          className={`${isMobile ? "mt-0" : "h-full mt-0"}`}
+        >
+          <TabCard
+            title={translations.omitrtlUsage}
+            contentKey="omitrtl-content"
+          >
+            <div className="space-y-3 sm:space-y-4">
+              <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                {translations.OmitRTLInstruction}
+              </p>
+              <OmitRTL>
+                <CopyableCode>{codeExamples.omitRTLExample}</CopyableCode>
+              </OmitRTL>
+            </div>
+          </TabCard>
+        </TabsContent>
+
+        <TabsContent
+          value="contribute"
+          key="contribute-tab"
+          className={`${isMobile ? "mt-0" : "h-full mt-0"}`}
+        >
+          <TabCard
+            title={translations.howToContribute}
+            contentKey="contribute-content"
+          >
+            <div className="space-y-3 sm:space-y-4">
+              <motion.div
+                className="space-y-1 sm:space-y-2"
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.05 }}
+              >
+                <p className="text-xs sm:text-sm font-medium text-muted-foreground">
+                  {translations.contributeSteps.fork}
+                </p>
+              </motion.div>
+
+              <InstallationStep
+                description={translations.contributeSteps.createBranch}
+                code={codeExamples.branch}
+                delay={0.1}
+              />
+
+              <InstallationStep
+                description={translations.contributeSteps.commit}
+                code={codeExamples.commit}
+                delay={0.15}
+              />
+
+              <InstallationStep
+                description={translations.contributeSteps.push}
+                code={codeExamples.push}
+                delay={0.2}
+              />
+
+              <motion.div
+                className="space-y-1 sm:space-y-2"
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.25 }}
+              >
+                <p className="text-xs sm:text-sm font-medium text-muted-foreground">
+                  {translations.contributeSteps.pullRequest}
+                </p>
+              </motion.div>
+            </div>
+          </TabCard>
+        </TabsContent>
+      </AnimatePresence>
+    </div>
+  </Tabs>
+));
+
+TabsSection.displayName = "TabsSection";
