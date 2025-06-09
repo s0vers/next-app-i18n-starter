@@ -66,7 +66,6 @@ The project follows Next.js 15's recommended App Router structure with additions
 │   │   │   ├── error.tsx                 # Error handling
 │   │   │   ├── favicon.ico               # Favicon
 │   │   │   ├── globals.css               # Global styles
-│   │   │   ├── not-found.tsx             # 404 page
 │   │   │   ├── robots.txt                # SEO robots file
 │   │   │   └── sitemap.ts                # Dynamic sitemap generation
 │   │   └── components                    # Application components
