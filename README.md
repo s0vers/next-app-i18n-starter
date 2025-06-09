@@ -54,7 +54,7 @@ The project follows Next.js 15's recommended App Router structure with additions
 
 ```
 ├── .next                                 # Next.js build output
-├── messages                              # i18n translation files
+├── dictionary                            # i18n translation files
 │   ├── ar.json                           # Arabic translations
 │   └── en.json                           # English translations
 ├── node_modules                          # Dependencies
@@ -95,11 +95,11 @@ The project follows Next.js 15's recommended App Router structure with additions
 
 ## 🌐 Internationalization
 
-This template uses middleware-based i18n routing with Next.js 15. Language files are stored in the `messages/` directory.
+This template uses middleware-based i18n routing with Next.js 15. Language files are stored in the `dictionary/` directory.
 
 ### Adding a New Language
 
-1. Create a new JSON file in the `messages/` directory (e.g., `fr.json`)
+1. Create a new JSON file in the `dictionary/` directory (e.g., `fr.json`)
 2. Add the language to the supported locales in `middleware.ts` and `lib/i18n.ts`
 3. Add language option to the `LanguageSwitcher` component
 
