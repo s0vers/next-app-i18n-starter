@@ -56,7 +56,10 @@ The project follows Next.js 15's recommended App Router structure with additions
 ├── .next                                 # Next.js build output
 ├── dictionary                            # i18n translation files
 │   ├── ar.json                           # Arabic translations
-│   └── en.json                           # English translations
+│   ├── en.json                           # English translations
+│   ├── es.json                           # Spanish translations
+│   ├── ja.json                           # Japanese translations
+│   └── zh.json                           # Chinese translations
 ├── node_modules                          # Dependencies
 ├── public                                # Static assets
 ├── src                                   # Source code
@@ -97,10 +100,20 @@ The project follows Next.js 15's recommended App Router structure with additions
 
 This template uses middleware-based i18n routing with Next.js 15. Language files are stored in the `dictionary/` directory.
 
+### Supported Languages
+
+The template currently supports **5 languages**:
+
+- 🇺🇸 **English** (`en`) - Default language
+- 🇸🇦 **Arabic** (`ar`) - With RTL support
+- 🇨🇳 **Chinese** (`zh`) - Simplified Chinese
+- 🇪🇸 **Spanish** (`es`) - European Spanish
+- 🇯🇵 **Japanese** (`ja`) - Japanese
+
 ### Adding a New Language
 
 1. Create a new JSON file in the `dictionary/` directory (e.g., `fr.json`)
-2. Add the language to the supported locales in `middleware.ts` and `lib/i18n.ts`
+2. Add the language to the supported locales in `src/app/[locale]/layout.tsx` and `src/app/sitemap.ts`
 3. Add language option to the `LanguageSwitcher` component
 
 ## 🎨 Shadcn UI Components
@@ -164,7 +177,9 @@ export default App;
 
 ## 🔍 SEO Optimization
 
-The template provides comprehensive SEO features with the Next.js 15 Metadata API:
+The template provides comprehensive SEO features with the Next.js 15 Metadata API. All metadata is dynamically generated based on the current locale and stored in the `dictionary/[locale]/Metadata` namespace.
+
+### Complete Metadata Implementation
 
 ```jsx
 export async function generateMetadata({
@@ -178,19 +193,21 @@ export async function generateMetadata({
   return {
     title: t("title"),
     description: t("description"),
+    keywords: t("keywords"),
     other: {
       "google-site-verification": "********",
     },
     openGraph: {
       title: t("title"),
       description: t("description"),
-      url: `next-app-i18n-starter.vercel.app`,
+      url: DOMAIN,
       siteName: "Next.js i18n Template",
       images: [
         {
-          url: "next-app-i18n-starter.vercel.app/og-image.png",
+          url: `${DOMAIN}/og-image.png`,
           width: 1200,
           height: 630,
+          alt: t("title"),
         },
       ],
       locale: locale,
@@ -200,13 +217,17 @@ export async function generateMetadata({
       card: "summary_large_image",
       title: t("title"),
       description: t("description"),
-      images: ["next-app-i18n-starter.vercel.app/og-image.png"],
+      images: [`${DOMAIN}/og-image.png`],
+      creator: "@s0ver5",
     },
     alternates: {
-      canonical: `next-app-i18n-starter.vercel.app`,
+      canonical: DOMAIN,
       languages: {
-        en: "next-app-i18n-starter.vercel.app",
-        ar: "next-app-i18n-starter.vercel.app",
+        en: `${DOMAIN}/en`,
+        ar: `${DOMAIN}/ar`,
+        zh: `${DOMAIN}/zh`,
+        es: `${DOMAIN}/es`,
+        ja: `${DOMAIN}/ja`,
       },
     },
     robots: {
@@ -224,7 +245,9 @@ export async function generateMetadata({
 }
 ```
 
-Additionally, structured data is implemented using react-schemaorg for better search engine understanding:
+### Structured Data
+
+Structured data is implemented using react-schemaorg for better search engine understanding:
 
 ```jsx
 <script
@@ -233,23 +256,36 @@ Additionally, structured data is implemented using react-schemaorg for better se
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
-      name: "Next.js i18n Template",
-      description:
-        "A humble Next 15 starter with i18n, shadcn UI, light/dark themes, and language switch.",
-      url: "next-app-i18n-starter.vercel.app",
+      name: t("title"),
+      description: t("description"),
+      url: DOMAIN,
+      inLanguage: locale,
     })}
 />
 ```
 
-Other SEO features included in the template:
+### SEO Features Included
 
-- Canonical URLs to prevent duplicate content issues
-- Language-specific metadata with translations
-- Proper HTML lang attribute based on current locale
-- Dynamic sitemap generation
-- Robots.txt configuration
-- Google site verification
-- Optimized OpenGraph and Twitter card images
+- **Dynamic Metadata**: Locale-specific titles, descriptions, and keywords
+- **OpenGraph Tags**: Optimized for social media sharing across all platforms
+- **Twitter Cards**: Enhanced Twitter sharing with large image support
+- **Canonical URLs**: Prevents duplicate content issues
+- **Hreflang Tags**: Proper language targeting for all 5 supported languages
+- **Robots Directives**: Comprehensive search engine crawling instructions
+- **Google Site Verification**: Ready for Google Search Console integration
+- **Dynamic Sitemap**: Automatically generated sitemap.xml
+- **Robots.txt**: Properly configured with sitemap reference
+- **Structured Data**: Schema.org markup for better search understanding
+
+### Language-Specific SEO
+
+Each language version includes:
+
+- Proper HTML `lang` attribute
+- RTL support for Arabic (`dir="rtl"`)
+- Locale-specific metadata from translation files
+- Proper hreflang implementation
+- Language-specific OpenGraph locale tags
 
 These features work together to help search engines better understand, index, and display your content to potential visitors across different languages and regions.
 

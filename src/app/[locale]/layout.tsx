@@ -83,7 +83,7 @@ export default async function RootLayout({
   );
 }
 
-const locales = ["en", "ar", "zh", "es", "jp"] as const;
+const locales = ["en", "ar", "zh", "es", "ja"] as const;
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -134,7 +134,7 @@ export async function generateMetadata({
         ar: `${DOMAIN}/ar`,
         zh: `${DOMAIN}/zh`,
         es: `${DOMAIN}/es`,
-        ja: `${DOMAIN}/jp`,
+        ja: `${DOMAIN}/ja`,
       },
     },
     robots: {
