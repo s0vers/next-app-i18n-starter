@@ -21,6 +21,9 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// Extract domain to a constant to avoid repetition
+const DOMAIN = "https://next-app-i18n-starter.vercel.app";
+
 export default async function RootLayout({
   children,
   params,
@@ -50,40 +53,13 @@ export default async function RootLayout({
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
-        <link
-          rel="canonical"
-          href={`https://next-app-i18n-starter.vercel.app`}
-        />
-        <link
-          rel="alternate"
-          hrefLang="x-default"
-          href="https://next-app-i18n-starter.vercel.app"
-        />
-        <link
-          rel="alternate"
-          hrefLang="en"
-          href="https://next-app-i18n-starter.vercel.app/en"
-        />
-        <link
-          rel="alternate"
-          hrefLang="ar"
-          href="https://next-app-i18n-starter.vercel.app/ar"
-        />
-        <link
-          rel="alternate"
-          hrefLang="zh"
-          href="https://next-app-i18n-starter.vercel.app/zh"
-        />
-        <meta name="keywords" content={t("keywords")} />
-        <meta name="author" content="Sovers Tonmoy Pandey" />
-        <meta name="robots" content="index, follow" />
         <script
           {...jsonLdScriptProps<WebSite>({
             "@context": "https://schema.org",
             "@type": "WebSite",
             name: t("title"),
             description: t("description"),
-            url: "https://next-app-i18n-starter.vercel.app",
+            url: DOMAIN,
             inLanguage: locale,
           })}
         />
@@ -131,11 +107,11 @@ export async function generateMetadata({
     openGraph: {
       title: t("title"),
       description: t("description"),
-      url: `https://next-app-i18n-starter.vercel.app`,
+      url: DOMAIN,
       siteName: "Next.js i18n Template",
       images: [
         {
-          url: "https://next-app-i18n-starter.vercel.app/og-image.png",
+          url: `${DOMAIN}/og-image.png`,
           width: 1200,
           height: 630,
           alt: t("title"),
@@ -148,17 +124,17 @@ export async function generateMetadata({
       card: "summary_large_image",
       title: t("title"),
       description: t("description"),
-      images: ["https://next-app-i18n-starter.vercel.app/og-image.png"],
+      images: [`${DOMAIN}/og-image.png`],
       creator: "@s0ver5",
     },
     alternates: {
-      canonical: `https://next-app-i18n-starter.vercel.app`,
+      canonical: DOMAIN,
       languages: {
-        en: "https://next-app-i18n-starter.vercel.app/en",
-        ar: "https://next-app-i18n-starter.vercel.app/ar",
-        zh: "https://next-app-i18n-starter.vercel.app/zh",
-        es: "https://next-app-i18n-starter.vercel.app/es",
-        ja: "https://next-app-i18n-starter.vercel.app/jp",
+        en: `${DOMAIN}/en`,
+        ar: `${DOMAIN}/ar`,
+        zh: `${DOMAIN}/zh`,
+        es: `${DOMAIN}/es`,
+        ja: `${DOMAIN}/jp`,
       },
     },
     robots: {
