@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Globe, Github, Copy, Check, Star } from "lucide-react";
 import { useEffect, useState, useMemo, useCallback, memo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, easeOut } from "framer-motion";
 
 import { ModeToggle } from "../ModeToggle";
 import { useTranslations } from "next-intl";
@@ -38,7 +38,7 @@ const ANIMATION_VARIANTS = {
       y: 0,
       transition: {
         duration: 0.4,
-        ease: "easeOut",
+        ease: easeOut,
       },
     },
   },
