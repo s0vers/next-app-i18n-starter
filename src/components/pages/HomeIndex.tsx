@@ -199,7 +199,7 @@ const HeroSection = memo<{
       variants={ANIMATION_VARIANTS.item}
     >
       <motion.h1
-        className={`font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text ${
+        className={`font-bold tracking-tight bg-linear-to-r from-foreground to-foreground/80 bg-clip-text ${
           isMobile
             ? "text-2xl sm:text-3xl md:text-4xl"
             : "text-3xl xl:text-4xl 2xl:text-5xl"
@@ -351,7 +351,7 @@ export default function HomeIndex() {
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="w-full border-b backdrop-blur-sm bg-background/95 flex-shrink-0"
+        className="w-full border-b backdrop-blur-sm bg-background/95 shrink-0"
       >
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="h-12 sm:h-14 lg:h-16 flex items-center justify-between">
@@ -466,7 +466,7 @@ export default function HomeIndex() {
 
       {/* Footer */}
       <motion.footer
-        className="w-full border-t backdrop-blur-sm bg-background/95 flex-shrink-0"
+        className="w-full border-t backdrop-blur-sm bg-background/95 shrink-0"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.6 }}
@@ -573,7 +573,7 @@ const TabsSection = memo<{
     </TabsList>
 
     <div className={`${isMobile ? "" : "flex-1 overflow-hidden"}`}>
-      <AnimatePresence mode="wait" initial={false}>
+      <AnimatePresence mode="sync" initial={false}>
         <TabsContent
           value="install"
           key="install-tab"
@@ -588,11 +588,13 @@ const TabsSection = memo<{
                 description={translations.installationSteps.cloneRepository}
                 code={codeExamples.clone}
                 delay={0.05}
+                omitRTL={true}
               />
               <InstallationStep
                 description={translations.installationSteps.installDependencies}
                 code={codeExamples.install}
                 delay={0.1}
+                omitRTL={true}
               />
               <InstallationStep
                 description={translations.installationSteps.startDevServer}
@@ -649,18 +651,21 @@ const TabsSection = memo<{
                 description={translations.contributeSteps.createBranch}
                 code={codeExamples.branch}
                 delay={0.1}
+                omitRTL={true}
               />
 
               <InstallationStep
                 description={translations.contributeSteps.commit}
                 code={codeExamples.commit}
                 delay={0.15}
+                omitRTL={true}
               />
 
               <InstallationStep
                 description={translations.contributeSteps.push}
                 code={codeExamples.push}
                 delay={0.2}
+                omitRTL={true}
               />
 
               <motion.div
