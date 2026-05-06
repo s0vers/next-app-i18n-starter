@@ -194,7 +194,7 @@ const HeroSection = memo<{
   >
     <motion.div
       className={`space-y-3 sm:space-y-4 ${
-        isMobile ? "text-center" : "text-left"
+        isMobile ? "text-center" : "text-start"
       }`}
       variants={ANIMATION_VARIANTS.item}
     >
@@ -437,7 +437,7 @@ export default function HomeIndex() {
                 transition={{ duration: 0.6, delay: 0.3 }}
               >
                 <motion.h2
-                  className="text-2xl xl:text-3xl font-bold tracking-tight text-left mb-6"
+                  className="text-2xl xl:text-3xl font-bold tracking-tight text-start mb-6"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: 0.4 }}
