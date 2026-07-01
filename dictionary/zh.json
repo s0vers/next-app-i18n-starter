@@ -12,6 +12,7 @@
     "omitrtlUsage": "OmitRTL 使用方法",
     "OmitRTLInstruction": "如需禁用RTL支持，只需用OmitRTL组件包裹目标组件即可。",
     "contribute": "贡献指南",
+    "localization": "本地化",
     "installationSteps": {
       "cloneRepository": "克隆仓库：",
       "installDependencies": "安装依赖：",
@@ -37,8 +38,27 @@
     "githubLink": "GitHub仓库"
   },
   "Metadata": {
-    "title": "Next.js 国际化模板 - 多语言启动套件",
-    "description": "Next.js 国际化(i18n)入门套件，支持中文、英文、阿拉伯语、西班牙语和日语。包含 shadcn UI、主题切换和 RTL 支持。",
-    "keywords": "Next.js, i18n, 国际化, 中文, 英文, 阿拉伯语, 西班牙语, 日语, 多语言, 模板, shadcn UI, RTL支持"
+    "title": "Next.js 16 国际化模板 - S0vers 出品",
+    "description": "Next.js 16 国际化入门套件，基于 next-intl 4。按语言自动设置货币、日期和时区。支持中文、英文、阿拉伯语、西班牙语和日语，含 shadcn UI、RTL 和 SEO。",
+    "keywords": "Next.js 16, next-intl, i18n, 国际化, 本地化格式, 中文, 阿拉伯语, 西班牙语, 日语, 模板, shadcn UI, RTL, S0vers"
+  },
+  "Localization": {
+    "title": "按语言格式化",
+    "description": "使用 next-intl 格式化价格和日期。每种语言通过 getRequestConfig 设置货币和时区。",
+    "switchLanguageHint": "在顶部切换语言，即可看到货币、日期和相对时间的自动更新。",
+    "activeSettings": "当前格式：{currency} · {timeZone}",
+    "currencySection": "货币格式",
+    "timeSection": "日期与时间格式",
+    "productLabel": "模板许可证",
+    "priceLabel": "产品价格",
+    "subscriptionLabel": "订阅",
+    "usersLabel": "活跃用户",
+    "currentDateTime": "短格式",
+    "relativeTime": "最后更新",
+    "utcReference": "同一时刻（UTC）",
+    "localeDefaults": "语言默认值：{currency} · {timeZone}",
+    "priceMessage": "此产品价格 {price, number, currency}",
+    "subscriptionPrice": "月度计划：{price, number, currency}",
+    "usersCount": "{count, number, compact} 位用户"
   }
 }

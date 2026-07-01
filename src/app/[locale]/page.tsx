@@ -1,15 +1,59 @@
-import { use } from "react";
-import { setRequestLocale } from "next-intl/server";
+import { setRequestLocale, getTranslations } from "next-intl/server";
 import HomeIndex from "@/components/pages/HomeIndex";
+import { siteConfig } from "@/lib/site";
 
-export default function HomePage({
+function serializeJsonLd(data: Record<string, unknown>) {
+  return JSON.stringify(data).replace(/</g, "\\u003c");
+}
+
+export default async function HomePage({
   params,
 }: {
   params: Promise<{ locale: string }>;
 }) {
-  const { locale } = use(params);
-  // Enable static rendering
+  const { locale } = await params;
   setRequestLocale(locale);
 
-  return <HomeIndex />;
+  const t = await getTranslations({ locale, namespace: "Metadata" });
+
+  const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: siteConfig.name,
+    description: t("description"),
+    url: siteConfig.url,
+    inLanguage: locale,
+    author: {
+      "@type": "Person",
+      name: siteConfig.author.name,
+      url: siteConfig.author.url,
+    },
+  };
+
+  const personJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: siteConfig.author.name,
+    alternateName: siteConfig.author.alias,
+    url: siteConfig.author.url,
+    sameAs: [
+      siteConfig.author.github,
+      `https://twitter.com/${siteConfig.author.twitter.replace("@", "")}`,
+      siteConfig.github,
+    ],
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(websiteJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(personJsonLd) }}
+      />
+      <HomeIndex />
+    </>
+  );
 }

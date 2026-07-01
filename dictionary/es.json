@@ -12,6 +12,7 @@
     "omitrtlUsage": "Omitir uso de RTL",
     "OmitRTLInstruction": "Para usar OmitRTL, simplemente envuelve el componente para el que deseas omitir la compatibilidad con RTL con el componente OmitRTL.",
     "contribute": "Contribuir",
+    "localization": "Localización",
     "installationSteps": {
       "cloneRepository": "Clonar el repositorio:",
       "installDependencies": "Instalar dependencias:",
@@ -36,8 +37,27 @@
     "githubLink": "GitHub"
   },
   "Metadata": {
-    "title": "Plantilla i18n de Next.js - Plantilla de inicio multilingüe",
-    "description": "Kit de inicio para internacionalización (i18n) de Next.js con soporte para árabe, chino, inglés, español y japonés. Incluye shadcn UI, cambio de tema y soporte para RTL.",
-    "keywords": "Next.js, i18n, internacionalización, árabe, chino, inglés, español, japonés, multilingüe, plantilla, plantilla de inicio, shadcn UI, soporte RTL"
+    "title": "Plantilla i18n Next.js 16 - Por S0vers",
+    "description": "Kit de inicio de internacionalización para Next.js 16 con next-intl 4. Moneda, fechas y zonas horarias según el idioma. Soporte para árabe, chino, inglés, español y japonés con shadcn UI, RTL y SEO.",
+    "keywords": "Next.js 16, next-intl, i18n, internacionalización, formato local, árabe, chino, español, japonés, plantilla, shadcn UI, RTL, S0vers"
+  },
+  "Localization": {
+    "title": "Formato según idioma",
+    "description": "Formatea precios y fechas con next-intl. Cada idioma define moneda y zona horaria en getRequestConfig.",
+    "switchLanguageHint": "Cambia el idioma en la cabecera para ver cómo se actualizan moneda, fechas y tiempo relativo.",
+    "activeSettings": "Formato activo: {currency} · {timeZone}",
+    "currencySection": "Formato de moneda",
+    "timeSection": "Formato de fecha y hora",
+    "productLabel": "Licencia de plantilla",
+    "priceLabel": "Precio del producto",
+    "subscriptionLabel": "Suscripción",
+    "usersLabel": "Usuarios activos",
+    "currentDateTime": "Formato corto",
+    "relativeTime": "Última actualización",
+    "utcReference": "Mismo instante en UTC",
+    "localeDefaults": "Valores predeterminados del idioma: {currency} · {timeZone}",
+    "priceMessage": "Este producto cuesta {price, number, currency}",
+    "subscriptionPrice": "Plan mensual: {price, number, currency}",
+    "usersCount": "{count, number, compact} usuarios"
   }
 }

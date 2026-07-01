@@ -1,14 +1,27 @@
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getPathname } from "@/i18n/navigation";
+import {
+  getMessages,
+  getNow,
+  getTimeZone,
+  getTranslations,
+  setRequestLocale,
+} from "next-intl/server";
 import { Metadata } from "next";
+import { cookies } from "next/headers";
 import { ThemeProvider } from "@/components/theme-provider";
-import { jsonLdScriptProps } from "react-schemaorg";
-import { WebSite } from "schema-dts";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { openGraphLocales, siteConfig } from "@/lib/site";
+import {
+  isTheme,
+  resolveSSRTheme,
+  THEME_STORAGE_KEY,
+  type Theme,
+} from "@/lib/theme";
 import "../globals.css";
 
 const geistSans = Geist({
@@ -21,8 +34,10 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// Extract domain to a constant to avoid repetition
-const DOMAIN = "https://next-app-i18n-starter.vercel.app";
+async function getLocaleUrl(locale: string) {
+  const pathname = await getPathname({ locale, href: "/" });
+  return new URL(pathname, siteConfig.url).toString();
+}
 
 export default async function RootLayout({
   children,
@@ -31,19 +46,30 @@ export default async function RootLayout({
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
 }) {
-  // Ensure that the incoming `locale` is valid
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
 
-  // Enable static rendering
   setRequestLocale(locale);
 
   const isArabic = locale === "ar";
-  const t = await getTranslations({ locale, namespace: "Metadata" });
+  const messages = await getMessages();
+  const timeZone = await getTimeZone();
+  const now = await getNow();
+
+  const cookieStore = await cookies();
+  const themeCookie = cookieStore.get(THEME_STORAGE_KEY)?.value;
+  const initialTheme: Theme = isTheme(themeCookie) ? themeCookie : "dark";
+  const ssrTheme = resolveSSRTheme(themeCookie, "dark");
+
   return (
-    <html lang={locale} dir={isArabic ? "rtl" : "ltr"} suppressHydrationWarning>
+    <html
+      lang={locale}
+      dir={isArabic ? "rtl" : "ltr"}
+      className={ssrTheme}
+      suppressHydrationWarning
+    >
       <head>
         <link rel="icon" href="/favicon.ico" />
         <meta name="theme-color" content="#000000" />
@@ -53,28 +79,15 @@ export default async function RootLayout({
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
-        <script
-          {...jsonLdScriptProps<WebSite>({
-            "@context": "https://schema.org",
-            "@type": "WebSite",
-            name: t("title"),
-            description: t("description"),
-            url: DOMAIN,
-            inLanguage: locale,
-          })}
-        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <ThemeProvider initialTheme={initialTheme} defaultTheme="dark" enableSystem>
+          <NextIntlClientProvider messages={messages} timeZone={timeZone} now={now}>
+            {children}
+          </NextIntlClientProvider>
         </ThemeProvider>
         <Analytics />
         <SpeedInsights />
@@ -83,10 +96,8 @@ export default async function RootLayout({
   );
 }
 
-const locales = ["en", "ar", "zh", "es", "ja"] as const;
-
 export function generateStaticParams() {
-  return locales.map((locale) => ({ locale }));
+  return routing.locales.map((locale) => ({ locale }));
 }
 
 export async function generateMetadata({
@@ -96,46 +107,51 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "Metadata" });
+  const canonical = await getLocaleUrl(locale);
+
+  const languages = Object.fromEntries(
+    await Promise.all(
+      routing.locales.map(async (l) => [l, await getLocaleUrl(l)]),
+    ),
+  );
 
   return {
+    metadataBase: new URL(siteConfig.url),
     title: t("title"),
     description: t("description"),
     keywords: t("keywords"),
+    authors: [{ name: siteConfig.author.name, url: siteConfig.author.url }],
+    creator: siteConfig.author.twitter,
+    applicationName: siteConfig.name,
     other: {
       "google-site-verification": "sVYBYfSJfXdBca3QoqsZtD6lsWVH6sk02RCH4YAbcm8",
     },
     openGraph: {
       title: t("title"),
       description: t("description"),
-      url: DOMAIN,
-      siteName: "Next.js i18n Template",
+      url: canonical,
+      siteName: siteConfig.name,
       images: [
         {
-          url: `${DOMAIN}/og-image.png`,
+          url: "/og-image.png",
           width: 1200,
           height: 630,
           alt: t("title"),
         },
       ],
-      locale: locale,
+      locale: openGraphLocales[locale] ?? locale,
       type: "website",
     },
     twitter: {
       card: "summary_large_image",
       title: t("title"),
       description: t("description"),
-      images: [`${DOMAIN}/og-image.png`],
-      creator: "@s0ver5",
+      images: ["/og-image.png"],
+      creator: siteConfig.author.twitter,
     },
     alternates: {
-      canonical: DOMAIN,
-      languages: {
-        en: `${DOMAIN}/en`,
-        ar: `${DOMAIN}/ar`,
-        zh: `${DOMAIN}/zh`,
-        es: `${DOMAIN}/es`,
-        ja: `${DOMAIN}/ja`,
-      },
+      canonical,
+      languages,
     },
     robots: {
       index: true,

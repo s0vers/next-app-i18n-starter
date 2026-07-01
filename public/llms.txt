@@ -1,0 +1,66 @@
+# Next.js i18n Starter
+
+> Next.js 16 App Router boilerplate with next-intl 4, locale-driven currency/date formatting, shadcn UI, RTL support, and SEO.
+
+## Stack
+
+- Next.js 16 (App Router, Turbopack)
+- React 19
+- next-intl 4
+- Tailwind CSS 4
+- shadcn/ui
+- TypeScript
+
+## Author
+
+- Name: Sovers Tonmoy Pandey
+- Alias: S0vers
+- Website: https://s0vers.com
+- GitHub: https://github.com/S0vers
+- Twitter: @s0ver5
+
+## Links
+
+- Repository: https://github.com/S0vers/next-app-i18n-starter
+- Live demo: https://next-app-i18n-starter.vercel.app
+- next-intl docs: https://next-intl.dev
+
+## Key paths
+
+- `src/proxy.ts` — i18n proxy (Next.js 16, replaces middleware)
+- `src/i18n/request.ts` — `getRequestConfig`: locale, timeZone, formats, messages
+- `src/i18n/routing.ts` — locales, `localePrefix: as-needed`
+- `src/i18n/regional.ts` — per-locale currency and time zone defaults
+- `src/i18n/navigation.ts` — localized `Link`, `useRouter`, `getPathname`
+- `dictionary/` — translation JSON files (en, ar, zh, es, ja)
+- `src/lib/site.ts` — site URL, author, SEO constants
+- `src/app/[locale]/layout.tsx` — `generateMetadata`, theme SSR
+- `src/app/[locale]/page.tsx` — home page + JSON-LD
+- `src/app/sitemap.ts` — sitemap with hreflang alternates
+- `src/app/robots.ts` — robots.txt generation
+
+## Locales and regional defaults
+
+| Locale | Currency | Time zone |
+|--------|----------|-----------|
+| en | USD | America/New_York |
+| ar | SAR | Asia/Riyadh |
+| zh | CNY | Asia/Shanghai |
+| es | EUR | Europe/Madrid |
+| ja | JPY | Asia/Tokyo |
+
+Switch language in the header to see formatting update. Currency and time zone are driven by locale via `getRequestConfig`, not separate user overrides.
+
+## Conventions
+
+- Package manager: bun (pnpm also supported)
+- No secrets committed; use `.env.example` for `NEXT_PUBLIC_SITE_URL`
+- Theme: cookie-based SSR on `<html>`, client `ThemeProvider`
+- Routing: `localePrefix: as-needed` (default locale at `/`, others prefixed)
+
+## SEO
+
+- `metadataBase`, hreflang via `getPathname`
+- JSON-LD: WebSite + Person schemas
+- Dynamic sitemap with language alternates
+- Locale-specific metadata in `dictionary/*/Metadata`

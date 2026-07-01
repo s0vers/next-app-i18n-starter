@@ -1,21 +1,28 @@
 import { MetadataRoute } from "next";
+import { getPathname } from "@/i18n/navigation";
+import { routing } from "@/i18n/routing";
+import { siteConfig } from "@/lib/site";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://next-app-i18n-starter.vercel.app";
-  const locales = ["en", "ar", "zh", "es", "ja"] as const;
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const languages = Object.fromEntries(
+    await Promise.all(
+      routing.locales.map(async (locale) => [
+        locale,
+        new URL(
+          await getPathname({ locale, href: "/" }),
+          siteConfig.url,
+        ).toString(),
+      ]),
+    ),
+  );
 
   return [
     {
-      url: baseUrl,
+      url: siteConfig.url,
       lastModified: new Date(),
-      changeFrequency: "yearly",
+      changeFrequency: "monthly",
       priority: 1,
+      alternates: { languages },
     },
-    ...locales.map((locale) => ({
-      url: `${baseUrl}/${locale}`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.8,
-    })),
   ];
 }

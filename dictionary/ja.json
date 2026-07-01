@@ -12,6 +12,7 @@
     "omitrtlUsage": "OmitRTLの使用",
     "OmitRTLInstruction": "OmitRTLを使用するには、RTLサポートを省略したいコンポーネントをOmitRTLコンポーネントでラップするだけです。",
     "contribute": "貢献",
+    "localization": "ローカライズ",
     "installationSteps": {
       "cloneRepository": "リポジトリをクローン:",
       "installDependencies": "依存関係をインストール:",
@@ -36,8 +37,27 @@
     "githubLink": "GitHub"
   },
   "Metadata": {
-    "title": "Next.js i18n テンプレート - 多言語スターターテンプレート",
-    "description": "Next.jsの国際化（i18n）スターターキット。アラビア語、中国語、英語、スペイン語、日本語に対応。shadcn UI、テーマ切り替え、RTLサポートを含む。",
-    "keywords": "Next.js, i18n, 国際化, アラビア語, 中国語, 英語, スペイン語, 日本語, 多言語, テンプレート, スターターテンプレート, shadcn UI, RTLサポート"
+    "title": "Next.js 16 i18n テンプレート - S0vers 作",
+    "description": "Next.js 16 と next-intl 4 の国際化スターター。ロケールごとに通貨・日時・タイムゾーンを設定。アラビア語、中国語、英語、スペイン語、日本語に対応。shadcn UI、RTL、SEO 付き。",
+    "keywords": "Next.js 16, next-intl, i18n, 国際化, ロケールフォーマット, アラビア語, 中国語, スペイン語, 日本語, テンプレート, shadcn UI, RTL, S0vers"
+  },
+  "Localization": {
+    "title": "ロケール連動フォーマット",
+    "description": "next-intl で価格と日時をフォーマット。各ロケールは getRequestConfig で通貨とタイムゾーンを設定します。",
+    "switchLanguageHint": "ヘッダーで言語を切り替えると、通貨・日時・相対時間が自動的に更新されます。",
+    "activeSettings": "現在のフォーマット: {currency} · {timeZone}",
+    "currencySection": "通貨フォーマット",
+    "timeSection": "日時フォーマット",
+    "productLabel": "テンプレートライセンス",
+    "priceLabel": "製品価格",
+    "subscriptionLabel": "サブスクリプション",
+    "usersLabel": "アクティブユーザー",
+    "currentDateTime": "短い形式",
+    "relativeTime": "最終更新",
+    "utcReference": "同じ瞬間（UTC）",
+    "localeDefaults": "ロケールのデフォルト: {currency} · {timeZone}",
+    "priceMessage": "この製品の価格は {price, number, currency} です",
+    "subscriptionPrice": "月額プラン: {price, number, currency}",
+    "usersCount": "{count, number, compact} ユーザー"
   }
 }

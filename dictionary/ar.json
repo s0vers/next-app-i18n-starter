@@ -12,6 +12,7 @@
     "omitrtlUsage": "استخدام OmitRTL",
     "OmitRTLInstruction": "لاستخدام OmitRTL، قم ببساطة بتغليف العنصر الذي تريد استبعاد دعم RTL له بعنصر OmitRTL.",
     "contribute": "المساهمة",
+    "localization": "التدويل",
     "installationSteps": {
       "cloneRepository": "استنساخ المستودع:",
       "installDependencies": "تثبيت الاعتمادات:",
@@ -36,8 +37,27 @@
     "githubLink": "GitHub"
   },
   "Metadata": {
-    "title": "قالب Next.js للتدويل - نقطة بدء متعددة اللغات",
-    "description": "قالب Next.js للتدويل (i18n) مع دعم العربية، الصينية، الإنجليزية، الإسبانية، واليابانية. يتضمن واجهة shadcn، تبديل السمات ودعم RTL.",
-    "keywords": "Next.js, i18n, تدويل, عربي, صيني, إنجليزي, إسباني, ياباني, متعدد اللغات, قالب, واجهة shadcn, دعم RTL"
+    "title": "قالب Next.js 16 للتدويل - بواسطة S0vers",
+    "description": "قالب تدويل Next.js 16 مع next-intl 4. تنسيق العملة والتواريخ والمناطق الزمنية حسب اللغة. يدعم العربية والصينية والإنجليزية والإسبانية واليابانية مع shadcn UI ودعم RTL وتحسين SEO.",
+    "keywords": "Next.js 16, next-intl, i18n, تدويل, تنسيق محلي, عربي, صيني, إسباني, ياباني, قالب, shadcn UI, RTL, S0vers"
+  },
+  "Localization": {
+    "title": "التنسيق حسب اللغة",
+    "description": "تنسيق الأسعار والتواريخ باستخدام next-intl. كل لغة تحدد العملة والمنطقة الزمنية عبر getRequestConfig.",
+    "switchLanguageHint": "غيّر اللغة من الشريط العلوي لرؤية تحديث العملة والتواريخ والوقت النسبي تلقائياً.",
+    "activeSettings": "التنسيق النشط: {currency} · {timeZone}",
+    "currencySection": "تنسيق العملة",
+    "timeSection": "تنسيق التاريخ والوقت",
+    "productLabel": "رخصة القالب",
+    "priceLabel": "سعر المنتج",
+    "subscriptionLabel": "الاشتراك",
+    "usersLabel": "المستخدمون النشطون",
+    "currentDateTime": "تنسيق مختصر",
+    "relativeTime": "آخر تحديث",
+    "utcReference": "نفس اللحظة بتوقيت UTC",
+    "localeDefaults": "افتراضيات اللغة: {currency} · {timeZone}",
+    "priceMessage": "سعر هذا المنتج {price, number, currency}",
+    "subscriptionPrice": "الخطة الشهرية: {price, number, currency}",
+    "usersCount": "{count, number, compact} مستخدم"
   }
 }

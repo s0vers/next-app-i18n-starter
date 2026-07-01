@@ -1,7 +1,7 @@
 {
   "Index": {
     "boilerplateName": "Next.js i18n Template",
-    "title": "Next 15 Template with i18n and Shadcn UI",
+    "title": "Next.js 16 Template with i18n and Shadcn UI",
     "description": "A powerful starting point for your next multilingual, accessible web application.",
     "cloneRepository": "Clone Repository",
     "leaveStar": "Leave a Star",
@@ -12,6 +12,7 @@
     "omitrtlUsage": "OmitRTL Usage",
     "OmitRTLInstruction": "To use OmitRTL, simply wrap the component you want to omit RTL support for with the OmitRTL component.",
     "contribute": "Contribute",
+    "localization": "Localization",
     "installationSteps": {
       "cloneRepository": "Clone the repository:",
       "installDependencies": "Install dependencies:",
@@ -33,12 +34,31 @@
   },
 
   "Footer": {
-    "copyright": "© 2025 Next.js i18n Template. Open source under MIT license.",
+    "copyright": "© 2026 Next.js i18n Template by Sovers Tonmoy Pandey. Open source under MIT license.",
     "githubLink": "GitHub"
   },
   "Metadata": {
-    "title": "Next.js i18n Template - Multilingual Starter Template",
-    "description": "Next.js internationalization (i18n) starter kit with Arabic, Chinese, English, Spanish, and Japanese support. Includes shadcn UI, theme switching, and RTL support.",
-    "keywords": "Next.js, i18n, internationalization, Arabic, Chinese, Spanish, Japanese, multilingual, template, starter template, shadcn UI, RTL support"
+    "title": "Next.js 16 i18n Starter - Multilingual Template by S0vers",
+    "description": "Next.js 16 internationalization starter with next-intl 4. Locale-driven currency, dates, and time zones for Arabic, Chinese, English, Spanish, and Japanese. Includes shadcn UI, RTL support, and SEO.",
+    "keywords": "Next.js 16, next-intl, i18n, internationalization, locale formatting, Arabic, Chinese, Spanish, Japanese, multilingual, starter template, shadcn UI, RTL, S0vers"
+  },
+  "Localization": {
+    "title": "Locale-Driven Formatting",
+    "description": "Format prices and dates with next-intl. Each locale sets currency and time zone via getRequestConfig in src/i18n/request.ts.",
+    "switchLanguageHint": "Switch language in the header to see currency, dates, and relative time update automatically.",
+    "activeSettings": "Active formatting: {currency} · {timeZone}",
+    "currencySection": "Currency formatting",
+    "timeSection": "Date & time formatting",
+    "productLabel": "Template license",
+    "priceLabel": "Product price",
+    "subscriptionLabel": "Subscription",
+    "usersLabel": "Active users",
+    "currentDateTime": "Short format",
+    "relativeTime": "Last updated",
+    "utcReference": "Same moment in UTC",
+    "localeDefaults": "Locale defaults: {currency} · {timeZone}",
+    "priceMessage": "This product costs {price, number, currency}",
+    "subscriptionPrice": "Monthly plan: {price, number, currency}",
+    "usersCount": "{count, number, compact} users"
   }
 }

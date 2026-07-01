@@ -1,304 +1,162 @@
-# Next.js 15 Template with i18n and Shadcn UI
+# Next.js 16 i18n Starter
 
-A modern, SEO-optimized template for Next.js 15 applications featuring server components, internationalization support, shadcn UI components, and theme switching capabilities. Perfect for building performant, accessible, and multilingual web applications.
+A modern, SEO-optimized boilerplate for multilingual Next.js applications. Built with **Next.js 16**, **React 19**, **next-intl 4**, and **shadcn/ui**.
 
-## ✨ Features
+**Author:** [Sovers Tonmoy Pandey](https://s0vers.com) (S0vers) · [GitHub](https://github.com/S0vers)
 
-- **Next.js 15**: Built on the latest [Next.js 15](https://nextjs.org/) React framework with App Router and Server Components for optimal performance
-- **SEO Optimization**: Includes metadata API, structured data, and optimized page loading strategies
-- **Internationalization**: Full i18n support using middleware-based routing with [next-intl](https://next-intl-docs.vercel.app/)
-- **Shadcn UI**: Pre-configured [shadcn UI](https://ui.shadcn.com/) components using the new React Server Components pattern
-- **Theme System**: CSS Variables-based theme system with light/dark mode toggle and system preference detection
-- **Language Switching**: Seamless switching between languages (including RTL support for Arabic and other RTL languages)
-- **OmitRTL Utility**: Helper component to control elements that should maintain LTR (left-to-right) rendering in RTL contexts
-- **TypeScript**: Type-safe codebase with TypeScript configuration optimized for Next.js 15
-- **Metadata API**: Built-in SEO metadata management using Next.js 15's metadata API
+**Live demo:** [next-app-i18n-starter.vercel.app](https://next-app-i18n-starter.vercel.app)
 
-## 🚀 Getting Started
+## Features
 
-Clone the repository:
+- **Next.js 16** — App Router, Server Components, `proxy.ts` for i18n routing
+- **next-intl 4** — ICU messages, `useFormatter`, locale-driven currency and time zones
+- **5 languages** — English, Arabic (RTL), Chinese, Spanish, Japanese
+- **Locale-driven formatting** — switch language to change currency, dates, and relative time
+- **shadcn/ui** — accessible components with Tailwind CSS 4
+- **Theme system** — cookie SSR + client `ThemeProvider` (no blocking scripts)
+- **OmitRTL** — keep LTR layout for code, logos, and numbers in RTL locales
+- **SEO** — `metadataBase`, hreflang, JSON-LD, dynamic sitemap and robots
+
+## Getting Started
 
 ```bash
 git clone https://github.com/S0vers/next-app-i18n-starter.git
-```
-
-Install dependencies:
-
-```bash
-npm install
-# or
-yarn
-# or
-pnpm install
-# or
+cd next-app-i18n-starter
 bun install
-```
-
-Start the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
+cp .env.example .env.local   # optional: set NEXT_PUBLIC_SITE_URL
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-## 📋 Project Structure
-
-The project follows Next.js 15's recommended App Router structure with additions for internationalization:
+## Project Structure
 
 ```
-├── .next                                 # Next.js build output
-├── dictionary                            # i18n translation files
-│   ├── ar.json                           # Arabic translations
-│   ├── en.json                           # English translations
-│   ├── es.json                           # Spanish translations
-│   ├── ja.json                           # Japanese translations
-│   └── zh.json                           # Chinese translations
-├── node_modules                          # Dependencies
-├── public                                # Static assets
-├── src                                   # Source code
-│   ├── app                               # Next.js App Router
-│   │   ├── [locale]                      # Dynamic locale routing
-│   │   │   ├── page.tsx                  # Home page
-│   │   │   ├── error.tsx                 # Error handling
-│   │   │   ├── favicon.ico               # Favicon
-│   │   │   ├── globals.css               # Global styles
-│   │   │   ├── robots.txt                # SEO robots file
-│   │   │   └── sitemap.ts                # Dynamic sitemap generation
-│   │   └── components                    # Application components
-│   │       ├── ui                        # shadcn UI components
-│   │       ├── LanguageSwitcher.tsx      # Language toggle component
-│   │       ├── ModeToggle.tsx            # Theme toggle component
-│   │       ├── OmitRTL.tsx               # RTL handling utility
-│   │       └── theme-provider.tsx        # Theme context provider
-│   ├── i18n                              # Internationalization utilities
-│   │   ├── navigation.ts                 # Localized navigation helpers
-│   │   ├── requests.ts                   # i18n-aware API request helpers
-│   │   └── routing.ts                    # Locale routing utilities
-│   ├── lib                               # Utility functions and shared code
-│   │   └── middleware.ts                 # i18n middleware for route handling
-│   └── components.json                   # shadcn UI component configuration
-├── .eslintrc.json                        # ESLint configuration
-├── global.d.ts                           # Global TypeScript declarations
-├── LICENSE                               # Project license
-├── next-env.d.ts                         # Next.js TypeScript declarations
-├── next.config.js                        # Next.js configuration
-├── package.json                          # Project dependencies and scripts
-├── bun.lock                              # Bun lock file
-├── postcss.config.js                     # PostCSS configuration
-├── README.md                             # Project documentation
-└── tsconfig.json                         # TypeScript configuration
+├── dictionary/                 # Translation files (en, ar, zh, es, ja)
+├── public/
+│   ├── llms.txt                # Machine-readable project summary
+│   └── og-image.png            # Open Graph image
+├── src/
+│   ├── app/
+│   │   ├── [locale]/
+│   │   │   ├── layout.tsx      # Metadata, theme SSR, NextIntlClientProvider
+│   │   │   └── page.tsx        # Home page + JSON-LD
+│   │   ├── robots.ts           # Dynamic robots.txt
+│   │   └── sitemap.ts          # Sitemap with hreflang alternates
+│   ├── components/
+│   │   ├── LocalizationTab.tsx # Locale formatting demo
+│   │   ├── LanguageSwitcher.tsx
+│   │   ├── ModeToggle.tsx
+│   │   └── theme-provider.tsx
+│   ├── i18n/
+│   │   ├── request.ts          # getRequestConfig (locale, timeZone, formats)
+│   │   ├── routing.ts          # Locales, localePrefix: as-needed
+│   │   ├── regional.ts         # Per-locale currency & time zone
+│   │   └── navigation.ts       # Localized Link, useRouter, getPathname
+│   ├── lib/
+│   │   ├── site.ts             # Site URL, author, SEO constants
+│   │   └── theme.ts
+│   └── proxy.ts                # next-intl proxy (Next.js 16)
+├── .env.example
+└── next.config.ts
 ```
 
-## 🌐 Internationalization
+## Internationalization
 
-This template uses middleware-based i18n routing with Next.js 15. Language files are stored in the `dictionary/` directory.
+### How locale drives formatting
 
-### Supported Languages
+`src/i18n/request.ts` configures next-intl per request:
 
-The template currently supports **5 languages**:
+```ts
+const currency = resolveCurrency(locale);
+const timeZone = resolveTimeZone(locale);
 
-- 🇺🇸 **English** (`en`) - Default language
-- 🇸🇦 **Arabic** (`ar`) - With RTL support
-- 🇨🇳 **Chinese** (`zh`) - Simplified Chinese
-- 🇪🇸 **Spanish** (`es`) - European Spanish
-- 🇯🇵 **Japanese** (`ja`) - Japanese
-
-### Adding a New Language
-
-1. Create a new JSON file in the `dictionary/` directory (e.g., `fr.json`)
-2. Add the language to the supported locales in `src/app/[locale]/layout.tsx` and `src/app/sitemap.ts`
-3. Add language option to the `LanguageSwitcher` component
-
-## 🎨 Shadcn UI Components
-
-Shadcn UI components are configured to work with Next.js 15 Server Components. Import them from the `components/ui/` directory:
-
-```jsx
-import { Button } from "@/components/ui/button";
-
-export default function Home() {
-  return <Button>Click me</Button>;
-}
+return {
+  locale,
+  timeZone,
+  now: new Date(),
+  formats: createRegionalFormats(currency),
+  messages: (await import(`../../dictionary/${locale}.json`)).default,
+};
 ```
 
-## 🔄 OmitRTL Utility
+Regional defaults live in `src/i18n/regional.ts`:
 
-The `OmitRTL` utility helps you control which elements should maintain LTR direction even when the site is in RTL mode.
+| Locale | Currency | Time zone |
+|--------|----------|-----------|
+| en | USD | America/New_York |
+| ar | SAR | Asia/Riyadh |
+| zh | CNY | Asia/Shanghai |
+| es | EUR | Europe/Madrid |
+| ja | JPY | Asia/Tokyo |
 
-### How to use the function:
+Switch language in the header — prices and dates update automatically.
 
-```jsx
-import { OmitRTL } from "@/components/OmitRTL";
+### Routing
 
-function MyComponent() {
-  return (
-    <div>
-      <p>This text will follow the website's direction.</p>
-      <OmitRTL omitRTL={true}>
-        <img src="/logo.png" alt="Logo" />
-        <div>
-          <h2>This heading and content will always be LTR</h2>
-          <p>Regardless of the website's direction.</p>
-        </div>
-      </OmitRTL>
-    </div>
-  );
-}
+`localePrefix: "as-needed"` in `src/i18n/routing.ts`:
+
+- English (default): `/`
+- Other locales: `/ar`, `/zh`, `/es`, `/ja`
+
+### Adding a language
+
+1. Add `dictionary/xx.json` (copy from `en.json`)
+2. Add locale to `src/i18n/routing.ts`
+3. Add regional defaults to `src/i18n/regional.ts`
+4. Add label to `LanguageSwitcher.tsx`
+
+## OmitRTL
+
+Wrap elements that must stay LTR in RTL locales:
+
+```tsx
+import OmitRTL from "@/components/OmmitRlt";
+
+<OmitRTL omitRTL>
+  <code>git clone ...</code>
+</OmitRTL>
 ```
 
-### NPM Package
+Also available as [react-omit-rtl](https://www.npmjs.com/package/react-omit-rtl).
 
-If you just need the OmitRTL function, it's also available as an npm package:
+## SEO
+
+- **Metadata API** — locale-specific titles/descriptions from `dictionary/*/Metadata`
+- **metadataBase** — resolved from `NEXT_PUBLIC_SITE_URL`
+- **hreflang** — built with `getPathname` from `@/i18n/navigation`
+- **JSON-LD** — `WebSite` and `Person` schemas on the home page
+- **Sitemap** — `/sitemap.xml` with language alternates
+- **Robots** — `/robots.txt` via `src/app/robots.ts`
+- **Open Graph** — `/og-image.png` (1200×630)
+
+Set your production URL:
 
 ```bash
-npm i react-omit-rtl
+NEXT_PUBLIC_SITE_URL=https://your-domain.com
 ```
 
-```jsx
-import React from "react";
-import OmitRTL from "react-omit-rtl";
+## Theme
 
-function App() {
-  return (
-    <OmitRTL omitRTL={true}>
-      <p>This text will not have RTL direction.</p>
-    </OmitRTL>
-  );
-}
-export default App;
+Theme is stored in a cookie and applied server-side on `<html>` to avoid flash. Client-side `ThemeProvider` syncs toggles. No `<script>` tags in the React tree (React 19 compatible).
+
+## Scripts
+
+```bash
+bun dev      # Development server
+bun build    # Production build
+bun start    # Start production server
+bun lint     # ESLint
 ```
 
-## 🔍 SEO Optimization
-
-The template provides comprehensive SEO features with the Next.js 15 Metadata API. All metadata is dynamically generated based on the current locale and stored in the `dictionary/[locale]/Metadata` namespace.
-
-### Complete Metadata Implementation
-
-```jsx
-export async function generateMetadata({
-  params,
-}: {
-  params: { locale: string },
-}): Promise<Metadata> {
-  const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "Metadata" });
-
-  return {
-    title: t("title"),
-    description: t("description"),
-    keywords: t("keywords"),
-    other: {
-      "google-site-verification": "********",
-    },
-    openGraph: {
-      title: t("title"),
-      description: t("description"),
-      url: DOMAIN,
-      siteName: "Next.js i18n Template",
-      images: [
-        {
-          url: `${DOMAIN}/og-image.png`,
-          width: 1200,
-          height: 630,
-          alt: t("title"),
-        },
-      ],
-      locale: locale,
-      type: "website",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: t("title"),
-      description: t("description"),
-      images: [`${DOMAIN}/og-image.png`],
-      creator: "@s0ver5",
-    },
-    alternates: {
-      canonical: DOMAIN,
-      languages: {
-        en: `${DOMAIN}/en`,
-        ar: `${DOMAIN}/ar`,
-        zh: `${DOMAIN}/zh`,
-        es: `${DOMAIN}/es`,
-        ja: `${DOMAIN}/ja`,
-      },
-    },
-    robots: {
-      index: true,
-      follow: true,
-      googleBot: {
-        index: true,
-        follow: true,
-        "max-video-preview": -1,
-        "max-image-preview": "large",
-        "max-snippet": -1,
-      },
-    },
-  };
-}
-```
-
-### Structured Data
-
-Structured data is implemented using react-schemaorg for better search engine understanding:
-
-```jsx
-<script
-  {...(jsonLdScriptProps <
-    WebSite >
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      name: t("title"),
-      description: t("description"),
-      url: DOMAIN,
-      inLanguage: locale,
-    })}
-/>
-```
-
-### SEO Features Included
-
-- **Dynamic Metadata**: Locale-specific titles, descriptions, and keywords
-- **OpenGraph Tags**: Optimized for social media sharing across all platforms
-- **Twitter Cards**: Enhanced Twitter sharing with large image support
-- **Canonical URLs**: Prevents duplicate content issues
-- **Hreflang Tags**: Proper language targeting for all 5 supported languages
-- **Robots Directives**: Comprehensive search engine crawling instructions
-- **Google Site Verification**: Ready for Google Search Console integration
-- **Dynamic Sitemap**: Automatically generated sitemap.xml
-- **Robots.txt**: Properly configured with sitemap reference
-- **Structured Data**: Schema.org markup for better search understanding
-
-### Language-Specific SEO
-
-Each language version includes:
-
-- Proper HTML `lang` attribute
-- RTL support for Arabic (`dir="rtl"`)
-- Locale-specific metadata from translation files
-- Proper hreflang implementation
-- Language-specific OpenGraph locale tags
-
-These features work together to help search engines better understand, index, and display your content to potential visitors across different languages and regions.
-
-## 🤝 Contributing
-
-We welcome contributions to improve this template! Here's how you can help:
+## Contributing
 
 1. Fork the repository
-2. Create a new branch (`git checkout -b feature/your-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin feature/your-feature`)
-5. Create a new Pull Request
+2. Create a branch (`git checkout -b feature/your-feature`)
+3. Commit changes (`git commit -am 'Add feature'`)
+4. Push (`git push origin feature/your-feature`)
+5. Open a Pull Request
 
-## 📄 License
+## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+MIT © [Sovers Tonmoy Pandey](https://s0vers.com)

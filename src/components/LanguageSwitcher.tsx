@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
+import { useLocale } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
+import { routing } from "@/i18n/routing";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
@@ -11,46 +11,22 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 
+const languageLabels = {
+  en: "English",
+  ar: "العربية",
+  zh: "中文",
+  es: "Español",
+  ja: "日本語",
+} as const;
+
 const LanguageSwitcher = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const [currentLanguage, setCurrentLanguage] = useState("en");
-
-  useEffect(() => {
-    const savedLanguage =
-      document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("NEXT_LOCALE="))
-        ?.split("=")[1] || "en";
-    setCurrentLanguage(savedLanguage);
-
-    const urlLanguage = pathname.split("/")[1];
-    if (["en", "ar", "zh", "es", "ja"].includes(urlLanguage)) {
-      setCurrentLanguage(urlLanguage);
-    }
-  }, [pathname]);
+  const currentLanguage = useLocale();
 
   const changeLanguage = (newLanguage: string) => {
-    setCurrentLanguage(newLanguage);
-    document.cookie = `NEXT_LOCALE=${newLanguage}; path=/;`;
-
-    const segments = pathname.split("/");
-    if (["en", "ar", "zh", "es", "ja"].includes(segments[1])) {
-      segments[1] = newLanguage;
-    } else {
-      segments.splice(1, 0, newLanguage);
-    }
-
-    router.push(segments.join("/"));
+    router.replace(pathname, { locale: newLanguage });
     router.refresh();
-  };
-
-  const languageLabels = {
-    en: "English",
-    ar: "العربية",
-    zh: "中文",
-    es: "Español",
-    ja: "日本語",
   };
 
   return (
@@ -61,21 +37,11 @@ const LanguageSwitcher = () => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => changeLanguage("en")}>
-          English
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => changeLanguage("ar")}>
-          العربية
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => changeLanguage("zh")}>
-          中文
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => changeLanguage("es")}>
-          Español
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => changeLanguage("ja")}>
-          日本語
-        </DropdownMenuItem>
+        {routing.locales.map((locale) => (
+          <DropdownMenuItem key={locale} onClick={() => changeLanguage(locale)}>
+            {languageLabels[locale]}
+          </DropdownMenuItem>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );

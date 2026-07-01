@@ -5,17 +5,37 @@ import type React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Globe, Github, Copy, Check, Star } from "lucide-react";
-import { useEffect, useState, useMemo, useCallback, memo } from "react";
-import { motion, AnimatePresence, easeOut } from "framer-motion";
+import { Globe, Copy, Check, Star } from "lucide-react";
+import { useState, useMemo, useCallback, memo } from "react";
+import { motion, AnimatePresence } from "motion/react";
 
 import { ModeToggle } from "../ModeToggle";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import OmitRTL from "../OmmitRlt";
 import LanguageSwitcher from "../LanguageSwitcher";
+import LocalizationTab from "../LocalizationTab";
 
 // Constants moved outside component to prevent recreation
 const GITHUB_URL = "https://github.com/S0vers/next-app-i18n-starter";
+
+function GithubIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-.1.58-.18.88-.25.5 0 1 .17 1.41.5.02-.82.32-1.58.84-2.15 2.51-.17 5.01-.83 7.16-1.9.61-.33 1.27-.51 1.94-.51 3.34 0 6 2.69 6 6 0 3.26-3 5.26-6 5.5a4.8 4.8 0 0 0-1 3.5v4" />
+      <path d="M9 18c-4.51 2-5-2-7-2" />
+    </svg>
+  );
+}
 const ANIMATION_DURATION = 0.2;
 const COPY_TIMEOUT = 2000;
 
@@ -38,7 +58,7 @@ const ANIMATION_VARIANTS = {
       y: 0,
       transition: {
         duration: 0.4,
-        ease: easeOut,
+        ease: "easeOut" as const,
       },
     },
   },
@@ -230,7 +250,7 @@ const HeroSection = memo<{
       }`}
       variants={ANIMATION_VARIANTS.item}
     >
-      <ActionButton href={GITHUB_URL} variant="primary" icon={Github}>
+      <ActionButton href={GITHUB_URL} variant="primary" icon={GithubIcon}>
         <span className={isMobile ? "hidden xs:inline" : ""}>
           {translations.cloneRepository}
         </span>
@@ -284,8 +304,10 @@ ActionButton.displayName = "ActionButton";
 // Main component
 export default function HomeIndex() {
   const t = useTranslations("Index");
+  const l = useTranslations("Localization");
   const f = useTranslations("Footer");
-  const [isRTL, setIsRTL] = useState(false);
+  const locale = useLocale();
+  const isRTL = locale === "ar";
 
   // Translations object (no need for useMemo)
   const translations = {
@@ -298,6 +320,7 @@ export default function HomeIndex() {
     installation: t("installation"),
     omitrtlUsage: t("omitrtlUsage"),
     contribute: t("contribute"),
+    localization: t("localization"),
     gettingStarted: t("gettingStarted"),
     howToContribute: t("howToContribute"),
     OmitRTLInstruction: t("OmitRTLInstruction"),
@@ -315,6 +338,8 @@ export default function HomeIndex() {
     },
   };
 
+  const localizationTitle = l("title");
+
   // Footer translations (no need for useMemo)
   const footerTranslations = {
     copyright: f("copyright"),
@@ -324,28 +349,8 @@ export default function HomeIndex() {
   // Code examples (define as constant outside component)
   const codeExamples = CODE_EXAMPLES;
 
-  // Simplified RTL detection
-  useEffect(() => {
-    setIsRTL(document.documentElement.dir === "rtl");
-  }, []);
-
-  // Optimized scroll management
-  useEffect(() => {
-    const originalOverflow = document.documentElement.style.overflow;
-    document.documentElement.style.overflow = "hidden";
-
-    const timer = setTimeout(() => {
-      document.documentElement.style.overflow = originalOverflow || "auto";
-    }, 1000);
-
-    return () => {
-      clearTimeout(timer);
-      document.documentElement.style.overflow = originalOverflow || "auto";
-    };
-  }, []);
-
   return (
-    <div className="flex flex-col min-h-screen overflow-hidden">
+    <div className="flex flex-col min-h-screen">
       {/* Header */}
       <motion.header
         initial={{ opacity: 0, y: -10 }}
@@ -396,9 +401,9 @@ export default function HomeIndex() {
       </motion.header>
 
       {/* Main Content */}
-      <main className="flex-1 w-full overflow-hidden">
-        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-full max-h-screen">
-          <div className="h-full py-4 sm:py-6 lg:py-8">
+      <main className="flex-1 w-full">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 min-h-full">
+          <div className="py-4 sm:py-6 lg:py-8 space-y-6 sm:space-y-8 lg:space-y-10">
             {/* Mobile and Tablet Layout */}
             <div className="lg:hidden space-y-6 sm:space-y-8">
               <HeroSection translations={translations} isMobile={true} />
@@ -406,7 +411,7 @@ export default function HomeIndex() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
               >
                 <motion.h2
                   className="text-xl sm:text-2xl font-bold tracking-tight text-center mb-4 sm:mb-6"
@@ -419,9 +424,11 @@ export default function HomeIndex() {
 
                 <TabsSection
                   translations={translations}
+                  localizationTitle={localizationTitle}
                   codeExamples={codeExamples}
                   isRTL={isRTL}
                   isMobile={true}
+                  InstallationStep={InstallationStep}
                 />
               </motion.div>
             </div>
@@ -453,9 +460,11 @@ export default function HomeIndex() {
                 >
                   <TabsSection
                     translations={translations}
+                    localizationTitle={localizationTitle}
                     codeExamples={codeExamples}
                     isRTL={isRTL}
                     isMobile={false}
+                    InstallationStep={InstallationStep}
                   />
                 </motion.div>
               </motion.div>
@@ -509,6 +518,7 @@ type Translations = {
   installation: string;
   omitrtlUsage: string;
   contribute: string;
+  localization: string;
   gettingStarted: string;
   howToContribute: string;
   OmitRTLInstruction: string;
@@ -538,17 +548,31 @@ type CodeExamples = {
 
 const TabsSection = memo<{
   translations: Translations;
+  localizationTitle: string;
   codeExamples: CodeExamples;
   isRTL: boolean;
   isMobile: boolean;
-}>(({ translations, codeExamples, isRTL, isMobile }) => (
+  InstallationStep: React.ComponentType<{
+    description: string;
+    code: string;
+    delay?: number;
+    omitRTL?: boolean;
+  }>;
+}>(({
+  translations,
+  localizationTitle,
+  codeExamples,
+  isRTL,
+  isMobile,
+  InstallationStep,
+}) => (
   <Tabs
     defaultValue="install"
     className={`w-full ${isMobile ? "" : "h-full flex flex-col"}`}
     dir={isRTL ? "rtl" : "ltr"}
   >
     <TabsList
-      className={`grid w-full grid-cols-3 bg-muted/50 backdrop-blur-sm mb-4 ${
+      className={`grid w-full grid-cols-2 sm:grid-cols-4 bg-muted/50 backdrop-blur-sm mb-4 ${
         isMobile ? "" : "h-12"
       }`}
     >
@@ -570,9 +594,15 @@ const TabsSection = memo<{
       >
         {translations.contribute}
       </TabsTrigger>
+      <TabsTrigger
+        value="localization"
+        className="text-xs sm:text-sm transition-all duration-300 hover:bg-background/80 data-[state=active]:bg-background data-[state=active]:shadow-sm"
+      >
+        {translations.localization}
+      </TabsTrigger>
     </TabsList>
 
-    <div className={`${isMobile ? "" : "flex-1 overflow-hidden"}`}>
+    <div className={`${isMobile ? "" : "flex-1"}`}>
       <AnimatePresence mode="sync" initial={false}>
         <TabsContent
           value="install"
@@ -679,6 +709,19 @@ const TabsSection = memo<{
                 </p>
               </motion.div>
             </div>
+          </TabCard>
+        </TabsContent>
+
+        <TabsContent
+          value="localization"
+          key="localization-tab"
+          className={`${isMobile ? "mt-0" : "h-full mt-0"}`}
+        >
+          <TabCard
+            title={localizationTitle}
+            contentKey="localization-content"
+          >
+            <LocalizationTab />
           </TabCard>
         </TabsContent>
       </AnimatePresence>
