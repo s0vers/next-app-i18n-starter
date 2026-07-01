@@ -1,0 +1,44 @@
+---
+description: SEO — metadata, hreflang, sitemap, robots, and site config
+globs: src/lib/site.ts,src/app/**/layout.tsx,src/app/**/page.tsx,src/app/sitemap.ts,src/app/robots.ts,dictionary/**/Metadata*
+alwaysApply: false
+---
+
+# SEO
+
+## Single source of truth
+
+- `src/lib/site.ts` — `siteConfig`, `openGraphLocales`
+- Copy: `dictionary/{locale}/Metadata` (`title`, `description`, `keywords`)
+
+## Canonical and hreflang URLs
+
+Use `getLocaleUrl` / `getAlternateLanguages` from `@/lib/site` — never duplicate hreflang maps in layout and sitemap.
+
+```ts
+const canonical = await getLocaleUrl(locale, "/your-path");
+const languages = await getAlternateLanguages("/your-path");
+```
+
+| Locale | Path |
+|--------|------|
+| `en` | `/` |
+| others | `/{locale}` |
+
+## `generateMetadata`
+
+- Set `metadataBase: new URL(siteConfig.url)`.
+- `alternates.canonical` + `alternates.languages` for all `routing.locales`.
+- OG image: `/og-image.png` (1200×630 in `public/`).
+
+## Sitemap (`src/app/sitemap.ts`)
+
+- One entry per logical page with `alternates.languages` — not duplicate rows per locale.
+- New pages: add entry with `getPathname({ locale, href: "/your-path" })` for each locale.
+
+## New page SEO checklist
+
+1. Meta keys in all dictionary files
+2. Page-level `generateMetadata` with canonical
+3. Sitemap entry with hreflang alternates
+4. Optional JSON-LD in Server Component only

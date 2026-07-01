@@ -1,0 +1,40 @@
+---
+description: next-intl routing, dictionaries, and locale-driven formatting
+globs: dictionary/**/*.json,src/i18n/**/*
+alwaysApply: false
+---
+
+# Internationalization
+
+## Routing (`src/i18n/routing.ts`)
+
+- Locales: `en`, `ar`, `zh`, `es`, `ja` — default `en`, `localePrefix: "as-needed"`.
+- English URLs have **no** prefix (`/` not `/en`). Add locales in `src/i18n/locales.ts` only (`localeConfig`); routing, regional, OG, and switcher derive from it.
+
+## Navigation
+
+```tsx
+// ✅ Use
+import { Link, useRouter, usePathname, getPathname } from "@/i18n/navigation";
+
+// ❌ Avoid for locale-aware routes
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+```
+
+## Dictionaries (`dictionary/{locale}.json`)
+
+- **`en.json` is the type source of truth** (`global.d.ts` → `IntlMessages`).
+- Adding a key to `en.json` requires the same key in **every** locale file.
+- Namespaces in use: `Index`, `Footer`, `Metadata`, `Localization` — add new namespaces to all files.
+
+## Request config (`src/i18n/request.ts`)
+
+- Currency and timezone come from `src/i18n/regional.ts` per locale — no user override dropdowns.
+- Messages loaded via dynamic import: `dictionary/${locale}.json`.
+
+## Components
+
+- Server: `setRequestLocale(locale)` + `getTranslations({ locale, namespace })`.
+- Client: `useTranslations`, `useFormatter`, `useTimeZone`, `useNow` from `next-intl`.
+- Proxy: `src/proxy.ts` (Next.js 16 locale middleware) — do not recreate as `middleware.ts`.

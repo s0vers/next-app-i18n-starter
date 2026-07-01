@@ -1,8 +1,6 @@
 "use client";
 
-import {
-  localeRegionalDefaults,
-} from "@/i18n/regional";
+import { localeRegionalDefaults } from "@/i18n/regional";
 import {
   useFormatter,
   useLocale,
@@ -18,8 +16,8 @@ const USERS_COUNT = 12840;
 
 function FormatExample({ label, value }: { label: string; value: string }) {
   return (
-    <div className="space-y-1 sm:space-y-2">
-      <p className="text-xs sm:text-sm font-medium text-muted-foreground leading-relaxed">
+    <div className="space-y-2">
+      <p className="text-xs font-medium text-muted-foreground sm:text-sm">
         {label}
       </p>
       <OmitRTL omitRTL>
@@ -37,31 +35,19 @@ export default function LocalizationTab() {
   const locale = useLocale();
   const timeZone = useTimeZone();
   const now = useNow({ updateInterval: 30_000 });
-  const localeDefaults =
+  const defaults =
     localeRegionalDefaults[locale as keyof typeof localeRegionalDefaults];
   const lastUpdated = new Date(now.getTime() - 2 * 60 * 60 * 1000);
+  const tz = (timeZone ?? defaults.timeZone).replace(/_/g, " ");
 
   return (
-    <div className="space-y-3 sm:space-y-4">
-      <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-        {t("description")}
-      </p>
-
-      <p className="text-xs sm:text-sm text-muted-foreground">
-        {t("switchLanguageHint")}
-      </p>
-
-      <p className="text-xs sm:text-sm text-muted-foreground">
+    <div className="space-y-4">
+      <p className="text-sm text-muted-foreground">{t("description")}</p>
+      <p className="text-sm text-muted-foreground">{t("switchLanguageHint")}</p>
+      <p className="text-sm text-muted-foreground">
         {t("localeDefaults", {
-          currency: localeDefaults.currency,
-          timeZone: localeDefaults.timeZone.replace(/_/g, " "),
-        })}
-      </p>
-
-      <p className="text-xs sm:text-sm text-muted-foreground">
-        {t("activeSettings", {
-          currency: localeDefaults.currency,
-          timeZone: (timeZone ?? localeDefaults.timeZone).replace(/_/g, " "),
+          currency: defaults.currency,
+          timeZone: tz,
         })}
       </p>
 
@@ -71,15 +57,15 @@ export default function LocalizationTab() {
       />
       <FormatExample
         label={t("priceMessage", { price: LICENSE_PRICE })}
-        value={t("priceMessage", { price: LICENSE_PRICE })}
+        value={format.number(LICENSE_PRICE, "price")}
       />
       <FormatExample
         label={t("subscriptionPrice", { price: SUBSCRIPTION_PRICE })}
-        value={t("subscriptionPrice", { price: SUBSCRIPTION_PRICE })}
+        value={format.number(SUBSCRIPTION_PRICE, "price")}
       />
       <FormatExample
         label={t("usersCount", { count: USERS_COUNT })}
-        value={t("usersCount", { count: USERS_COUNT })}
+        value={format.number(USERS_COUNT, "compact")}
       />
       <FormatExample
         label={t("timeSection")}

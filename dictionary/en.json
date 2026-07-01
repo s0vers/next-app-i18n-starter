@@ -46,13 +46,8 @@
     "title": "Locale-Driven Formatting",
     "description": "Format prices and dates with next-intl. Each locale sets currency and time zone via getRequestConfig in src/i18n/request.ts.",
     "switchLanguageHint": "Switch language in the header to see currency, dates, and relative time update automatically.",
-    "activeSettings": "Active formatting: {currency} · {timeZone}",
     "currencySection": "Currency formatting",
     "timeSection": "Date & time formatting",
-    "productLabel": "Template license",
-    "priceLabel": "Product price",
-    "subscriptionLabel": "Subscription",
-    "usersLabel": "Active users",
     "currentDateTime": "Short format",
     "relativeTime": "Last updated",
     "utcReference": "Same moment in UTC",
@@ -60,5 +55,10 @@
     "priceMessage": "This product costs {price, number, currency}",
     "subscriptionPrice": "Monthly plan: {price, number, currency}",
     "usersCount": "{count, number, compact} users"
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "description": "The page you are looking for does not exist or may have been moved.",
+    "homeLink": "Go back home"
   }
 }

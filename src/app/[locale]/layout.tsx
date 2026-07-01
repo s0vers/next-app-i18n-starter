@@ -1,7 +1,6 @@
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
-import { getPathname } from "@/i18n/navigation";
 import {
   getMessages,
   getNow,
@@ -15,7 +14,12 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { openGraphLocales, siteConfig } from "@/lib/site";
+import {
+  getAlternateLanguages,
+  getLocaleUrl,
+  openGraphLocales,
+  siteConfig,
+} from "@/lib/site";
 import {
   isTheme,
   resolveSSRTheme,
@@ -33,11 +37,6 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
-
-async function getLocaleUrl(locale: string) {
-  const pathname = await getPathname({ locale, href: "/" });
-  return new URL(pathname, siteConfig.url).toString();
-}
 
 export default async function RootLayout({
   children,
@@ -73,18 +72,12 @@ export default async function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" />
         <meta name="theme-color" content="#000000" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning
       >
-        <ThemeProvider initialTheme={initialTheme} defaultTheme="dark" enableSystem>
+        <ThemeProvider initialTheme={initialTheme}>
           <NextIntlClientProvider messages={messages} timeZone={timeZone} now={now}>
             {children}
           </NextIntlClientProvider>
@@ -108,12 +101,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "Metadata" });
   const canonical = await getLocaleUrl(locale);
-
-  const languages = Object.fromEntries(
-    await Promise.all(
-      routing.locales.map(async (l) => [l, await getLocaleUrl(l)]),
-    ),
-  );
+  const languages = await getAlternateLanguages();
 
   return {
     metadataBase: new URL(siteConfig.url),

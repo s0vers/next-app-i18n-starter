@@ -1,0 +1,45 @@
+---
+description: App Router pages, layouts, and route handlers under [locale]
+globs: src/app/**/*
+alwaysApply: false
+---
+
+# App Router pages
+
+## Structure
+
+- All user-facing routes: `src/app/[locale]/…`
+- Root metadata routes: `src/app/sitemap.ts`, `src/app/robots.ts` (not locale-scoped)
+- Catch-all `src/app/[locale]/[...rest]/page.tsx` → `notFound()`
+
+## Server page template
+
+```tsx
+import { setRequestLocale, getTranslations } from "next-intl/server";
+
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations({ locale, namespace: "YourNamespace" });
+  return <h1>{t("title")}</h1>;
+}
+```
+
+## Layout (`src/app/[locale]/layout.tsx`)
+
+- Validate locale with `hasLocale(routing.locales, locale)` → `notFound()`.
+- Set `<html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>`.
+- `generateStaticParams` must list all `routing.locales`.
+
+## React 19 constraints
+
+- JSON-LD: Server Component only; serialize with `JSON.stringify(data).replace(/</g, "\\u003c")`.
+- No `next/script` or client-side `<script>` for theme — cookie SSR in layout.
+
+## Params
+
+- Next.js 16: `params` and `searchParams` are **Promises** — always `await params`.

@@ -46,13 +46,8 @@
     "title": "按语言格式化",
     "description": "使用 next-intl 格式化价格和日期。每种语言通过 getRequestConfig 设置货币和时区。",
     "switchLanguageHint": "在顶部切换语言，即可看到货币、日期和相对时间的自动更新。",
-    "activeSettings": "当前格式：{currency} · {timeZone}",
     "currencySection": "货币格式",
     "timeSection": "日期与时间格式",
-    "productLabel": "模板许可证",
-    "priceLabel": "产品价格",
-    "subscriptionLabel": "订阅",
-    "usersLabel": "活跃用户",
     "currentDateTime": "短格式",
     "relativeTime": "最后更新",
     "utcReference": "同一时刻（UTC）",
@@ -60,5 +55,10 @@
     "priceMessage": "此产品价格 {price, number, currency}",
     "subscriptionPrice": "月度计划：{price, number, currency}",
     "usersCount": "{count, number, compact} 位用户"
+  },
+  "NotFound": {
+    "title": "页面未找到",
+    "description": "您访问的页面不存在或可能已被移动。",
+    "homeLink": "返回首页"
   }
 }

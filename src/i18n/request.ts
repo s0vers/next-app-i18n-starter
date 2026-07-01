@@ -1,11 +1,7 @@
 import { getRequestConfig } from "next-intl/server";
 import { hasLocale } from "next-intl";
 import { routing } from "./routing";
-import {
-  createRegionalFormats,
-  resolveCurrency,
-  resolveTimeZone,
-} from "./regional";
+import { createRegionalFormats, localeRegionalDefaults } from "./regional";
 
 export default getRequestConfig(async ({ requestLocale }) => {
   const requested = await requestLocale;
@@ -13,8 +9,8 @@ export default getRequestConfig(async ({ requestLocale }) => {
     ? requested
     : routing.defaultLocale;
 
-  const currency = resolveCurrency(locale);
-  const timeZone = resolveTimeZone(locale);
+  const { currency, timeZone } =
+    localeRegionalDefaults[locale] ?? localeRegionalDefaults.en;
 
   return {
     locale,

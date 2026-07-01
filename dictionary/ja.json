@@ -45,13 +45,8 @@
     "title": "ロケール連動フォーマット",
     "description": "next-intl で価格と日時をフォーマット。各ロケールは getRequestConfig で通貨とタイムゾーンを設定します。",
     "switchLanguageHint": "ヘッダーで言語を切り替えると、通貨・日時・相対時間が自動的に更新されます。",
-    "activeSettings": "現在のフォーマット: {currency} · {timeZone}",
     "currencySection": "通貨フォーマット",
     "timeSection": "日時フォーマット",
-    "productLabel": "テンプレートライセンス",
-    "priceLabel": "製品価格",
-    "subscriptionLabel": "サブスクリプション",
-    "usersLabel": "アクティブユーザー",
     "currentDateTime": "短い形式",
     "relativeTime": "最終更新",
     "utcReference": "同じ瞬間（UTC）",
@@ -59,5 +54,10 @@
     "priceMessage": "この製品の価格は {price, number, currency} です",
     "subscriptionPrice": "月額プラン: {price, number, currency}",
     "usersCount": "{count, number, compact} ユーザー"
+  },
+  "NotFound": {
+    "title": "ページが見つかりません",
+    "description": "お探しのページは存在しないか、移動した可能性があります。",
+    "homeLink": "ホームに戻る"
   }
 }

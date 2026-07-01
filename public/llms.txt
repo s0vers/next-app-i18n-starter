@@ -1,15 +1,77 @@
-# Next.js i18n Starter
+# Next.js i18n Starter — LLM Context File
+# https://llmstxt.org/ — machine-readable project reference for AI assistants
+# Repository: https://github.com/S0vers/next-app-i18n-starter
+# Live demo: https://next-app-i18n-starter.vercel.app
 
-> Next.js 16 App Router boilerplate with next-intl 4, locale-driven currency/date formatting, shadcn UI, RTL support, and SEO.
+> Next.js 16 App Router boilerplate with next-intl 4, locale-driven currency/date/time formatting, shadcn UI, RTL support, cookie-based theme SSR, and full SEO (hreflang, JSON-LD, sitemap).
 
-## Stack
+---
 
-- Next.js 16 (App Router, Turbopack)
-- React 19
-- next-intl 4
-- Tailwind CSS 4
-- shadcn/ui
-- TypeScript
+## Quick answers for common tasks
+
+### How do I add a new language?
+1. Copy `dictionary/en.json` → `dictionary/xx.json` and translate all namespaces.
+2. Add `"xx"` to `locales` in `src/i18n/routing.ts`.
+3. Add `{ currency, timeZone }` to `localeRegionalDefaults` in `src/i18n/regional.ts`.
+4. Add label to `languageLabels` in `src/components/LanguageSwitcher.tsx`.
+5. Add BCP 47 mapping to `openGraphLocales` in `src/lib/site.ts` (e.g. `fr: "fr_FR"`).
+6. Run `bun run build` — TypeScript picks up new keys via `global.d.ts` (typed from `en.json`).
+
+### How does currency/timezone formatting work?
+Locale drives everything. No user override dropdowns or cookies.
+- `src/i18n/request.ts` → `getRequestConfig` sets `timeZone`, `now`, `formats` per locale.
+- `src/i18n/regional.ts` → `localeRegionalDefaults` maps locale → currency + IANA time zone.
+- Client: `useFormatter()`, `useTimeZone()`, `useNow()` from `next-intl`.
+- Demo UI: `src/components/LocalizationTab.tsx` — switch language in header to see changes.
+
+### How do I add a new page?
+1. Create `src/app/[locale]/your-page/page.tsx` (Server Component).
+2. Call `setRequestLocale(locale)` at top of page (enables static rendering).
+3. Use `getTranslations({ locale, namespace: "YourNamespace" })` for server text.
+4. Use `useTranslations("YourNamespace")` in client components.
+5. Add keys to all `dictionary/*.json` files.
+6. Link with `Link` from `@/i18n/navigation` (not `next/link` directly).
+
+### How do I navigate between locales?
+Always use `@/i18n/navigation` wrappers — they respect `localePrefix: as-needed`:
+```tsx
+import { Link, useRouter, usePathname } from "@/i18n/navigation";
+router.replace(pathname, { locale: "ar" });
+```
+
+### How do I update SEO metadata?
+Edit `dictionary/{locale}/Metadata` in all 5 JSON files (`title`, `description`, `keywords`). Layout `generateMetadata` in `src/app/[locale]/layout.tsx` reads this namespace via `getTranslations({ locale, namespace: "Metadata" })`. Rebuild after changes.
+
+### How do I add SEO to a new page?
+1. Add `metaTitle` / `metaDescription` keys to a new namespace in all dictionary files.
+2. Export `generateMetadata` from the page using `getTranslations` + `getPathname({ locale, href: "/your-path" })` for canonical.
+3. Add a sitemap entry in `src/app/sitemap.ts` with `alternates.languages` per locale.
+4. Optionally add page-specific JSON-LD in the page Server Component.
+
+### How are hreflang URLs built?
+Never hardcode `/en` or `/ar`. Use `getPathname({ locale, href: "/" })` from `@/i18n/navigation`, then `new URL(pathname, siteConfig.url)`. With `localePrefix: as-needed`, English is `/` (no prefix), others are `/ar`, `/zh`, etc.
+
+### What is proxy.ts vs middleware?
+Next.js 16 renamed middleware to proxy. This project uses `src/proxy.ts` with `createMiddleware` from `next-intl/middleware`. Same role: locale detection, redirects, cookie handling.
+
+---
+
+## Stack and versions
+
+| Package | Version | Role |
+|---------|---------|------|
+| next | 16.2.x | App Router, Turbopack (default in dev), Metadata API |
+| react / react-dom | 19.2.x | Server Components, no `<script>` in client trees |
+| next-intl | 4.13.x | i18n routing, ICU messages, formatters |
+| tailwindcss | 4.3.x | Styling via `@tailwindcss/postcss` |
+| motion | 12.x | Animations (`motion/react`, not framer-motion) |
+| lucide-react | 1.22.x | Icons |
+| @vercel/analytics | 1.6.x | Analytics in root layout |
+| @vercel/speed-insights | 1.3.x | Performance insights |
+
+Package manager: **bun** (preferred). pnpm also works.
+
+---
 
 ## Author
 
@@ -18,49 +80,486 @@
 - Website: https://s0vers.com
 - GitHub: https://github.com/S0vers
 - Twitter: @s0ver5
-
-## Links
-
 - Repository: https://github.com/S0vers/next-app-i18n-starter
-- Live demo: https://next-app-i18n-starter.vercel.app
-- next-intl docs: https://next-intl.dev
 
-## Key paths
+---
 
-- `src/proxy.ts` — i18n proxy (Next.js 16, replaces middleware)
-- `src/i18n/request.ts` — `getRequestConfig`: locale, timeZone, formats, messages
-- `src/i18n/routing.ts` — locales, `localePrefix: as-needed`
-- `src/i18n/regional.ts` — per-locale currency and time zone defaults
-- `src/i18n/navigation.ts` — localized `Link`, `useRouter`, `getPathname`
-- `dictionary/` — translation JSON files (en, ar, zh, es, ja)
-- `src/lib/site.ts` — site URL, author, SEO constants
-- `src/app/[locale]/layout.tsx` — `generateMetadata`, theme SSR
-- `src/app/[locale]/page.tsx` — home page + JSON-LD
-- `src/app/sitemap.ts` — sitemap with hreflang alternates
-- `src/app/robots.ts` — robots.txt generation
+## Environment variables
 
-## Locales and regional defaults
+| Variable | Required | Description |
+|----------|----------|-------------|
+| NEXT_PUBLIC_SITE_URL | No (has default) | Production URL for metadataBase, sitemap, canonical, OG. Default: `https://next-app-i18n-starter.vercel.app` |
 
-| Locale | Currency | Time zone |
-|--------|----------|-----------|
-| en | USD | America/New_York |
-| ar | SAR | Asia/Riyadh |
-| zh | CNY | Asia/Shanghai |
-| es | EUR | Europe/Madrid |
-| ja | JPY | Asia/Tokyo |
+Copy `.env.example` → `.env.local`. Never commit secrets.
 
-Switch language in the header to see formatting update. Currency and time zone are driven by locale via `getRequestConfig`, not separate user overrides.
+---
 
-## Conventions
+## Architecture
 
-- Package manager: bun (pnpm also supported)
-- No secrets committed; use `.env.example` for `NEXT_PUBLIC_SITE_URL`
-- Theme: cookie-based SSR on `<html>`, client `ThemeProvider`
-- Routing: `localePrefix: as-needed` (default locale at `/`, others prefixed)
+```
+Request
+  → src/proxy.ts (next-intl middleware)
+  → src/i18n/routing.ts (locales, localePrefix: as-needed)
+  → src/i18n/request.ts (getRequestConfig)
+       ├── locale from URL / cookie / Accept-Language
+       ├── timeZone from regional.ts
+       ├── formats (currency, dateTime, compact) from regional.ts
+       └── messages from dictionary/{locale}.json
+  → src/app/[locale]/layout.tsx
+       ├── generateMetadata (SEO)
+       ├── theme cookie → className on <html>
+       └── NextIntlClientProvider (messages, timeZone, now)
+  → page.tsx + client components
+```
 
-## SEO
+### URL routing (`localePrefix: as-needed`)
 
-- `metadataBase`, hreflang via `getPathname`
-- JSON-LD: WebSite + Person schemas
-- Dynamic sitemap with language alternates
-- Locale-specific metadata in `dictionary/*/Metadata`
+| Locale | URL path | HTML dir |
+|--------|----------|----------|
+| en (default) | `/` | ltr |
+| ar | `/ar` | rtl |
+| zh | `/zh` | ltr |
+| es | `/es` | ltr |
+| ja | `/ja` | ltr |
+
+`localeDetection: true` — browser language used on first visit.
+
+---
+
+## File reference
+
+### i18n core
+- `src/proxy.ts` — next-intl middleware export + matcher config
+- `src/i18n/routing.ts` — `defineRouting({ locales, defaultLocale, localePrefix })`
+- `src/i18n/request.ts` — `getRequestConfig` plugin entry (wired in `next.config.ts`)
+- `src/i18n/regional.ts` — `localeRegionalDefaults`, `resolveCurrency`, `resolveTimeZone`, `createRegionalFormats`
+- `src/i18n/navigation.ts` — `createNavigation(routing)` → `Link`, `redirect`, `useRouter`, `usePathname`, `getPathname`
+- `next.config.ts` — `createNextIntlPlugin("./src/i18n/request.ts")`
+
+### App routes
+- `src/app/[locale]/layout.tsx` — root layout, `generateMetadata`, `generateStaticParams`, theme SSR
+- `src/app/[locale]/page.tsx` — home page, JSON-LD (WebSite + Person schemas)
+- `src/app/[locale]/[...rest]/page.tsx` — catch-all 404
+- `src/app/[locale]/not-found.tsx` — localized not-found
+- `src/app/sitemap.ts` — sitemap with `alternates.languages` via `getPathname`
+- `src/app/robots.ts` — dynamic robots.txt
+- `src/app/error.tsx` — global error boundary
+
+### Components
+- `src/components/pages/HomeIndex.tsx` — main landing page (tabs: install, OmitRTL, contribute, localization)
+- `src/components/LocalizationTab.tsx` — locale formatting demo (read-only, no copy buttons)
+- `src/components/LanguageSwitcher.tsx` — `router.replace(pathname, { locale })`
+- `src/components/ModeToggle.tsx` — light/dark toggle via `useTheme()`
+- `src/components/theme-provider.tsx` — client theme context, cookie + localStorage sync
+- `src/components/OmmitRlt.tsx` — force LTR in RTL locales (note: filename typo is intentional/historical)
+- `src/components/ui/*` — shadcn/ui primitives (button, card, tabs, dropdown-menu, select)
+
+### Lib
+- `src/lib/site.ts` — `siteConfig` (name, url, author, github), `openGraphLocales`
+- `src/lib/theme.ts` — `THEME_STORAGE_KEY`, `resolveSSRTheme`, `setThemeCookie`
+- `src/lib/utils.ts` — `cn()` helper (tailwind-merge + clsx)
+- `global.d.ts` — `IntlMessages` typed from `dictionary/en.json`
+
+### Translations
+- `dictionary/en.json` — source of truth for TypeScript message keys
+- `dictionary/ar.json`, `zh.json`, `es.json`, `ja.json` — must mirror en.json structure
+
+### Translation namespaces (en.json)
+- `Index` — landing page UI (hero, tabs, installation steps, contribute steps, errors)
+- `Footer` — copyright, links
+- `Metadata` — SEO title, description, keywords (used in `generateMetadata`)
+- `Localization` — localization tab labels and ICU format examples
+
+### ICU message examples in Localization namespace
+```json
+"priceMessage": "This product costs {price, number, currency}"
+"usersCount": "{count, number, compact} users"
+```
+Requires matching `formats` in `createRegionalFormats()`.
+
+---
+
+## Regional defaults
+
+| Locale | Language | Currency | Time zone | RTL |
+|--------|----------|----------|-----------|-----|
+| en | English | USD | America/New_York | No |
+| ar | Arabic | SAR | Asia/Riyadh | Yes |
+| zh | Chinese | CNY | Asia/Shanghai | No |
+| es | Spanish | EUR | Europe/Madrid | No |
+| ja | Japanese | JPY | Asia/Tokyo | No |
+
+Format names available via `useFormatter()`:
+- `format.number(value, "price")` — currency with 2 decimal places
+- `format.number(value, "compact")` — compact notation (e.g. 12.8K)
+- `format.dateTime(date, "long")` — full date + time in locale time zone
+- `format.dateTime(date, "short")` — medium date + short time
+- `format.relativeTime(from, to)` — relative time (e.g. "2 hours ago")
+
+---
+
+## SEO — complete implementation reference
+
+This section documents every SEO mechanism in the project. Read this before modifying metadata, sitemap, structured data, or social tags.
+
+### SEO file map
+
+| File | What it does |
+|------|-------------|
+| `src/lib/site.ts` | `siteConfig` (name, url, author, github), `openGraphLocales` BCP 47 map |
+| `src/app/[locale]/layout.tsx` | `generateMetadata()` → all `<head>` meta/link tags per locale |
+| `src/app/[locale]/page.tsx` | JSON-LD `WebSite` + `Person` schemas (home page only) |
+| `src/app/sitemap.ts` | Generates `/sitemap.xml` with hreflang alternates |
+| `src/app/robots.ts` | Generates `/robots.txt` pointing to sitemap |
+| `dictionary/en.json` → `Metadata` | Source of truth for SEO text keys (typed via global.d.ts) |
+| `dictionary/ar.json` etc. | Translated Metadata per locale |
+| `public/og-image.png` | 1200×630 Open Graph / Twitter preview image |
+| `public/google52d37058772b10e6.html` | Alternate Google Search Console verification file |
+| `.env.example` | Documents `NEXT_PUBLIC_SITE_URL` |
+
+### Central config: src/lib/site.ts
+
+```ts
+export const siteConfig = {
+  name: "Next.js i18n Starter",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://next-app-i18n-starter.vercel.app",
+  github: "https://github.com/S0vers/next-app-i18n-starter",
+  author: {
+    name: "Sovers Tonmoy Pandey",
+    alias: "S0vers",
+    url: "https://s0vers.com",
+    twitter: "@s0ver5",
+    github: "https://github.com/S0vers",
+  },
+};
+
+export const openGraphLocales = {
+  en: "en_US", ar: "ar_SA", zh: "zh_CN", es: "es_ES", ja: "ja_JP",
+};
+```
+
+ALL absolute URLs in SEO output derive from `siteConfig.url`. Set `NEXT_PUBLIC_SITE_URL` in production.
+
+### generateMetadata — src/app/[locale]/layout.tsx
+
+Async function called by Next.js Metadata API per `[locale]` segment.
+
+**Helper:**
+```ts
+async function getLocaleUrl(locale: string) {
+  const pathname = await getPathname({ locale, href: "/" });
+  return new URL(pathname, siteConfig.url).toString();
+}
+```
+
+**Full return object and HTML output:**
+
+| Field | HTML output | Notes |
+|-------|-------------|-------|
+| `metadataBase: new URL(siteConfig.url)` | (base for relative URLs) | Resolves `/og-image.png` to absolute URL |
+| `title` | `<title>` | From `dictionary/{locale}/Metadata.title` |
+| `description` | `<meta name="description" content="...">` | Localized per locale |
+| `keywords` | `<meta name="keywords" content="...">` | Localized per locale |
+| `authors: [{ name, url }]` | `<meta name="author" content="...">` | Sovers Tonmoy Pandey, https://s0vers.com |
+| `creator` | `<meta name="creator" content="@s0ver5">` | Twitter handle |
+| `applicationName` | `<meta name="application-name">` | siteConfig.name |
+| `alternates.canonical` | `<link rel="canonical" href="...">` | Locale-specific absolute URL |
+| `alternates.languages` | `<link rel="alternate" hreflang="xx" href="...">` × 5 | All locales linked from every locale page |
+| `openGraph.title` | `<meta property="og:title">` | Same as title |
+| `openGraph.description` | `<meta property="og:description">` | Same as description |
+| `openGraph.url` | `<meta property="og:url">` | Locale canonical (NOT bare domain) |
+| `openGraph.siteName` | `<meta property="og:site_name">` | siteConfig.name |
+| `openGraph.images` | `<meta property="og:image">` + width/height/alt | `/og-image.png`, 1200×630 |
+| `openGraph.locale` | `<meta property="og:locale">` | BCP 47: en_US, ar_SA, etc. |
+| `openGraph.type` | `<meta property="og:type">` | `website` |
+| `twitter.card` | `<meta name="twitter:card">` | `summary_large_image` |
+| `twitter.title` | `<meta name="twitter:title">` | Localized |
+| `twitter.description` | `<meta name="twitter:description">` | Localized |
+| `twitter.images` | `<meta name="twitter:image">` | `/og-image.png` |
+| `twitter.creator` | `<meta name="twitter:creator">` | `@s0ver5` |
+| `robots.index/follow` | `<meta name="robots" content="index, follow">` | Allow crawling |
+| `robots.googleBot` | `<meta name="googlebot" ...>` | max-video-preview: -1, max-image-preview: large, max-snippet: -1 |
+| `other["google-site-verification"]` | `<meta name="google-site-verification">` | Search Console token |
+
+### hreflang URL table (localePrefix: as-needed)
+
+| Locale | getPathname({ locale, href: "/" }) | Example canonical |
+|--------|-----------------------------------|-------------------|
+| en | `/` | https://next-app-i18n-starter.vercel.app/ |
+| ar | `/ar` | https://next-app-i18n-starter.vercel.app/ar |
+| zh | `/zh` | https://next-app-i18n-starter.vercel.app/zh |
+| es | `/es` | https://next-app-i18n-starter.vercel.app/es |
+| ja | `/ja` | https://next-app-i18n-starter.vercel.app/ja |
+
+`alternates.languages` in generateMetadata builds all 5 hreflang links on every locale's page.
+
+### Translation-driven metadata — dictionary Metadata namespace
+
+```json
+"Metadata": {
+  "title": "Next.js 16 i18n Starter - Multilingual Template by S0vers",
+  "description": "Next.js 16 internationalization starter with next-intl 4...",
+  "keywords": "Next.js 16, next-intl, i18n, internationalization..."
+}
+```
+
+Present in: en.json, ar.json, zh.json, es.json, ja.json. Keys are type-checked via global.d.ts (IntlMessages = typeof en).
+
+### HTML semantics in layout
+
+```tsx
+<html lang={locale} dir={isArabic ? "rtl" : "ltr"} className={ssrTheme}>
+```
+
+- `lang` — BCP 47 language tag for crawlers and assistive tech
+- `dir` — `rtl` for Arabic only; `ltr` for all others
+- `generateStaticParams()` — pre-renders all 5 locale variants at build
+
+Additional `<head>` elements in layout (not via Metadata API):
+- `<link rel="icon" href="/favicon.ico">`
+- `<meta name="theme-color" content="#000000">`
+- Google Fonts preconnect links
+
+### JSON-LD — src/app/[locale]/page.tsx
+
+Two `<script type="application/ld+json">` blocks in the home page Server Component.
+
+**XSS-safe serialization (required by Next.js docs):**
+```ts
+function serializeJsonLd(data: Record<string, unknown>) {
+  return JSON.stringify(data).replace(/</g, "\\u003c");
+}
+```
+
+**Schema 1 — WebSite:**
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Next.js i18n Starter",
+  "description": "<from Metadata.description, localized>",
+  "url": "<siteConfig.url>",
+  "inLanguage": "<current locale, e.g. ja>",
+  "author": { "@type": "Person", "name": "Sovers Tonmoy Pandey", "url": "https://s0vers.com" }
+}
+```
+
+**Schema 2 — Person (author):**
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Sovers Tonmoy Pandey",
+  "alternateName": "S0vers",
+  "url": "https://s0vers.com",
+  "sameAs": [
+    "https://github.com/S0vers",
+    "https://twitter.com/s0ver5",
+    "https://github.com/S0vers/next-app-i18n-starter"
+  ]
+}
+```
+
+IMPORTANT: JSON-LD uses server-component `<script>` tags directly — NOT `next/script`, NOT client components. React 19 blocks scripts in client component trees.
+
+Validate at: https://search.google.com/test/rich-results
+
+### Sitemap — src/app/sitemap.ts
+
+Route: `GET /sitemap.xml` (auto-generated by Next.js App Router)
+
+```ts
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const languages = Object.fromEntries(
+    await Promise.all(
+      routing.locales.map(async (locale) => [
+        locale,
+        new URL(await getPathname({ locale, href: "/" }), siteConfig.url).toString(),
+      ]),
+    ),
+  );
+
+  return [{
+    url: siteConfig.url,
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 1,
+    alternates: { languages },
+  }];
+}
+```
+
+**Design:** ONE url entry with `alternates.languages` — NOT separate entries per locale. Matches next-intl recommended pattern. Prevents duplicate URL rows.
+
+When adding pages, add more objects to the return array, each with its own `alternates.languages` built via `getPathname({ locale, href: "/page-path" })`.
+
+### Robots — src/app/robots.ts
+
+Route: `GET /robots.txt`
+
+```ts
+export default function robots(): MetadataRoute.Robots {
+  return {
+    rules: { userAgent: "*", allow: "/" },
+    sitemap: `${siteConfig.url}/sitemap.xml`,
+  };
+}
+```
+
+Output:
+```
+User-Agent: *
+Allow: /
+Sitemap: https://your-domain.com/sitemap.xml
+```
+
+Replaces the old static `src/app/robots.txt` file (deleted).
+
+### Open Graph image
+
+- Path: `public/og-image.png`
+- Dimensions: 1200×630 (1.91:1)
+- Referenced as relative `/og-image.png` in metadata
+- Resolved to absolute URL via `metadataBase`
+- Used by both `openGraph.images` and `twitter.images`
+- `alt` text = localized Metadata.title
+
+### Google Search Console
+
+Two verification methods present:
+1. Meta tag via `other["google-site-verification"]` in generateMetadata
+2. Static HTML file at `public/google52d37058772b10e6.html`
+
+Replace verification token when deploying to a new domain.
+
+### Adding SEO to a new page — step by step
+
+Example: `/about` page
+
+1. Create `src/app/[locale]/about/page.tsx`
+2. Add to all dictionary files:
+   ```json
+   "About": { "metaTitle": "...", "metaDescription": "..." }
+   ```
+3. Page-level generateMetadata:
+   ```ts
+   const pathname = await getPathname({ locale, href: "/about" });
+   const canonical = new URL(pathname, siteConfig.url).toString();
+   return { title: t("metaTitle"), description: t("metaDescription"), alternates: { canonical } };
+   ```
+4. Extend sitemap.ts with new entry + alternates.languages for `/about`
+5. Optional: add JSON-LD script block in the page component
+
+### SEO pitfalls (project-specific)
+
+- DO NOT hardcode `/en` — English uses `/` with as-needed prefix
+- DO NOT duplicate locale URL rows in sitemap when using alternates.languages
+- DO NOT put JSON-LD in client components or use next/script
+- DO NOT hardcode domain — use siteConfig.url
+- DO NOT forget to translate Metadata namespace when adding a locale
+- DO NOT use next/link for canonical URL construction — use getPathname
+
+### SEO verification commands
+
+```bash
+curl -s http://localhost:3000/sitemap.xml
+curl -s http://localhost:3000/robots.txt
+curl -s http://localhost:3000/ar | grep -E 'lang=|canonical|hreflang|og:|twitter:'
+curl -s http://localhost:3000 | grep 'application/ld+json'
+```
+
+### Production SEO checklist
+
+- Set NEXT_PUBLIC_SITE_URL to production domain
+- Replace public/og-image.png
+- Update google-site-verification token
+- Translate Metadata in all dictionary files
+- Submit sitemap.xml in Google Search Console
+- Test hreflang, JSON-LD, OG previews
+
+### External SEO references
+
+- Next.js Metadata API: https://nextjs.org/docs/app/api-reference/functions/generate-metadata
+- Next.js JSON-LD guide: https://nextjs.org/docs/app/guides/json-ld
+- next-intl sitemap pattern: https://next-intl.dev/docs/environments/actions-metadata-route-handlers#sitemap
+- Google hreflang docs: https://developers.google.com/search/docs/specialty/international/localized-versions
+
+---
+
+## Theme system
+
+React 19 blocks `<script>` tags in component trees. Theme uses cookie SSR instead:
+
+1. Server (`layout.tsx`): read `theme` cookie → `resolveSSRTheme()` → `className` on `<html>`
+2. Client (`theme-provider.tsx`): `useSyncExternalStore` for system preference, syncs cookie + localStorage on change
+3. `ModeToggle.tsx`: toggles between `light` / `dark` (not system)
+
+Cookie name: `theme` (see `src/lib/theme.ts`).
+
+---
+
+## RTL and OmitRTL
+
+Arabic (`ar`) sets `dir="rtl"` on `<html>`. Code blocks, terminal commands, and formatted numbers should stay LTR:
+
+```tsx
+import OmitRTL from "@/components/OmmitRlt";
+<OmitRTL omitRTL>{children}</OmitRTL>
+```
+
+NPM package also available: `react-omit-rtl`.
+
+---
+
+## Scripts
+
+```bash
+bun install    # Install dependencies
+bun dev        # Dev server (Turbopack)
+bun build      # Production build + typecheck
+bun start      # Production server
+bun lint       # ESLint (eslint-config-next flat config)
+```
+
+---
+
+## Conventions and pitfalls
+
+DO:
+- Use `Link`, `useRouter`, `usePathname` from `@/i18n/navigation`
+- Use `setRequestLocale(locale)` in every `[locale]` page/layout for static rendering
+- Add translation keys to ALL dictionary files when adding features
+- Use `getPathname` for SEO URLs (respects `as-needed` prefix)
+- Prefer Server Components; add `"use client"` only when needed
+
+DON'T:
+- Use `next/link` or `next/navigation` directly for locale-aware routing
+- Add `<Script>` or inline `<script>` in client components (React 19 error)
+- Hardcode site URL — use `siteConfig.url` or `NEXT_PUBLIC_SITE_URL`
+- Duplicate locale arrays — import `routing.locales` from `src/i18n/routing.ts`
+- Hardcode hreflang URLs like `/en` — English canonical is `/` with as-needed routing
+- Duplicate per-locale rows in sitemap.ts when alternates.languages is used
+- Put JSON-LD in client components — only Server Components (see page.tsx)
+- Touch `.env` in automation — use `.env.example` as reference only
+
+---
+
+## Type safety
+
+`global.d.ts` imports `dictionary/en.json` as `IntlMessages`. All `useTranslations("Namespace")` and `t("key")` calls are type-checked against en.json structure. When adding keys, update en.json first.
+
+---
+
+## External documentation
+
+- next-intl: https://next-intl.dev
+- Next.js App Router: https://nextjs.org/docs/app
+- Next.js Metadata API: https://nextjs.org/docs/app/building-your-application/optimizing/metadata
+- Next.js JSON-LD: https://nextjs.org/docs/app/guides/json-ld
+- shadcn/ui: https://ui.shadcn.com
+
+---
+
+## License
+
+MIT © Sovers Tonmoy Pandey (https://s0vers.com)

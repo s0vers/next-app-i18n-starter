@@ -1,37 +1,13 @@
-import { routing } from "./routing";
+import { localeConfig, type AppLocale, type AppTimeZone, type Currency } from "./locales";
 
-export type Currency = "USD" | "EUR" | "GBP" | "JPY" | "CNY" | "SAR";
-export type AppTimeZone =
-  | "America/New_York"
-  | "Europe/London"
-  | "Europe/Berlin"
-  | "Europe/Madrid"
-  | "Asia/Tokyo"
-  | "Asia/Shanghai"
-  | "Asia/Riyadh";
+export type { Currency, AppTimeZone };
 
-export const localeRegionalDefaults: Record<
-  (typeof routing.locales)[number],
-  { currency: Currency; timeZone: AppTimeZone }
-> = {
-  en: { currency: "USD", timeZone: "America/New_York" },
-  ar: { currency: "SAR", timeZone: "Asia/Riyadh" },
-  zh: { currency: "CNY", timeZone: "Asia/Shanghai" },
-  es: { currency: "EUR", timeZone: "Europe/Madrid" },
-  ja: { currency: "JPY", timeZone: "Asia/Tokyo" },
-};
-
-export function resolveCurrency(locale: string): Currency {
-  const defaults =
-    localeRegionalDefaults[locale as keyof typeof localeRegionalDefaults];
-  return defaults?.currency ?? "USD";
-}
-
-export function resolveTimeZone(locale: string): AppTimeZone {
-  const defaults =
-    localeRegionalDefaults[locale as keyof typeof localeRegionalDefaults];
-  return defaults?.timeZone ?? "America/New_York";
-}
+export const localeRegionalDefaults = Object.fromEntries(
+  Object.entries(localeConfig).map(([locale, config]) => [
+    locale,
+    { currency: config.currency, timeZone: config.timeZone },
+  ]),
+) as Record<AppLocale, { currency: Currency; timeZone: AppTimeZone }>;
 
 export function createRegionalFormats(currency: Currency) {
   return {

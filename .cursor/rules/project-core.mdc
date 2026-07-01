@@ -1,0 +1,34 @@
+---
+description: Core project standards — tooling, env, commits, and change discipline
+alwaysApply: true
+---
+
+# Project core
+
+## Tooling
+
+- Use **bun** (or pnpm). Do not add npm/yarn lockfiles.
+- Node **24.x**. Run `bun run build` after meaningful Next.js/i18n changes.
+- Run `bun run lint` when editing TypeScript or ESLint config.
+
+## Environment
+
+- **Never modify `.env`** or commit env files. Document new vars in `.env.example` only.
+- Canonical URL: `NEXT_PUBLIC_SITE_URL` → consumed by `src/lib/site.ts`.
+
+## Code changes
+
+- Smallest correct diff; no unrelated refactors or new abstractions for one-liners.
+- Match existing import style (`@/…` aliases), naming, and file layout.
+- shadcn primitives live in `src/components/ui/` — extend via `components.json`, don't fork casually.
+- Prefer CSS transitions over animation libraries unless motion is explicitly requested.
+
+## Git
+
+- Commit only when the user asks. No "Made-with: Cursor" in commit messages.
+- Do not commit `.next/`, `node_modules/`, or `.env*`.
+
+## Docs
+
+- Long-form guides: `README.md` and `public/llms.txt`.
+- Agent rules: `.cursor/rules/` — keep rules short; update rules when conventions change.

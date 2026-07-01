@@ -2,6 +2,7 @@
 
 import { useLocale } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
+import { localeConfig } from "@/i18n/locales";
 import { routing } from "@/i18n/routing";
 import { Button } from "./ui/button";
 import {
@@ -11,35 +12,25 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 
-const languageLabels = {
-  en: "English",
-  ar: "العربية",
-  zh: "中文",
-  es: "Español",
-  ja: "日本語",
-} as const;
-
 const LanguageSwitcher = () => {
   const router = useRouter();
   const pathname = usePathname();
   const currentLanguage = useLocale();
 
-  const changeLanguage = (newLanguage: string) => {
-    router.replace(pathname, { locale: newLanguage });
-    router.refresh();
-  };
-
   return (
     <DropdownMenu dir={currentLanguage === "ar" ? "rtl" : "ltr"}>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="sm">
-          {languageLabels[currentLanguage as keyof typeof languageLabels]}
+          {localeConfig[currentLanguage as keyof typeof localeConfig].label}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         {routing.locales.map((locale) => (
-          <DropdownMenuItem key={locale} onClick={() => changeLanguage(locale)}>
-            {languageLabels[locale]}
+          <DropdownMenuItem
+            key={locale}
+            onClick={() => router.replace(pathname, { locale })}
+          >
+            {localeConfig[locale].label}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

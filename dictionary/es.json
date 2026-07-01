@@ -45,13 +45,8 @@
     "title": "Formato según idioma",
     "description": "Formatea precios y fechas con next-intl. Cada idioma define moneda y zona horaria en getRequestConfig.",
     "switchLanguageHint": "Cambia el idioma en la cabecera para ver cómo se actualizan moneda, fechas y tiempo relativo.",
-    "activeSettings": "Formato activo: {currency} · {timeZone}",
     "currencySection": "Formato de moneda",
     "timeSection": "Formato de fecha y hora",
-    "productLabel": "Licencia de plantilla",
-    "priceLabel": "Precio del producto",
-    "subscriptionLabel": "Suscripción",
-    "usersLabel": "Usuarios activos",
     "currentDateTime": "Formato corto",
     "relativeTime": "Última actualización",
     "utcReference": "Mismo instante en UTC",
@@ -59,5 +54,10 @@
     "priceMessage": "Este producto cuesta {price, number, currency}",
     "subscriptionPrice": "Plan mensual: {price, number, currency}",
     "usersCount": "{count, number, compact} usuarios"
+  },
+  "NotFound": {
+    "title": "Página no encontrada",
+    "description": "La página que buscas no existe o puede haber sido movida.",
+    "homeLink": "Volver al inicio"
   }
 }

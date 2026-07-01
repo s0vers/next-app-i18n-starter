@@ -1,5 +1,6 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import HomeIndex from "@/components/pages/HomeIndex";
+import { getGithubStarCount } from "@/lib/github";
 import { siteConfig } from "@/lib/site";
 
 function serializeJsonLd(data: Record<string, unknown>) {
@@ -14,7 +15,10 @@ export default async function HomePage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const t = await getTranslations({ locale, namespace: "Metadata" });
+  const [t, starCount] = await Promise.all([
+    getTranslations({ locale, namespace: "Metadata" }),
+    getGithubStarCount(),
+  ]);
 
   const websiteJsonLd = {
     "@context": "https://schema.org",
@@ -53,7 +57,7 @@ export default async function HomePage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(personJsonLd) }}
       />
-      <HomeIndex />
+      <HomeIndex starCount={starCount} />
     </>
   );
 }

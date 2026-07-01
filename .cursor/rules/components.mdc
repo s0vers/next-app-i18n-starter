@@ -1,0 +1,44 @@
+---
+description: React components — shadcn/ui, RTL, theme, and client/server boundaries
+globs: src/components/**/*
+alwaysApply: false
+---
+
+# Components
+
+## Organization
+
+- `src/components/pages/` — page-level compositions (e.g. `HomeIndex.tsx`)
+- `src/components/ui/` — shadcn primitives (Button, Card, Tabs, …)
+- Feature components at `src/components/` root
+
+## Client vs server
+
+- Add `"use client"` only when using hooks, events, or browser APIs.
+- Prefer Server Components for pages; pass translated strings or use `NextIntlClientProvider` (set in layout).
+
+## Styling
+
+- Tailwind CSS 4 + `cn()` from `@/lib/utils`.
+- Use CSS variables from `globals.css` for theme tokens.
+
+## RTL
+
+- Arabic sets `dir="rtl"` on `<html>`.
+- Keep code, numbers, logos LTR with `OmitRTL` from `@/components/OmmitRlt`:
+
+```tsx
+<OmitRTL omitRTL>
+  <pre><code>{command}</code></pre>
+</OmitRTL>
+```
+
+## Theme
+
+- No `next-themes`. Theme: cookie SSR (`src/lib/theme.ts`) + `ThemeProvider` + `ModeToggle`.
+- Do not inject blocking scripts for theme flash prevention.
+
+## UI additions
+
+- New shadcn components: follow `components.json` aliases (`@/components`, `@/lib/utils`).
+- Icons: `lucide-react`.

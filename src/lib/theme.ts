@@ -1,21 +1,18 @@
 export const THEME_STORAGE_KEY = "theme";
 
-export type Theme = "light" | "dark" | "system";
-export type ResolvedTheme = "light" | "dark";
+export type Theme = "light" | "dark";
 
 export function isTheme(value: string | undefined): value is Theme {
-  return value === "light" || value === "dark" || value === "system";
+  return value === "light" || value === "dark";
 }
 
-/** Server-side: resolve cookie to a concrete class for `<html>`. */
 export function resolveSSRTheme(
   cookieValue: string | undefined,
-  defaultTheme: ResolvedTheme = "dark",
-): ResolvedTheme {
-  if (cookieValue === "light" || cookieValue === "dark") {
-    return cookieValue;
-  }
-  return defaultTheme;
+  defaultTheme: Theme = "dark",
+): Theme {
+  return cookieValue === "light" || cookieValue === "dark"
+    ? cookieValue
+    : defaultTheme;
 }
 
 export function setThemeCookie(theme: Theme) {
