@@ -601,7 +601,9 @@ Add the key to `en.json` and every other dictionary. TypeScript checks message k
 
 ### `Failed to load native binding` or an SWC cache error on Windows
 
-`next-intl` loads `@swc/core` from `next.config.ts`. From 1.16, SWC extracts its native addon into `%LOCALAPPDATA%swc` and refuses a cache folder whose ancestors grant write rights to an AppContainer account, which some Windows setups do. The `overrides` entry in `package.json` pins `@swc/core` to 1.15.33, which loads its addon directly. Keep the override until you have checked that `bun run build` works on your machine without it.
+`next-intl` loads `@swc/core` from `next.config.ts`. From 1.16, SWC extracts its native addon into a cache folder and refuses any folder whose ancestors grant write rights to accounts other than yours. On Windows that rejects `%LOCALAPPDATA%swc` when an app package holds rights on `AppDataLocal`, and it rejects most folders on other drives, because they inherit `Authenticated Users: Modify`. The error is several levels deep in the `cause` of `Failed to load native binding`. It is reported upstream in [swc-project/swc#12442](https://github.com/swc-project/swc/issues/12442).
+
+This starter pins `@swc/core` to 1.15.33 through `overrides` in `package.json`, which loads its addon directly, so a fresh install works. If you remove the override, set `SWC_NATIVE_BINDING_CACHE` to a folder under your user profile, for example `C:Users<you>.swc-cache`, whose ancestors only you and administrators can write to. Remove the override once that issue is fixed and `bun run build` passes without it.
 
 ### Wrong locale in URL
 
