@@ -8,7 +8,8 @@ alwaysApply: false
 
 ## Single source of truth
 
-- `src/lib/site.ts` — `siteConfig`, `openGraphLocales`
+- `src/lib/site.ts` — `siteConfig`, canonical and hreflang URL helpers
+- `src/i18n/locales.ts` — Open Graph locale tags
 - Copy: `dictionary/{locale}/Metadata` (`title`, `description`, `keywords`)
 
 ## Canonical and hreflang URLs
@@ -16,8 +17,8 @@ alwaysApply: false
 Use `getLocaleUrl` / `getAlternateLanguages` from `@/lib/site` — never duplicate hreflang maps in layout and sitemap.
 
 ```ts
-const canonical = await getLocaleUrl(locale, "/your-path");
-const languages = await getAlternateLanguages("/your-path");
+const canonical = getLocaleUrl(locale, "/your-path");
+const languages = getAlternateLanguages("/your-path");
 ```
 
 | Locale | Path |
@@ -33,8 +34,9 @@ const languages = await getAlternateLanguages("/your-path");
 
 ## Sitemap (`src/app/sitemap.ts`)
 
-- One entry per logical page with `alternates.languages` — not duplicate rows per locale.
-- New pages: add entry with `getPathname({ locale, href: "/your-path" })` for each locale.
+- One entry per locale URL, each with the same complete `alternates.languages` map (including itself and `x-default`).
+- Only include `lastModified` when a real content update date is available; omit `changeFrequency` and `priority`.
+- New pages: add one entry per locale with `getLocaleUrl(locale, "/your-path")` and a shared `getAlternateLanguages("/your-path")` map.
 
 ## New page SEO checklist
 

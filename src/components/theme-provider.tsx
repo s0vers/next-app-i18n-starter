@@ -2,14 +2,13 @@
 
 import {
   createContext,
-  useCallback,
   useContext,
   useEffect,
   useMemo,
   useState,
   type ReactNode,
 } from "react";
-import { type Theme, setThemeCookie, THEME_STORAGE_KEY } from "@/lib/theme";
+import { type Theme, setThemeCookie } from "@/lib/theme";
 
 type ThemeContextValue = {
   theme: Theme;
@@ -17,18 +16,22 @@ type ThemeContextValue = {
 };
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
-
-function readStoredTheme(initialTheme: Theme): Theme {
-  if (typeof window === "undefined") {
-    return initialTheme;
-  }
-  const stored = localStorage.getItem(THEME_STORAGE_KEY);
-  return stored === "light" || stored === "dark" ? stored : initialTheme;
-}
+let restoreTransitions: number | undefined;
 
 function applyTheme(theme: Theme) {
-  document.documentElement.classList.remove("light", "dark");
-  document.documentElement.classList.add(theme);
+  const root = document.documentElement;
+  if (root.classList.contains(theme)) return;
+
+  if (restoreTransitions !== undefined) cancelAnimationFrame(restoreTransitions);
+  root.classList.add("theme-switching");
+  root.classList.toggle("light", theme === "light");
+  root.classList.toggle("dark", theme === "dark");
+  // Apply the new colors before transitions are restored on the next frame.
+  void root.offsetWidth;
+  restoreTransitions = requestAnimationFrame(() => {
+    root.classList.remove("theme-switching");
+    restoreTransitions = undefined;
+  });
 }
 
 export function ThemeProvider({
@@ -38,21 +41,14 @@ export function ThemeProvider({
   children: ReactNode;
   initialTheme: Theme;
 }) {
-  const [theme, setThemeState] = useState<Theme>(() =>
-    readStoredTheme(initialTheme),
-  );
+  const [theme, setThemeState] = useState<Theme>(initialTheme);
 
   useEffect(() => {
     applyTheme(theme);
-    localStorage.setItem(THEME_STORAGE_KEY, theme);
     setThemeCookie(theme);
   }, [theme]);
 
-  const setTheme = useCallback((value: Theme) => {
-    setThemeState(value);
-  }, []);
-
-  const value = useMemo(() => ({ theme, setTheme }), [theme, setTheme]);
+  const value = useMemo(() => ({ theme, setTheme: setThemeState }), [theme]);
 
   return (
     <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>

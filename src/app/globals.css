@@ -117,10 +117,46 @@
   * {
     @apply border-border outline-ring/50;
   }
-  html {
-    scrollbar-gutter: stable;
-  }
   body {
     @apply bg-background text-foreground;
   }
+  ::selection {
+    background: color-mix(in oklch, var(--foreground) 18%, transparent);
+    color: var(--foreground);
+  }
+}
+
+html.theme-switching,
+html.theme-switching *,
+html.theme-switching *::before,
+html.theme-switching *::after {
+  transition: none !important;
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-slot="dropdown-menu-content"],
+  [data-slot="dropdown-menu-sub-content"] {
+    animation: none !important;
+  }
+}
+
+@media (min-width: 640px) {
+  html {
+    scrollbar-gutter: stable;
+  }
+}
+
+.code-scroll {
+  scrollbar-color: color-mix(in oklch, var(--foreground) 28%, transparent) transparent;
+  scrollbar-width: thin;
+}
+
+.code-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.code-scroll::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background: color-mix(in oklch, var(--foreground) 28%, transparent);
 }

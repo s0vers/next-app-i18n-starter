@@ -1,6 +1,6 @@
 # Next.js 16 i18n Starter
 
-A production-ready boilerplate for multilingual Next.js applications. Built with **Next.js 16**, **React 19**, **next-intl 4**, and **shadcn/ui** — with locale-driven currency and date formatting, RTL support, cookie-based theme SSR, and full SEO.
+A multilingual Next.js starter built with **Next.js 16**, **React 19**, **next-intl 4**, and **shadcn/ui**. It includes locale-driven formatting, Arabic RTL support, cookie-based light/dark mode, and SEO metadata for every locale.
 
 **Author:** [Sovers Tonmoy Pandey](https://s0vers.com) (S0vers) · [GitHub](https://github.com/S0vers) · [@s0ver5](https://twitter.com/s0ver5)
 
@@ -23,6 +23,7 @@ A production-ready boilerplate for multilingual Next.js applications. Built with
   - [Adding a new page](#adding-a-new-page)
 - [OmitRTL](#omitrtl)
 - [Theme system](#theme-system)
+- [Typography and motion](#typography-and-motion)
 - [SEO](#seo)
   - [SEO architecture overview](#seo-architecture-overview)
   - [Central site config](#central-site-config)
@@ -60,7 +61,7 @@ A production-ready boilerplate for multilingual Next.js applications. Built with
 | **Formatting** | Currency, dates, compact numbers, relative time — all driven by locale      |
 | **UI**         | shadcn/ui components, Tailwind CSS 4, light/dark theme                      |
 | **RTL**        | Automatic `dir="rtl"` for Arabic + `OmitRTL` utility for LTR islands        |
-| **SEO**        | `metadataBase`, hreflang, JSON-LD, dynamic sitemap/robots, OG image         |
+| **SEO**        | `metadataBase`, hreflang, JSON-LD, sitemap/robots, OG image                 |
 | **DX**         | TypeScript, typed translation keys via `global.d.ts`, ESLint flat config    |
 
 
@@ -68,7 +69,8 @@ A production-ready boilerplate for multilingual Next.js applications. Built with
 
 ## Prerequisites
 
-- [Bun](https://bun.sh) 1.x (recommended) or Node.js 24+
+- Node.js 24.x (see `.nvmrc`)
+- [Bun](https://bun.sh) 1.x (preferred package manager); pnpm also works
 - Basic familiarity with Next.js App Router and React Server Components
 
 ---
@@ -77,8 +79,8 @@ A production-ready boilerplate for multilingual Next.js applications. Built with
 
 ```bash
 # Clone
-git clone https://github.com/S0vers/next-app-i18n-starter.git
-cd next-app-i18n-starter
+git clone https://github.com/S0vers/i18n-Nextjs-BoilerPlate.git
+cd i18n-Nextjs-BoilerPlate
 
 # Install
 bun install
@@ -93,12 +95,14 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000). Use the language switcher in the header to see translations and regional formatting update.
 
+Before deploying a fork, set `NEXT_PUBLIC_SITE_URL`, update the site and author details in `src/lib/site.ts`, replace the Open Graph image, and replace the demo site's Google verification token and file. See the [production SEO checklist](#production-seo-checklist).
+
 ---
 
 ## Project structure
 
 ```
-next-app-i18n-starter/
+i18n-Nextjs-BoilerPlate/
 ├── dictionary/                     # Translation JSON files
 │   ├── en.json                     # English (TypeScript source of truth)
 │   ├── ar.json                     # Arabic
@@ -108,7 +112,7 @@ next-app-i18n-starter/
 ├── public/
 │   ├── llms.txt                    # Machine-readable context for AI tools
 │   ├── og-image.png                # Open Graph image (1200×630)
-│   └── favicon.ico
+│   └── google52d37058772b10e6.html # Demo site's verification file
 ├── src/
 │   ├── app/
 │   │   ├── [locale]/               # All pages are locale-scoped
@@ -117,6 +121,7 @@ next-app-i18n-starter/
 │   │   │   ├── not-found.tsx       # Localized 404
 │   │   │   └── [...rest]/          # Catch-all → not-found
 │   │   ├── globals.css             # Tailwind + CSS variables
+│   │   ├── favicon.ico             # Site icon
 │   │   ├── robots.ts               # Dynamic robots.txt
 │   │   └── sitemap.ts              # Sitemap with hreflang alternates
 │   ├── components/
@@ -128,9 +133,10 @@ next-app-i18n-starter/
 │   │   ├── theme-provider.tsx      # Client theme context
 │   │   └── ui/                     # shadcn/ui primitives
 │   ├── i18n/
+│   │   ├── locales.ts              # Locale labels and regional defaults
 │   │   ├── request.ts              # getRequestConfig (core i18n setup)
 │   │   ├── routing.ts              # Locales + URL prefix strategy
-│   │   ├── regional.ts             # Per-locale currency & timezone
+│   │   ├── regional.ts             # Number and date format definitions
 │   │   └── navigation.ts           # Localized Link, useRouter, getPathname
 │   ├── lib/
 │   │   ├── site.ts                 # Site URL, author, SEO constants
@@ -138,7 +144,7 @@ next-app-i18n-starter/
 │   │   └── utils.ts                # cn() class merge helper
 │   └── proxy.ts                    # next-intl proxy (Next.js 16)
 ├── .env.example
-├── global.d.ts                     # Typed IntlMessages from en.json
+├── global.d.ts                     # next-intl AppConfig types
 ├── next.config.ts
 ├── package.json
 └── tsconfig.json
@@ -148,19 +154,23 @@ next-app-i18n-starter/
 
 ## Internationalization
 
-This template uses [next-intl](https://next-intl.dev) with the App Router pattern. All i18n configuration flows through three files:
+This template uses [next-intl](https://next-intl.dev) with the App Router pattern. The i18n setup uses these files:
 
-1. `**src/i18n/routing.ts**` — which locales exist and how URLs are shaped
-2. `**src/i18n/request.ts**` — per-request config (messages, timezone, formats)
-3. `**src/i18n/navigation.ts**` — locale-aware navigation wrappers
+1. `src/i18n/locales.ts` — locale labels, currency, time zone, font, and Open Graph locale
+2. `src/i18n/routing.ts` — URL prefix strategy
+3. `src/i18n/request.ts` — per-request messages, time zone, and formats
+4. `src/i18n/navigation.ts` — locale-aware navigation wrappers
 
 ### How routing works
 
 Configured in `src/i18n/routing.ts`:
 
 ```ts
+import { defineRouting } from "next-intl/routing";
+import { locales } from "./locales";
+
 export const routing = defineRouting({
-  locales: ["en", "ar", "zh", "es", "ja"],
+  locales,
   defaultLocale: "en",
   localeDetection: true,
   localePrefix: "as-needed",
@@ -179,7 +189,7 @@ With `localePrefix: "as-needed"`:
 | `ja`   | `/ja` |                              |
 
 
-`src/proxy.ts` runs on every request to detect locale from URL, cookie, or `Accept-Language` header.
+`src/proxy.ts` handles locale detection for application routes using the URL, cookie, or `Accept-Language` header.
 
 **Always use navigation from `@/i18n/navigation`**, not `next/link` or `next/navigation` directly:
 
@@ -196,7 +206,7 @@ router.replace(pathname, { locale: "ar" });
 
 Currency, dates, and time zones are **not** user-configurable dropdowns — they follow the active locale. This is the recommended next-intl pattern for regional formatting.
 
-`**src/i18n/regional.ts**` maps each locale to defaults:
+`src/i18n/locales.ts` defines each locale's defaults:
 
 
 | Locale | Currency | Time zone        |
@@ -208,17 +218,21 @@ Currency, dates, and time zones are **not** user-configurable dropdowns — they
 | `ja`   | JPY      | Asia/Tokyo       |
 
 
-`**src/i18n/request.ts**` applies them on every request:
+`src/i18n/request.ts` applies them on every request:
 
 ```ts
 export default getRequestConfig(async ({ requestLocale }) => {
-  const locale = /* validated against routing.locales */;
+  const requested = await requestLocale;
+  const locale = hasLocale(routing.locales, requested)
+    ? requested
+    : routing.defaultLocale;
+  const { currency, timeZone } = localeConfig[locale];
 
   return {
     locale,
-    timeZone: resolveTimeZone(locale),
+    timeZone,
     now: new Date(),
-    formats: createRegionalFormats(resolveCurrency(locale)),
+    formats: createRegionalFormats(currency),
     messages: (await import(`../../dictionary/${locale}.json`)).default,
   };
 });
@@ -228,14 +242,21 @@ export default getRequestConfig(async ({ requestLocale }) => {
 
 ```tsx
 "use client";
-import { useFormatter, useTimeZone, useNow } from "next-intl";
+import { useFormatter, useNow } from "next-intl";
 
-const format = useFormatter();
-const now = useNow({ updateInterval: 30_000 });
+export function RegionalExamples() {
+  const format = useFormatter();
+  const now = useNow({ updateInterval: 30_000 });
+  const twoHoursAgo = new Date(now.getTime() - 2 * 60 * 60 * 1000);
 
-format.number(29.99, "price");           // → "$29.99" (en) or "¥30" (ja)
-format.dateTime(now, "long");              // → locale + timezone aware
-format.relativeTime(twoHoursAgo, now);     // → "2 hours ago"
+  return (
+    <div>
+      <p>{format.number(29.99, "price")}</p>
+      <p>{format.dateTime(now, "long")}</p>
+      <p>{format.relativeTime(twoHoursAgo, now)}</p>
+    </div>
+  );
+}
 ```
 
 **In translation messages**, use ICU syntax:
@@ -260,27 +281,41 @@ All strings live in `dictionary/{locale}.json`. Namespaces:
 | `Footer`       | Copyright, links                                      |
 | `Metadata`     | SEO title, description, keywords (`generateMetadata`) |
 | `Localization` | Formatting demo tab labels                            |
+| `NotFound`     | Localized 404 page                                    |
 
 
-TypeScript enforces key consistency via `global.d.ts`:
+`global.d.ts` types locales, format names, and message keys from `en.json`:
 
 ```ts
 import en from "./dictionary/en.json";
-type IntlMessages = typeof en;
+import type { AppLocale } from "./src/i18n/locales";
+import { createRegionalFormats } from "./src/i18n/regional";
+
+declare module "next-intl" {
+  interface AppConfig {
+    Locale: AppLocale;
+    Messages: typeof en;
+    Formats: ReturnType<typeof createRegionalFormats>;
+  }
+}
 ```
 
-When you add a key to `en.json`, TypeScript will error until you add it to all other locale files.
+Add each new key to every dictionary. TypeScript checks keys used in code against `en.json`; it does not compare the other JSON files automatically.
 
 ### Server vs client components
 
 **Server Component** (page or layout):
 
 ```tsx
+import { hasLocale } from "next-intl";
+import { notFound } from "next/navigation";
 import { setRequestLocale, getTranslations } from "next-intl/server";
+import { routing } from "@/i18n/routing";
 
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  setRequestLocale(locale); // Required for static rendering
+  if (!hasLocale(routing.locales, locale)) notFound();
+  setRequestLocale(locale);
 
   const t = await getTranslations({ locale, namespace: "Index" });
   return <h1>{t("title")}</h1>;
@@ -305,34 +340,30 @@ The root layout wraps children in `NextIntlClientProvider` with `messages`, `tim
 
 Example: adding French (`fr`)
 
-1. **Create translation file**
-  ```bash
-   cp dictionary/en.json dictionary/fr.json
-   # Translate all values in fr.json
-  ```
-2. **Register locale** in `src/i18n/routing.ts`:
-  ```ts
-   locales: ["en", "ar", "zh", "es", "ja", "fr"],
-  ```
-3. **Add regional defaults** in `src/i18n/regional.ts`:
-  ```ts
-   fr: { currency: "EUR", timeZone: "Europe/Paris" },
-  ```
-4. **Add UI label** in `src/components/LanguageSwitcher.tsx`:
-  ```ts
-   fr: "Français",
-  ```
-5. **Add OpenGraph locale** in `src/lib/site.ts`:
-  ```ts
-   fr: "fr_FR",
-  ```
-6. **Build** to verify types: `bun run build`
+1. Copy `dictionary/en.json` to `dictionary/fr.json` and translate every value.
+2. Add one entry to `localeConfig` in `src/i18n/locales.ts`:
+
+   ```ts
+   fr: {
+     label: "Français",
+     ogLocale: "fr_FR",
+     currency: "EUR",
+     timeZone: "Europe/Paris",
+     font: "geist",
+   },
+   ```
+
+   Routing, the language switcher, regional formatting, and Open Graph locale derive from this config. Choose `font: "system"` if the Geist Latin subset does not cover the language.
+3. Run `bun run lint` and `bun run build`, then check the new locale's page and metadata. TypeScript does not check that `fr.json` contains every English key; compare the dictionaries when translating.
 
 ### Adding a new page
 
 ```tsx
 // src/app/[locale]/about/page.tsx
+import { hasLocale } from "next-intl";
+import { notFound } from "next/navigation";
 import { setRequestLocale, getTranslations } from "next-intl/server";
+import { routing } from "@/i18n/routing";
 
 export default async function AboutPage({
   params,
@@ -340,6 +371,7 @@ export default async function AboutPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: "About" });
 
@@ -374,7 +406,7 @@ function CodeBlock({ code }: { code: string }) {
 }
 ```
 
-The same utility is published as `[react-omit-rtl](https://www.npmjs.com/package/react-omit-rtl)` on npm.
+The file is named `OmmitRlt.tsx` for compatibility with existing imports; import its default export as `OmitRTL`.
 
 ---
 
@@ -385,23 +417,31 @@ Light/dark mode without flash-of-unstyled-content and without `<script>` tags (R
 **How it works:**
 
 1. **Server** (`layout.tsx`) reads the `theme` cookie and sets `className="light"` or `"dark"` on `<html>` before paint.
-2. **Client** (`theme-provider.tsx`) syncs toggles to cookie + `localStorage` via `useSyncExternalStore` for system preference.
+2. **Client** (`theme-provider.tsx`) updates the theme class and cookie when toggled.
 3. **Toggle** (`ModeToggle.tsx`) switches between `light` and `dark`.
 
 No blocking scripts. No `next-themes` dependency.
 
 ---
 
+## Typography and motion
+
+`src/i18n/locales.ts` selects Geist for English and Spanish, and a system font for Arabic, Chinese, and Japanese. The layout loads the Geist Latin subset; change the locale's `font` setting when adding a language with different script coverage. Headings use balanced wrapping, while longer descriptions use readable line lengths and `text-pretty`.
+
+Interactive controls have touch-sized targets and visible keyboard focus. Dropdowns use short enter and exit animations; keyboard-opened menus skip the entrance animation. The copy button only animates its icon for pointer input. Reduced-motion preferences disable those effects, and theme changes temporarily suppress color transitions so the whole page changes together.
+
+---
+
 ## SEO
 
-This template ships with a complete, locale-aware SEO setup using the Next.js 16 Metadata API, next-intl URL helpers, JSON-LD structured data, and dynamic sitemap/robots generation. Everything is designed to work correctly with `localePrefix: "as-needed"` routing.
+The SEO setup uses the Next.js Metadata API, next-intl URL helpers, JSON-LD structured data, and generated sitemap and robots routes. Canonical and alternate URLs follow `localePrefix: "as-needed"` routing.
 
 ### SEO architecture overview
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │  src/lib/site.ts                                                │
-│  siteConfig.url, author, openGraphLocales                       │
+│  siteConfig.url and author                                      │
 └──────────────────────────┬──────────────────────────────────────┘
                            │
          ┌─────────────────┼─────────────────┐
@@ -422,25 +462,26 @@ This template ships with a complete, locale-aware SEO setup using the Next.js 16
 
 | File                          | SEO responsibility                                                      |
 | ----------------------------- | ----------------------------------------------------------------------- |
-| `src/lib/site.ts`             | Site name, canonical base URL, author info, OpenGraph BCP 47 locale map |
+| `src/lib/site.ts`             | Site name, canonical base URL, author info, URL helpers                 |
+| `src/i18n/locales.ts`         | Locale settings, including fonts and Open Graph locale tags            |
 | `src/app/[locale]/layout.tsx` | `generateMetadata` — all `<head>` meta tags per locale                  |
 | `src/app/[locale]/page.tsx`   | JSON-LD `WebSite` + `Person` schemas on home page                       |
 | `src/app/sitemap.ts`          | `/sitemap.xml` with hreflang language alternates                        |
 | `src/app/robots.ts`           | `/robots.txt` with sitemap reference                                    |
 | `dictionary/*/Metadata`       | Locale-specific `title`, `description`, `keywords`                      |
 | `public/og-image.png`         | Social sharing preview image (1200×630)                                 |
-| `public/llms.txt`             | Machine-readable project docs for AI crawlers                           |
+| `public/llms.txt`             | Machine-readable project reference                                      |
 
 
 ### Central site config
 
-All hardcoded SEO values live in one place — `src/lib/site.ts`:
+Shared site identity and the URL used by SEO helpers live in `src/lib/site.ts`:
 
 ```ts
 export const siteConfig = {
   name: "Next.js i18n Starter",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://next-app-i18n-starter.vercel.app",
-  github: "https://github.com/S0vers/next-app-i18n-starter",
+  github: "https://github.com/S0vers/i18n-Nextjs-BoilerPlate",
   author: {
     name: "Sovers Tonmoy Pandey",
     alias: "S0vers",
@@ -450,16 +491,9 @@ export const siteConfig = {
   },
 } as const;
 
-export const openGraphLocales: Record<string, string> = {
-  en: "en_US",
-  ar: "ar_SA",
-  zh: "zh_CN",
-  es: "es_ES",
-  ja: "ja_JP",
-};
 ```
 
-Set `NEXT_PUBLIC_SITE_URL` in production so `metadataBase`, canonical URLs, sitemap entries, and OG absolute URLs all resolve to your real domain.
+Set `NEXT_PUBLIC_SITE_URL` in production so `metadataBase`, canonical URLs, sitemap entries, and OG absolute URLs all resolve to your real domain. Also replace the demo author's details in this file, translated metadata in `dictionary/*.json`, and the Search Console verification in `layout.tsx`.
 
 ### Metadata API (`generateMetadata`)
 
@@ -468,14 +502,10 @@ Defined in `src/app/[locale]/layout.tsx`. Next.js calls this per locale at build
 ```ts
 export async function generateMetadata({ params }): Promise<Metadata> {
   const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) notFound();
   const t = await getTranslations({ locale, namespace: "Metadata" });
-  const canonical = await getLocaleUrl(locale);
-
-  const languages = Object.fromEntries(
-    await Promise.all(
-      routing.locales.map(async (l) => [l, await getLocaleUrl(l)]),
-    ),
-  );
+  const canonical = getLocaleUrl(locale);
+  const languages = getAlternateLanguages();
 
   return {
     metadataBase: new URL(siteConfig.url),
@@ -489,7 +519,7 @@ export async function generateMetadata({ params }): Promise<Metadata> {
     twitter: { /* see below */ },
     alternates: { canonical, languages },
     robots: { index: true, follow: true, /* googleBot directives */ },
-    other: { "google-site-verification": "..." },
+    verification: { google: "..." },
   };
 }
 ```
@@ -516,11 +546,11 @@ export async function generateMetadata({ params }): Promise<Metadata> {
 
 ### Locale-aware URLs and hreflang
 
-The helper `getLocaleUrl` in `layout.tsx` builds correct absolute URLs using next-intl's `getPathname`:
+The helper `getLocaleUrl` in `src/lib/site.ts` builds correct absolute URLs using next-intl's `getPathname`:
 
 ```ts
-async function getLocaleUrl(locale: string) {
-  const pathname = await getPathname({ locale, href: "/" });
+function getLocaleUrl(locale: AppLocale) {
+  const pathname = getPathname({ locale, href: "/" });
   return new URL(pathname, siteConfig.url).toString();
 }
 ```
@@ -576,13 +606,13 @@ The root layout sets semantic HTML attributes on `<html>`:
 <html
   lang={locale}           // e.g. "ar", "ja" — BCP 47 language tag
   dir={isArabic ? "rtl" : "ltr"}  // text direction for the whole document
-  className={ssrTheme}
+  className={initialTheme}
 >
 ```
 
 Search engines and screen readers use `lang` to identify page language. `dir="rtl"` for Arabic ensures correct text flow without affecting SEO negatively — Google fully indexes RTL pages.
 
-`generateStaticParams` pre-renders all locale variants at build time:
+`generateStaticParams` enumerates the supported locale routes. The layout reads a theme cookie, so the homepage is rendered per request:
 
 ```ts
 export function generateStaticParams() {
@@ -612,7 +642,7 @@ Escaping `<` prevents script injection if user-controlled strings ever end up in
   "@type": "WebSite",
   "name": "Next.js i18n Starter",
   "description": "<locale-specific from Metadata namespace>",
-  "url": "https://your-domain.com",
+  "url": "https://your-domain.com/ar",
   "inLanguage": "ar",
   "author": {
     "@type": "Person",
@@ -633,8 +663,7 @@ Escaping `<` prevents script injection if user-controlled strings ever end up in
   "url": "https://s0vers.com",
   "sameAs": [
     "https://github.com/S0vers",
-    "https://twitter.com/s0ver5",
-    "https://github.com/S0vers/next-app-i18n-starter"
+    "https://twitter.com/s0ver5"
   ]
 }
 ```
@@ -643,48 +672,37 @@ Validate with [Google Rich Results Test](https://search.google.com/test/rich-res
 
 ### Sitemap
 
-`src/app/sitemap.ts` generates `/sitemap.xml` at build time.
+`src/app/sitemap.ts` generates `/sitemap.xml` from the configured locales.
 
 ```ts
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const languages = Object.fromEntries(
-    await Promise.all(
-      routing.locales.map(async (locale) => [
-        locale,
-        new URL(await getPathname({ locale, href: "/" }), siteConfig.url).toString(),
-      ]),
-    ),
-  );
+export default function sitemap(): MetadataRoute.Sitemap {
+  const languages = getAlternateLanguages();
 
-  return [{
-    url: siteConfig.url,
-    lastModified: new Date(),
-    changeFrequency: "monthly",
-    priority: 1,
+  return routing.locales.map((locale) => ({
+    url: getLocaleUrl(locale),
     alternates: { languages },
-  }];
+  }));
 }
 ```
 
-**Design decision:** One sitemap entry (the site root) with `alternates.languages` for all locales — not separate rows per locale. This matches the [next-intl sitemap pattern](https://next-intl.dev/docs/environments/actions-metadata-route-handlers#sitemap) and avoids duplicate-content signals.
+Each localized URL has its own sitemap entry, and every entry lists all language variants, including itself and an `x-default` fallback. This follows [Google's localized sitemap guidance](https://developers.google.com/search/docs/specialty/international/localized-versions#sitemap). There is no synthetic `lastModified` date; add one only when you can supply a verified content update date.
 
 Example output structure:
 
 ```xml
 <url>
-  <loc>https://your-domain.com</loc>
-  <lastmod>2026-06-30</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>1</priority>
+  <loc>https://your-domain.com/</loc>
   <xhtml:link rel="alternate" hreflang="en" href="https://your-domain.com/" />
   <xhtml:link rel="alternate" hreflang="ar" href="https://your-domain.com/ar" />
   <xhtml:link rel="alternate" hreflang="zh" href="https://your-domain.com/zh" />
   <xhtml:link rel="alternate" hreflang="es" href="https://your-domain.com/es" />
   <xhtml:link rel="alternate" hreflang="ja" href="https://your-domain.com/ja" />
+  <xhtml:link rel="alternate" hreflang="x-default" href="https://your-domain.com/" />
 </url>
+<!-- Repeat with /ar, /zh, /es, and /ja as each entry's <loc>. -->
 ```
 
-When you add pages beyond the home page, extend `sitemap.ts` with additional entries — each with its own `alternates.languages` built via `getPathname({ locale, href: "/your-page" })`.
+When you add pages beyond the home page, extend `sitemap.ts` with an entry for every localized URL, each with the same `getAlternateLanguages("/your-page")` map.
 
 ### Robots.txt
 
@@ -721,7 +739,7 @@ The sitemap URL uses `siteConfig.url` so it stays correct across environments wh
 | `og:description`  | `dictionary/{locale}/Metadata.description`    |
 | `og:url`          | Locale-specific canonical URL                 |
 | `og:site_name`    | `siteConfig.name`                             |
-| `og:locale`       | BCP 47 from `openGraphLocales` (e.g. `ar_SA`) |
+| `og:locale`       | Locale tag from `localeConfig` (e.g. `ar_SA`) |
 | `og:type`         | `website`                                     |
 | `og:image`        | `/og-image.png` → resolved via `metadataBase` |
 | `og:image:width`  | `1200`                                        |
@@ -753,11 +771,11 @@ Replace this file with your own branded image before production launch. Recommen
 
 ### Google Search Console verification
 
-Site ownership verification is configured via the Metadata API `other` field:
+Site ownership verification is configured via the Metadata API `verification` field:
 
 ```ts
-other: {
-  "google-site-verification": "sVYBYfSJfXdBca3QoqsZtD6lsWVH6sk02RCH4YAbcm8",
+verification: {
+  google: "sVYBYfSJfXdBca3QoqsZtD6lsWVH6sk02RCH4YAbcm8",
 },
 ```
 
@@ -769,12 +787,14 @@ A static verification file also exists at `public/google52d37058772b10e6.html` (
 
 For a page at `src/app/[locale]/about/page.tsx`:
 
-**Option A — page-level metadata:**
+**Page-level metadata:**
 
 ```tsx
+import { hasLocale } from "next-intl";
+import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { getPathname } from "@/i18n/navigation";
-import { siteConfig } from "@/lib/site";
+import { routing } from "@/i18n/routing";
+import { getAlternateLanguages, getLocaleUrl } from "@/lib/site";
 import type { Metadata } from "next";
 
 export async function generateMetadata({
@@ -783,35 +803,28 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) notFound();
   const t = await getTranslations({ locale, namespace: "About" });
-  const pathname = await getPathname({ locale, href: "/about" });
-  const canonical = new URL(pathname, siteConfig.url).toString();
 
   return {
     title: t("metaTitle"),
     description: t("metaDescription"),
-    alternates: { canonical },
+    alternates: {
+      canonical: getLocaleUrl(locale, "/about"),
+      languages: getAlternateLanguages("/about"),
+    },
   };
 }
 ```
 
-**Option B — extend sitemap:**
+**Sitemap entries:**
 
 ```ts
-// In sitemap.ts, add another entry:
-{
-  url: new URL(await getPathname({ locale: "en", href: "/about" }), siteConfig.url).toString(),
-  alternates: {
-    languages: Object.fromEntries(
-      await Promise.all(
-        routing.locales.map(async (l) => [
-          l,
-          new URL(await getPathname({ locale: l, href: "/about" }), siteConfig.url).toString(),
-        ]),
-      ),
-    ),
-  },
-}
+const languages = getAlternateLanguages("/about");
+const aboutEntries = routing.locales.map((locale) => ({
+  url: getLocaleUrl(locale, "/about"),
+  alternates: { languages },
+}));
 ```
 
 Add `metaTitle` and `metaDescription` keys to the `About` namespace in all dictionary files.
@@ -819,8 +832,9 @@ Add `metaTitle` and `metaDescription` keys to the `About` namespace in all dicti
 ### Production SEO checklist
 
 - [ ] Set `NEXT_PUBLIC_SITE_URL` to your production domain
-- [x] Replace `public/og-image.png` with branded 1200×630 image
-- [ ] Update `google-site-verification` meta tag with your Search Console token
+- [ ] Replace the demo site name, repository link, and author details in `src/lib/site.ts`
+- [ ] Replace `public/og-image.png` with your branded 1200×630 image
+- [ ] Replace the demo Search Console token in `src/app/[locale]/layout.tsx` and remove or replace `public/google52d37058772b10e6.html`
 - [ ] Translate `Metadata` namespace in all dictionary files
 - [ ] Submit `https://your-domain.com/sitemap.xml` in Google Search Console
 - [ ] Verify hreflang with [hreflang Tags Testing Tool](https://technicalseo.com/tools/hreflang/)
@@ -836,7 +850,7 @@ Add `metaTitle` and `metaDescription` keys to the `About` namespace in all dicti
 ```bash
 bun dev
 # Visit http://localhost:3000 and View Page Source
-# Or curl headers:
+# Or inspect the HTML response:
 curl -s http://localhost:3000 | grep -E '<title>|<meta|<link rel="canonical"|<link rel="alternate"'
 ```
 
@@ -912,7 +926,7 @@ bun lint      # Run ESLint
 
 ### Translations not updating after adding keys
 
-Run `bun run build` — TypeScript validates all dictionary files against `en.json`. Missing keys in other locales will cause type errors.
+Add the key to `en.json` and every other dictionary. TypeScript checks message keys used in code against `en.json`, but does not compare the other locale files automatically. Restart the dev server if an edited JSON file is not picked up.
 
 ### Wrong locale in URL
 
@@ -924,7 +938,7 @@ Ensure the component is inside `NextIntlClientProvider` (set in root layout) and
 
 ### Theme flash on load
 
-The `theme` cookie must be set before the first paint. If you see a flash, clear cookies and reload — the server reads the cookie in `layout.tsx` and applies the class on `<html>`.
+The server reads the `theme` cookie in `layout.tsx` and applies the class on `<html>` before rendering. Check that the cookie is `light` or `dark` and has path `/` if the initial theme is wrong.
 
 ### React 19 script tag error
 

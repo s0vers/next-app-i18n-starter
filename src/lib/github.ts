@@ -2,6 +2,7 @@ import { siteConfig } from "@/lib/site";
 
 const REPO_PATH = siteConfig.github.replace("https://github.com/", "");
 
+// Stars are optional; a GitHub API failure should not fail the homepage.
 export async function getGithubStarCount(): Promise<number | null> {
   try {
     const response = await fetch(`https://api.github.com/repos/${REPO_PATH}`, {

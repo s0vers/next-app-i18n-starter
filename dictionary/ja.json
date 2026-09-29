@@ -1,10 +1,15 @@
 {
   "Index": {
     "boilerplateName": "Next.js i18n テンプレート",
-    "title": "i18nとShadcn UIを備えたNext 15 テンプレート",
+    "title": "i18nとShadcn UIを備えたNext 16 テンプレート",
     "description": "次世代の多言語対応でアクセシブルなウェブアプリケーションのための強力な出発点。",
     "cloneRepository": "リポジトリをクローン",
     "leaveStar": "スターを付ける",
+    "copyCode": "コードをコピー",
+    "copied": "コピーしました",
+    "copyFailed": "コピーできませんでした。テキストを選択して手動でコピーしてください。",
+    "settings": "言語と外観",
+    "toggleTheme": "テーマを切り替える",
     "howToUse": "使い方",
     "gettingStarted": "はじめに",
     "installation": "インストール",
@@ -33,7 +38,7 @@
     }
   },
   "Footer": {
-    "copyright": "© 2025 Next.js i18n テンプレート。MITライセンスの下でオープンソース。",
+    "copyright": "© 2026 Next.js i18n テンプレート。MITライセンスの下でオープンソース。",
     "githubLink": "GitHub"
   },
   "Metadata": {

@@ -1,5 +1,5 @@
 import { getPathname } from "@/i18n/navigation";
-import { localeConfig, locales } from "@/i18n/locales";
+import type { AppLocale } from "@/i18n/locales";
 import { routing } from "@/i18n/routing";
 
 export const siteConfig = {
@@ -7,7 +7,7 @@ export const siteConfig = {
   url:
     process.env.NEXT_PUBLIC_SITE_URL ??
     "https://next-app-i18n-starter.vercel.app",
-  github: "https://github.com/S0vers/next-app-i18n-starter",
+  github: "https://github.com/S0vers/i18n-Nextjs-BoilerPlate",
   author: {
     name: "Sovers Tonmoy Pandey",
     alias: "S0vers",
@@ -17,27 +17,20 @@ export const siteConfig = {
   },
 } as const;
 
-export const openGraphLocales = Object.fromEntries(
-  locales.map((locale) => [locale, localeConfig[locale].ogLocale]),
-);
-
-export async function getLocaleUrl(
-  locale: string,
+export function getLocaleUrl(
+  locale: AppLocale,
   href: "/" | `/${string}` = "/",
 ) {
-  const pathname = await getPathname({ locale, href });
+  const pathname = getPathname({ locale, href });
   return new URL(pathname, siteConfig.url).toString();
 }
 
-export async function getAlternateLanguages(
+export function getAlternateLanguages(
   href: "/" | `/${string}` = "/",
 ) {
-  return Object.fromEntries(
-    await Promise.all(
-      routing.locales.map(async (locale) => [
-        locale,
-        await getLocaleUrl(locale, href),
-      ]),
-    ),
+  const languages = Object.fromEntries(
+    routing.locales.map((locale) => [locale, getLocaleUrl(locale, href)]),
   );
+
+  return { ...languages, "x-default": languages[routing.defaultLocale] };
 }

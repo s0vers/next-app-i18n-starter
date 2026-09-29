@@ -1,13 +1,4 @@
-import { localeConfig, type AppLocale, type AppTimeZone, type Currency } from "./locales";
-
-export type { Currency, AppTimeZone };
-
-export const localeRegionalDefaults = Object.fromEntries(
-  Object.entries(localeConfig).map(([locale, config]) => [
-    locale,
-    { currency: config.currency, timeZone: config.timeZone },
-  ]),
-) as Record<AppLocale, { currency: Currency; timeZone: AppTimeZone }>;
+import type { Currency } from "./locales";
 
 export function createRegionalFormats(currency: Currency) {
   return {

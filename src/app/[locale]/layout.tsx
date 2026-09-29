@@ -11,20 +11,18 @@ import {
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { ThemeProvider } from "@/components/theme-provider";
+import { localeConfig } from "@/i18n/locales";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import {
   getAlternateLanguages,
   getLocaleUrl,
-  openGraphLocales,
   siteConfig,
 } from "@/lib/site";
 import {
-  isTheme,
   resolveSSRTheme,
-  THEME_STORAGE_KEY,
-  type Theme,
+  THEME_COOKIE_NAME,
 } from "@/lib/theme";
 import "../globals.css";
 
@@ -53,29 +51,26 @@ export default async function RootLayout({
   setRequestLocale(locale);
 
   const isArabic = locale === "ar";
+  const useGeist = localeConfig[locale].font === "geist";
   const messages = await getMessages();
   const timeZone = await getTimeZone();
   const now = await getNow();
 
   const cookieStore = await cookies();
-  const themeCookie = cookieStore.get(THEME_STORAGE_KEY)?.value;
-  const initialTheme: Theme = isTheme(themeCookie) ? themeCookie : "dark";
-  const ssrTheme = resolveSSRTheme(themeCookie, "dark");
+  const initialTheme = resolveSSRTheme(cookieStore.get(THEME_COOKIE_NAME)?.value);
 
   return (
     <html
       lang={locale}
       dir={isArabic ? "rtl" : "ltr"}
-      className={ssrTheme}
-      suppressHydrationWarning
+      className={initialTheme}
     >
       <head>
         <link rel="icon" href="/favicon.ico" />
         <meta name="theme-color" content="#000000" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        suppressHydrationWarning
+        className={`${geistSans.variable} ${geistMono.variable} ${useGeist ? "font-sans" : ""} antialiased [font-synthesis:none]`}
       >
         <ThemeProvider initialTheme={initialTheme}>
           <NextIntlClientProvider messages={messages} timeZone={timeZone} now={now}>
@@ -99,9 +94,12 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) {
+    notFound();
+  }
   const t = await getTranslations({ locale, namespace: "Metadata" });
-  const canonical = await getLocaleUrl(locale);
-  const languages = await getAlternateLanguages();
+  const canonical = getLocaleUrl(locale);
+  const languages = getAlternateLanguages();
 
   return {
     metadataBase: new URL(siteConfig.url),
@@ -111,8 +109,8 @@ export async function generateMetadata({
     authors: [{ name: siteConfig.author.name, url: siteConfig.author.url }],
     creator: siteConfig.author.twitter,
     applicationName: siteConfig.name,
-    other: {
-      "google-site-verification": "sVYBYfSJfXdBca3QoqsZtD6lsWVH6sk02RCH4YAbcm8",
+    verification: {
+      google: "sVYBYfSJfXdBca3QoqsZtD6lsWVH6sk02RCH4YAbcm8",
     },
     openGraph: {
       title: t("title"),
@@ -127,7 +125,7 @@ export async function generateMetadata({
           alt: t("title"),
         },
       ],
-      locale: openGraphLocales[locale] ?? locale,
+      locale: localeConfig[locale].ogLocale,
       type: "website",
     },
     twitter: {

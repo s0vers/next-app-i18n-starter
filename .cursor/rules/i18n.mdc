@@ -24,7 +24,7 @@ import { useRouter } from "next/navigation";
 
 ## Dictionaries (`dictionary/{locale}.json`)
 
-- **`en.json` is the type source of truth** (`global.d.ts` → `IntlMessages`).
+- **`en.json` is the type source of truth** (`global.d.ts` → next-intl `AppConfig`).
 - Adding a key to `en.json` requires the same key in **every** locale file.
 - Namespaces in use: `Index`, `Footer`, `Metadata`, `Localization` — add new namespaces to all files.
 

@@ -1,14 +1,12 @@
 import { MetadataRoute } from "next";
-import { getAlternateLanguages, siteConfig } from "@/lib/site";
+import { routing } from "@/i18n/routing";
+import { getAlternateLanguages, getLocaleUrl } from "@/lib/site";
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  return [
-    {
-      url: siteConfig.url,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 1,
-      alternates: { languages: await getAlternateLanguages() },
-    },
-  ];
+export default function sitemap(): MetadataRoute.Sitemap {
+  const languages = getAlternateLanguages();
+
+  return routing.locales.map((locale) => ({
+    url: getLocaleUrl(locale),
+    alternates: { languages },
+  }));
 }

@@ -1,10 +1,15 @@
 {
   "Index": {
     "boilerplateName": "Next.js 多语言模板",
-    "title": "Next 15 模板 (集成i18n与Shadcn UI)",
+    "title": "Next 16 模板 (集成i18n与Shadcn UI)",
     "description": "一个强大的起点，助您开发多语言、无障碍的Web应用程序。",
     "cloneRepository": "克隆仓库",
     "leaveStar": "点亮星标",
+    "copyCode": "复制代码",
+    "copied": "已复制",
+    "copyFailed": "复制失败。请选择文本并手动复制。",
+    "settings": "语言与外观",
+    "toggleTheme": "切换主题",
     "howToUse": "使用指南",
     "gettingStarted": "快速开始",
     "installation": "安装步骤",
@@ -34,7 +39,7 @@
   },
 
   "Footer": {
-    "copyright": "© 2025 Next.js 多语言模板。基于MIT协议开源。",
+    "copyright": "© 2026 Next.js 多语言模板。基于MIT协议开源。",
     "githubLink": "GitHub仓库"
   },
   "Metadata": {

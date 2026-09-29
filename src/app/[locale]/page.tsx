@@ -1,7 +1,10 @@
+import { hasLocale } from "next-intl";
+import { notFound } from "next/navigation";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import HomeIndex from "@/components/pages/HomeIndex";
 import { getGithubStarCount } from "@/lib/github";
-import { siteConfig } from "@/lib/site";
+import { getLocaleUrl, siteConfig } from "@/lib/site";
+import { routing } from "@/i18n/routing";
 
 function serializeJsonLd(data: Record<string, unknown>) {
   return JSON.stringify(data).replace(/</g, "\\u003c");
@@ -13,6 +16,9 @@ export default async function HomePage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) {
+    notFound();
+  }
   setRequestLocale(locale);
 
   const [t, starCount] = await Promise.all([
@@ -25,7 +31,7 @@ export default async function HomePage({
     "@type": "WebSite",
     name: siteConfig.name,
     description: t("description"),
-    url: siteConfig.url,
+    url: getLocaleUrl(locale),
     inLanguage: locale,
     author: {
       "@type": "Person",
@@ -43,7 +49,6 @@ export default async function HomePage({
     sameAs: [
       siteConfig.author.github,
       `https://twitter.com/${siteConfig.author.twitter.replace("@", "")}`,
-      siteConfig.github,
     ],
   };
 

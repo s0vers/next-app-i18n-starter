@@ -7,10 +7,10 @@ export default async function NotFound() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] px-4 text-center">
-      <h1 className="mb-2 text-3xl font-bold tracking-tight sm:text-4xl">
+      <h1 className="mb-2 text-3xl font-bold leading-tight tracking-tight text-balance sm:text-4xl">
         {t("title")}
       </h1>
-      <p className="mb-8 max-w-md text-lg text-muted-foreground">
+      <p className="mb-8 max-w-prose text-lg leading-relaxed text-pretty text-muted-foreground">
         {t("description")}
       </p>
       <Button asChild>
