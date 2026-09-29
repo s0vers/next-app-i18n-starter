@@ -158,7 +158,7 @@ Request
 ### Lib
 - `src/lib/site.ts`: `siteConfig`, canonical and hreflang URL helpers
 - `src/lib/theme.ts`: `THEME_COOKIE_NAME`, `resolveSSRTheme`, and `setThemeCookie`
-- `src/lib/utils.ts`: `cn()` helper (tailwind-merge + clsx)
+- `src/lib/utils.ts`: `cn()` re-exported from the `cn` package
 - `global.d.ts`: next-intl `AppConfig` types from `dictionary/en.json` and `localeConfig`
 
 ### Translations
