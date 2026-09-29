@@ -48,6 +48,8 @@ export default async function RootLayout({
   const useGeist = localeConfig[locale].font === "geist";
   const t = await getTranslations({ locale, namespace: "Index" });
 
+  // Reading cookies() keeps every page dynamic. The CSP nonce set in
+  // src/proxy.ts only reaches dynamic pages, so do not make these pages static.
   const cookieStore = await cookies();
   const initialTheme = resolveSSRTheme(cookieStore.get(THEME_COOKIE_NAME)?.value);
 
