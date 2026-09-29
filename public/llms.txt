@@ -153,7 +153,7 @@ Request
 - `src/components/ModeToggle.tsx`: light/dark toggle via `useTheme()`
 - `src/components/theme-provider.tsx`: client theme context and cookie updates
 - `src/components/OmitRtl.tsx`: forces left-to-right text in RTL locales
-- `src/components/ui/*`: shadcn/ui primitives (button, card, tabs, dropdown-menu)
+- `src/components/ui/*`: shadcn/ui primitives on Base UI (button, card, tabs, dropdown-menu)
 
 ### Lib
 - `src/lib/site.ts`: `siteConfig`, canonical and hreflang URL helpers

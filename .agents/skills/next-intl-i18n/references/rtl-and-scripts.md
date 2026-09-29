@@ -6,7 +6,7 @@ Read this for Arabic (RTL), Chinese and Japanese (CJK), and Spanish, and for any
 
 - `<html dir>` comes from the `dir` field in `localeConfig`, not from a hardcoded language check. Only `ar` is RTL here.
 - Do not derive direction at runtime with `Intl.Locale().getTextInfo()`. Node supports it, and cross-browser support is not verified.
-- Everything that reads direction (layout, `LanguageSwitcher`, `HomeIndex`, Radix `dir` props) reads the same field. A new hardcoded `=== "ar"` is the usual leak, so search for one before adding an RTL locale.
+- Everything that reads direction (layout, `LanguageSwitcher`, `HomeIndex`, the Base UI `DirectionProvider`) reads the same field. A new hardcoded `=== "ar"` is the usual leak, so search for one before adding an RTL locale.
 
 ## Layout in RTL
 

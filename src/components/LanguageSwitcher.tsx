@@ -21,16 +21,18 @@ const LanguageSwitcher = () => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        {/* The name says what the button does. Without it a screen reader only hears the current language. */}
-        <Button
-          variant="outline"
-          size="sm"
-          className="min-h-11 px-3"
-          aria-label={`${t("language")}: ${localeConfig[currentLanguage].label}`}
-        >
-          {localeConfig[currentLanguage].label}
-        </Button>
+      <DropdownMenuTrigger
+        render={
+          /* The name says what the button does. Without it a screen reader only hears the current language. */
+          <Button
+            variant="outline"
+            size="sm"
+            className="min-h-11 px-3"
+            aria-label={`${t("language")}: ${localeConfig[currentLanguage].label}`}
+          />
+        }
+      >
+        {localeConfig[currentLanguage].label}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         {/* Radio items expose the current language to assistive tech (aria-checked). */}

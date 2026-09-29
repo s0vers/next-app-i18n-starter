@@ -29,7 +29,7 @@ The i18n architecture in this starter (locale-scoped App Router, `localePrefix: 
 | Project | Role in this repo | Links |
 | ------- | ----------------- | ----- |
 | [shadcn/ui](https://ui.shadcn.com) | Component patterns and CLI setup (`components.json`) | [GitHub](https://github.com/shadcn-ui/ui) |
-| [Radix UI](https://www.radix-ui.com) | Accessible primitives (dropdown menu, tabs, slot) | [GitHub](https://github.com/radix-ui/primitives) |
+| [Base UI](https://base-ui.com) | Accessible primitives (button, menu, tabs, direction provider) | [GitHub](https://github.com/mui/base-ui) |
 | [Tailwind CSS](https://tailwindcss.com) | Utility-first styling (v4) | [GitHub](https://github.com/tailwindlabs/tailwindcss) |
 | [tailwindcss-animate](https://github.com/jamiebuilds/tailwindcss-animate) | Animation utilities for UI components | [GitHub](https://github.com/jamiebuilds/tailwindcss-animate) |
 | [class-variance-authority](https://cva.style) | Variant APIs for buttons and similar components | [GitHub](https://github.com/joe-bell/cva) |

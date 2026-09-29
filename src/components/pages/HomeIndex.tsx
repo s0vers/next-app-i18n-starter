@@ -6,11 +6,16 @@ import { siteConfig } from "@/lib/site";
 import CopyableCode from "../CopyableCode";
 import LocalizationTab from "../LocalizationTab";
 import OmitRTL from "../OmitRtl";
-import { Button } from "../ui/button";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 
 const GITHUB_URL = siteConfig.github;
+
+// Links styled as buttons: real anchors keep the link role, unlike a Button with render.
+const HERO_LINK =
+  "min-h-11 motion-safe:active:scale-96 motion-safe:focus-visible:active:scale-100";
 
 function GithubIcon({ className }: { className?: string }) {
   return (
@@ -87,27 +92,25 @@ export default function HomeIndex({
               </p>
             </div>
             <div className="flex flex-wrap gap-3">
-              <Button className="min-h-11 motion-safe:active:scale-96 motion-safe:focus-visible:active:scale-100" asChild>
-                <a
-                  href={GITHUB_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <GithubIcon className="size-4" />
-                  {t("cloneRepository")}
-                </a>
-              </Button>
-              <Button variant="outline" className="min-h-11 motion-safe:active:scale-96 motion-safe:focus-visible:active:scale-100" asChild>
-                <a
-                  href={GITHUB_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Star className="size-4" />
-                  <span>{t("leaveStar")}</span>
-                  {stars && <span className="tabular-nums opacity-70">· {stars}</span>}
-                </a>
-              </Button>
+              <a
+                href={GITHUB_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(buttonVariants(), HERO_LINK)}
+              >
+                <GithubIcon className="size-4" />
+                {t("cloneRepository")}
+              </a>
+              <a
+                href={GITHUB_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(buttonVariants({ variant: "outline" }), HERO_LINK)}
+              >
+                <Star className="size-4" />
+                <span>{t("leaveStar")}</span>
+                {stars && <span className="tabular-nums opacity-70">· {stars}</span>}
+              </a>
             </div>
           </section>
 
