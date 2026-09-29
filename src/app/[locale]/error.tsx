@@ -9,10 +9,10 @@ import { useTranslations } from "next-intl";
 
 export default function Error({
   error,
-  reset,
+  retry,
 }: {
   error: Error & { digest?: string };
-  reset: () => void;
+  retry: () => void;
 }) {
   const t = useTranslations("Index.error");
 
@@ -30,7 +30,7 @@ export default function Error({
       </h1>
       <p className="mb-8 max-w-prose text-lg leading-relaxed text-pretty text-muted-foreground">{t("sorry")}</p>
       <div className="flex flex-col gap-4 sm:flex-row">
-        <Button onClick={() => reset()} variant="default">
+        <Button onClick={() => retry()} variant="default">
           {t("tryAgain")}
         </Button>
         <Button variant="outline" asChild>

@@ -1,3 +1,4 @@
+import "server-only";
 import type { Metadata } from "next";
 import { getPathname } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/locales";

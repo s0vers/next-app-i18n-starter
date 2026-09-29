@@ -2,6 +2,7 @@
 
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -45,10 +46,16 @@ export function ThemeProvider({
 
   useEffect(() => {
     applyTheme(theme);
-    setThemeCookie(theme);
   }, [theme]);
 
-  const value = useMemo(() => ({ theme, setTheme: setThemeState }), [theme]);
+  // Write the cookie only when the visitor chooses a theme. Writing it on mount
+  // would overwrite a saved choice with whatever the server rendered.
+  const setTheme = useCallback((next: Theme) => {
+    setThemeState(next);
+    setThemeCookie(next);
+  }, []);
+
+  const value = useMemo(() => ({ theme, setTheme }), [theme, setTheme]);
 
   return (
     <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
