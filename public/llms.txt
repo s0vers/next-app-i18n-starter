@@ -26,7 +26,7 @@ Regional defaults come from the active locale. The demo formats values with that
 
 ### How do I add a new page?
 1. Create `src/app/[locale]/your-page/page.tsx` (Server Component).
-2. Call `setRequestLocale(locale)` at top of page (enables static rendering).
+2. Await `params`, validate the locale with `hasLocale`, and call `notFound()` otherwise. No `setRequestLocale` is needed because the locale comes from `next/root-params`.
 3. Use `getTranslations({ locale, namespace: "YourNamespace" })` for server text.
 4. Use `useTranslations("YourNamespace")` in client components.
 5. Add keys to all `dictionary/*.json` files.
@@ -310,7 +310,7 @@ bun run check     # ESLint, locale registry and message parity, skills structure
 ## Conventions
 
 - Use `Link`, `useRouter`, `usePathname` from `@/i18n/navigation`
-- Use `setRequestLocale(locale)` in every `[locale]` page/layout for static rendering
+- Do not call `setRequestLocale` (deprecated in next-intl 4.13.5). The locale reaches server code through `next/root-params`
 - Add translation keys to every dictionary file
 - Use `getPathname` for SEO URLs (respects `as-needed` prefix)
 - Prefer Server Components; add `"use client"` only when needed

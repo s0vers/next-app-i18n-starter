@@ -28,7 +28,7 @@
     },
     {
       "id": "migrate-root-params",
-      "prompt": "Migrate this project off setRequestLocale.",
+      "prompt": "This older project still uses setRequestLocale and requestLocale. Migrate it to the current next-intl API.",
       "assertions": [
         "Checks the installed Next.js version is at least 16.3 and next-intl at least 4.13.6 before editing",
         "Rewrites request.ts to read next/root-params with a hasLocale check and notFound fallback",
