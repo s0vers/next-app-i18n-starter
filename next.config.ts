@@ -1,8 +1,8 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
-// Headers that are safe for any site. A Content-Security-Policy is left out on
-// purpose: the right one depends on the scripts and hosts your fork uses.
+// Headers that are safe for any site. The Content-Security-Policy lives in
+// src/proxy.ts because it needs a fresh nonce for every request.
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },

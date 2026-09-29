@@ -566,6 +566,10 @@ Works on [Vercel](https://vercel.com) out of the box.
 
 The proxy (`src/proxy.ts`) runs on the Node.js runtime, which is the Next.js 16 default. No extra configuration is needed for i18n routing.
 
+### Security headers
+
+`next.config.ts` sends `X-Content-Type-Options`, `Referrer-Policy`, `X-Frame-Options`, and `Permissions-Policy`. `src/proxy.ts` sets a nonce-based `Content-Security-Policy` that allows only your own origin, and it needs pages to render dynamically (the theme cookie already makes them dynamic). When you add a script, font, image, or API host, add it to `buildCsp`. Set `REPORT_ONLY = true` while you test, so violations show in the browser console instead of being blocked, and check both with `curl -I` and the console. See [SECURITY.md](SECURITY.md).
+
 For other hosts, configure:
 
 - Node.js 24+

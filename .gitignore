@@ -49,3 +49,6 @@ next-env.d.ts
 /pnpm-workspace.yaml
 /package-lock.json
 /yarn.lock
+
+# Claude Code worktrees
+/.claude/worktrees/
