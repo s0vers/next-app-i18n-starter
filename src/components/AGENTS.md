@@ -2,6 +2,7 @@
 
 The repository-level `AGENTS.md` applies here too.
 
+- The locale layout renders the skip link, `SiteHeader`, `<main id="main">`, and `SiteFooter` around every page, including the 404 and error pages. A page component renders only its own content, never a second header, footer, or `<main>`.
 - Keep components in the existing structure: page compositions in `src/components/pages/`, shared feature components in `src/components/`, and reusable shadcn primitives in `src/components/ui/`.
 - Components are Server Components by default. Add `"use client"` only when a component needs state, effects, event handlers, or browser APIs. Keep data loading and static composition on the server where practical.
 - Use Tailwind CSS 4 utilities and `cn()` from `@/lib/utils`. Reuse the CSS theme variables in `src/app/globals.css` and existing shadcn variants before adding new styling systems.

@@ -5,6 +5,8 @@ import { routing } from "@/i18n/routing";
 import { getTranslations } from "next-intl/server";
 import type { Metadata, Viewport } from "next";
 import { cookies } from "next/headers";
+import { SiteFooter } from "@/components/SiteFooter";
+import { SiteHeader } from "@/components/SiteHeader";
 import { ThemeProvider } from "@/components/theme-provider";
 import { localeConfig } from "@/i18n/locales";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -44,6 +46,7 @@ export default async function RootLayout({
   }
 
   const useGeist = localeConfig[locale].font === "geist";
+  const t = await getTranslations({ locale, namespace: "Index" });
 
   const cookieStore = await cookies();
   const initialTheme = resolveSSRTheme(cookieStore.get(THEME_COOKIE_NAME)?.value);
@@ -61,7 +64,22 @@ export default async function RootLayout({
           {/* Radix menus and tabs read direction from here, not from the DOM. */}
           <DirectionProvider dir={localeConfig[locale].dir}>
             {/* Inherits the locale, messages, time zone, and formats from src/i18n/request.ts */}
-            <NextIntlClientProvider>{children}</NextIntlClientProvider>
+            <NextIntlClientProvider>
+              <div className="flex min-h-dvh flex-col">
+                {/* First tab stop: lets keyboard users jump past the header. */}
+                <a
+                  href="#main"
+                  className="sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-background focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:shadow-md focus:outline-2 focus:outline-ring"
+                >
+                  {t("skipToContent")}
+                </a>
+                <SiteHeader />
+                <main id="main" className="flex-1 bg-muted/25">
+                  {children}
+                </main>
+                <SiteFooter />
+              </div>
+            </NextIntlClientProvider>
           </DirectionProvider>
         </ThemeProvider>
         <Analytics />
