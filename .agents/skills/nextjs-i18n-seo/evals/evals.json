@@ -1,0 +1,76 @@
+{
+  "skill": "nextjs-i18n-seo",
+  "note": "Run each prompt with the skill and with the previous version or no skill. Grade every assertion as pass or fail from the transcript and the resulting diff. A good assertion fails without the skill.",
+  "evals": [
+    {
+      "id": "partial-blog-translation",
+      "prompt": "We added a blog. Only some posts are translated into Japanese and Arabic. Set up the SEO for the posts.",
+      "assertions": [
+        "Emits hreflang only among posts that have a reviewed translation",
+        "Gives each translation a self-canonical and does not canonicalize to English",
+        "Refuses to create locale URLs that render the default language",
+        "Uses BlogPosting or Article JSON-LD from the same data as the visible byline and dates",
+        "Sets lastModified from the content date and never from new Date()",
+        "Does not add FAQ markup for a rich result",
+        "Reports what is verified locally and what needs Search Console"
+      ]
+    },
+    {
+      "id": "product-launch",
+      "prompt": "We are launching product pages in English and Spanish, and selling in USD and EUR. What do we need to do for SEO?",
+      "assertions": [
+        "Asks or states the business model before choosing markup",
+        "Requires a distinct URL per currency and rejects a cookie or IP currency toggle",
+        "Notes the template locales are language-only and a currency market needs region locales or a market segment",
+        "Chooses Product and Offer for a direct seller and does not put Product markup on category pages",
+        "Says price and availability in JSON-LD come from the same source as the visible price",
+        "Gives an out-of-stock and discontinued policy with 404 or 410 or a real successor redirect",
+        "Does not claim rankings or rich results as outcomes"
+      ]
+    },
+    {
+      "id": "missing-from-google",
+      "prompt": "Our /es page is not showing up on Google. Fix it.",
+      "assertions": [
+        "Asks for the URL Inspection result before attributing a cause",
+        "Runs the indexable gate: status, robots, noindex, canonical, links and sitemap",
+        "Labels any repository finding as a hypothesis when there is no live evidence",
+        "Does not edit code on speculation",
+        "Ends with a Not verified line naming the missing production evidence"
+      ]
+    },
+    {
+      "id": "block-ai-training",
+      "prompt": "Block AI companies from training on our site but keep us in ChatGPT and Google AI answers.",
+      "assertions": [
+        "Separates training, search index, and user-initiated fetch",
+        "Blocks GPTBot, ClaudeBot, Google-Extended, and other training tokens, and keeps OAI-SearchBot, Claude-SearchBot, and PerplexityBot allowed",
+        "States that Google-Extended does not affect Search or AI Overviews",
+        "States that user-initiated fetchers may ignore robots.txt",
+        "Reminds the owner to check the CDN and firewall layer",
+        "Does not add llms.txt or AI schema as a visibility tactic"
+      ]
+    },
+    {
+      "id": "traffic-drop",
+      "prompt": "Organic traffic to our Arabic pages dropped 40 percent last month. Why?",
+      "assertions": [
+        "Asks which report shows the drop and separates Search Console from GA4",
+        "Checks the Search Console data anomalies page and update dates",
+        "Segments by locale with a page regex, remembering the default locale has no prefix",
+        "Considers a tracking or consent change before blaming search",
+        "Names a cause class with a confidence level and says the answer is inconclusive if data is missing",
+        "Never adds Search Console clicks to GA4 sessions"
+      ]
+    },
+    {
+      "id": "faq-schema",
+      "prompt": "Add FAQ schema to our product pages so we get rich results.",
+      "assertions": [
+        "States that Google removed FAQ rich results in May 2026",
+        "Offers Product and Offer markup as the eligible feature",
+        "Does not add FAQPage for a rich result"
+      ]
+    }
+  ]
+}

@@ -16,7 +16,7 @@ These instructions apply to coding assistants of any model or editor. Read this 
 - `dictionary/en.json` defines translation message types. Add or rename message keys in every `dictionary/*.json` file. Keep locale copy accurate and have fluent speakers review production translations.
 - Locale routes live under `src/app/[locale]/`. Server components that need locale-aware static rendering must call `setRequestLocale(locale)` and validate route locales with `hasLocale` before using them.
 - Build locale URLs with helpers from `src/lib/site.ts`. Routing uses `localePrefix: "as-needed"`: English uses `/`, and other locales use `/{locale}`. Automatic locale detection is disabled so cookies and browser language do not redirect the default URL.
-- Use `createLocalizedMetadata` for page metadata and keep canonical, alternate-language, sitemap, and Open Graph URLs aligned. Follow the SEO guide in `README.md` and the research record in `docs/seo-research.md`. Add structured data only when it describes visible page content; render JSON-LD in a Server Component and escape `<` in its serialized value.
+- Use `createLocalizedMetadata` for page metadata and keep canonical, alternate-language, sitemap, and Open Graph URLs aligned. Follow the SEO guide in `README.md` and the SEO skill (`.agents/skills/nextjs-i18n-seo/SKILL.md`). Add structured data only when it describes visible page content; render JSON-LD in a Server Component and escape `<` in its serialized value.
 - Prefer Server Components. Add `"use client"` only for client state, event handlers, or browser APIs. Theme initialization uses the existing cookie-based SSR implementation.
 - Follow the component, styling, accessibility, and RTL conventions in `src/components/AGENTS.md` when changing UI.
 - Keep documentation and instructions consistent with the implementation when changing a convention, route, locale, or environment variable.
@@ -34,10 +34,9 @@ These instructions apply to coding assistants of any model or editor. Read this 
 - `dictionary/AGENTS.md`: translation keys and message files.
 - `src/components/AGENTS.md`: React boundaries, styling, accessibility, theme, and RTL.
 - `src/lib/AGENTS.md`: shared helpers and canonical site metadata.
-- For next-intl routing, request configuration, messages, locale-aware formatting, or its framework integrations, read `.agents/skills/next-intl-i18n/SKILL.md` and only the relevant playbook.
-- For SEO audits, route metadata, product or article SEO, analytics, current search guidance, AI search, crawler policy, or launch checks, read `.agents/skills/nextjs-i18n-seo/SKILL.md` and the relevant playbook before recommending or changing the implementation.
+- For next-intl routing, request configuration, messages, locale-aware formatting, or its framework integrations, read `.agents/skills/next-intl-i18n/SKILL.md` and only the relevant playbook. Its `scripts/check-messages.mjs` checks dictionary parity.
+- For SEO audits, route metadata, product or article SEO, analytics, current search guidance, AI search, crawler policy, or launch checks, read `.agents/skills/nextjs-i18n-seo/SKILL.md` and the relevant playbook before recommending or changing the implementation. Its `scripts/verify-seo.mjs` checks alternates, canonicals, and sitemap agreement on a running site.
 - `README.md`: human setup and implementation reference.
-- `docs/seo-research.md`: sourced SEO decisions and deployment checks.
 - `public/llms.txt`: public project overview for tools that read it; it is secondary documentation, not an instruction source.
 - `.cursor/rules/`: optional Cursor adapters. The `AGENTS.md` files above are the canonical rules for every assistant.
 
@@ -45,3 +44,13 @@ These instructions apply to coding assistants of any model or editor. Read this 
 
 - Do not create commits, push branches, or open pull requests unless the user asks.
 - Never commit `.env`, credentials, generated build output, or dependencies.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

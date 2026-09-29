@@ -4,4 +4,4 @@ globs: src/i18n/**/*,dictionary/**/*.json
 alwaysApply: false
 ---
 
-For locale and translation changes, follow [`src/i18n/AGENTS.md`](../../src/i18n/AGENTS.md) and [`dictionary/AGENTS.md`](../../dictionary/AGENTS.md). The root [`AGENTS.md`](../../AGENTS.md) also applies.
+For locale and translation changes, follow [`src/i18n/AGENTS.md`](../../src/i18n/AGENTS.md) and [`dictionary/AGENTS.md`](../../dictionary/AGENTS.md). For larger i18n work, also follow [`.agents/skills/next-intl-i18n/SKILL.md`](../../.agents/skills/next-intl-i18n/SKILL.md). The root [`AGENTS.md`](../../AGENTS.md) also applies.

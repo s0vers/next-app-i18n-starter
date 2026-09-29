@@ -1,45 +1,104 @@
 # Architecture and rendering
 
-Use this reference for App Router setup, request-scoped configuration, Server and Client Components, or static rendering. Confirm installed versions and local instructions before copying an API example.
+Read this for request config, static rendering, Cache Components, the server and client split, provider payload, and the document's `lang` and `dir`.
 
-## Choose the locale source first
+## Choose the locale source
 
-Use locale-based routing when each language needs a stable, shareable URL. Use a request preference (such as a cookie) only when a single URL is intentionally rendered in the user's preferred language. A cookie-selected locale is not a substitute for distinct public locale URLs when each translation must be directly addressable. The App Router routing setup and getting-started docs distinguish these approaches: [locale-based routing](https://next-intl.dev/docs/routing/setup), [getting started](https://next-intl.dev/docs/getting-started/app-router).
+Walk the tree top to bottom and stop at the first match.
 
-## Wire App Router configuration
+```text
+Does each language need to be found, indexed, or shared?
+├── Yes
+│   ├── One hostname per market (us.example.com, de.example.com)?
+│   │   └── Yes → `domains` in routing config; every locale belongs to exactly one domain
+│   └── No → path prefix (`/ja`); this template's choice
+└── No (signed-in app, no SEO)
+    └── Cookie or user setting with `localePrefix: "never"`; alternate links turn off
+```
 
-For the App Router, keep `i18n/request.ts` (or the configured equivalent) as the request boundary: resolve the locale, load the relevant messages, and return request-specific formats, time zone, and `now` where needed. The Next.js plugin connects that file to next-intl. This template points the plugin at `./src/i18n/request.ts`; it derives currency and time zone from `localeConfig` and `createRegionalFormats`. See the [plugin guide](https://next-intl.dev/docs/usage/plugin) and [request configuration](https://next-intl.dev/docs/usage/configuration).
+Why the first branch wins: Google recommends distinct URLs per language and warns that pages adapted by cookie or `Accept-Language` may not be crawled in every variant.
 
-The current docs also mark `requestLocale` in `getRequestConfig` as a legacy locale source after `next/root-params` became available. On a compatible Next.js version, use the route param through `next/root-params` for new locale-based App Router setup and handle missing/invalid values deliberately. If the repository already depends on `requestLocale`/`setRequestLocale`, treat migration as a separate compatibility change unless the task includes it. See [routing setup](https://next-intl.dev/docs/routing/setup) and [request configuration](https://next-intl.dev/docs/usage/configuration).
+## Request config
 
-Keep locale validation explicit at the route boundary. In this template `request.ts` falls back to English when `requestLocale` is missing or unsupported, while `[locale]/layout.tsx` rejects unsupported route params with `notFound()`. Preserve that distinction: a fallback for an out-of-route execution path must not make an invalid public locale route look valid. See [routing setup](https://next-intl.dev/docs/routing/setup).
+`src/i18n/request.ts` is the request boundary. It resolves the locale, loads messages, and returns `timeZone`, `now`, and `formats`. The plugin in `next.config.ts` connects it.
 
-## Keep translation work on the server by default
+Root params path (Next >= 16.3, `[locale]` hosts `<html>`):
 
-In a Server Component, use `useTranslations`/`useFormatter` for synchronous shared components and `getTranslations`/`getFormatter` or the other awaitable server APIs in async components. Hooks cannot be called from async components. Server rendering keeps the message catalog and formatting library off the client when interactivity is unnecessary. See [Server and Client Components](https://next-intl.dev/docs/environments/server-client-components).
+```ts
+import * as rootParams from "next/root-params";
+import { notFound } from "next/navigation";
+import { hasLocale } from "next-intl";
+import { getRequestConfig } from "next-intl/server";
 
-When client interactivity needs translated content, choose in this order:
+export default getRequestConfig(async ({ locale }) => {
+  if (!locale) {
+    const param = await rootParams.locale();
+    if (hasLocale(routing.locales, param)) locale = param;
+    else notFound();
+  }
+  return { locale, messages: (await import(`../../dictionary/${locale}.json`)).default };
+});
+```
 
-1. Translate on the server and pass labels/children to an interactive leaf component.
-2. Move shareable state into URL/search params or server state when this keeps the translation server-side.
-3. Provide only the required messages through a nested `NextIntlClientProvider`.
-4. Provide the full catalog only when the app's client-side translation needs justify it; measure before optimizing.
+The `({ locale })` form is deliberate. Route Handlers and Server Actions pass a locale explicitly, and this form lets it through. The getter name comes from the folder name, so `[locale]` gives `locale`. Kebab-case folder names do not work.
 
-This is a performance choice, not a requirement to narrow every provider. This template deliberately passes the full catalog from its locale layout. Change that only when the requested feature or measured payload warrants it; preserve client components' actual message needs. A provider in the App Router inherits request configuration by default, and `messages={null}` or a nested provider can narrow delivery. See [Server and Client Components](https://next-intl.dev/docs/environments/server-client-components) and [request configuration](https://next-intl.dev/docs/usage/configuration).
+Legacy path (this template today): read `requestLocale`, fall back to `routing.defaultLocale` when `hasLocale` fails. The fallback exists for execution paths outside a locale route. It must never make an invalid public route look valid, so `[locale]/layout.tsx` keeps its own `hasLocale` plus `notFound()`.
 
-## Choose static rendering for the actual version
+## Static rendering
 
-Current next-intl docs describe `next/root-params` as the preferred route-locale access path on Next.js 16.3 and later, with `generateStaticParams` for locales that should be prerendered. They also label `requestLocale` in request config and `setRequestLocale` as legacy, still-supported paths. Do not migrate a project just because the docs changed: verify its Next.js version, installed types, and repository constraints; preserve its established API unless the task includes a migration. In this template, the root `AGENTS.md` still requires `setRequestLocale` for locale pages, so follow that local contract for normal edits and surface the newer API as a separate migration opportunity. See [routing setup and static rendering](https://next-intl.dev/docs/routing/setup) and [request configuration](https://next-intl.dev/docs/usage/configuration).
+| Mode | Needs | Fails when |
+| --- | --- | --- |
+| Root params | `generateStaticParams` returning the locales to prerender. No `setRequestLocale`. | Next < 16.3 without `experimental.rootParams`. Root params are unavailable in Client Components, Server Actions, Route Handlers, and `unstable_cache`. |
+| Legacy | `setRequestLocale(locale)` in every layout and page, before any next-intl call, plus `generateStaticParams` | One page forgets the call and turns dynamic, because layouts and pages render independently |
 
-For either path, inspect where static params are generated and which route segment they cover. In the legacy path, call `setRequestLocale(locale)` in every layout and page that needs static rendering, before any next-intl API, because Next.js renders them independently. The template generates all locale params at `[locale]/layout.tsx`. Only return locales intended to be generated at build time; runtime or selectively rendered locales may need another strategy. In `generateMetadata`, pass the awaited route locale explicitly to `getTranslations` rather than reading request-only data. See [routing setup](https://next-intl.dev/docs/routing/setup).
+Both modes: `generateStaticParams` returns only locales meant for build-time output. Check the build's route table. A locale page marked as dynamic (`ƒ`) when it should be static means the locale source is being read from headers.
 
-## Check rendered document attributes
+### Cache Components
 
-Ensure the root document has the correct `lang` and `dir` for each rendered locale. `dir` should reflect the script/content direction, not be guessed from a language name alone. Keep locale selection, request messages, document language, and RTL styling consistent. The translations guide includes RTL considerations: [translations](https://next-intl.dev/docs/usage/translations).
+`cacheComponents: true` changes three rules.
+
+1. Root params are the only working path. The legacy path fails with a `headers()` inside `use cache` error.
+2. `generateStaticParams` must return at least one value for each root param, or the build fails.
+3. `dynamicParams = false` is incompatible. Validate at runtime with `hasLocale` and `notFound()`.
+
+Values returned from `generateMetadata` under `use cache` must be serializable, so pass URL strings and not `URL` objects.
+
+### Migrate to root params
+
+Run this only when the task includes migration. It touches every locale page, so it is a separate change.
+
+1. Confirm `next` >= 16.3 (or set `experimental.rootParams`) and that `[locale]/layout.tsx` renders `<html>`.
+2. Confirm `next-intl` >= 4.13.6. Upgrading crosses 4.14.0, which needs a message update for `.po` users.
+3. Replace the body of `request.ts` with the snippet above.
+4. Delete every `setRequestLocale(locale)` call. In the layout, read the locale with `await getLocale()` from `next-intl/server`.
+5. In `generateMetadata`, `getTranslations("Metadata")` works without `params`. Keep the explicit `{ locale, namespace }` form for Route Handlers, manifests, and Server Actions.
+6. Update the repository rule that requires `setRequestLocale` (root `AGENTS.md`, `src/app/AGENTS.md`, `src/i18n/AGENTS.md`) in the same change.
+7. Run `bun run build`. Every locale page keeps its static marker, and `/xx/` still returns 404.
+
+## Server and client
+
+Default to the server. Use `getTranslations` and `getFormatter` in async components. Use `useTranslations` and `useFormatter` in sync shared components. Hooks cannot run in async components.
+
+When a Client Component needs translated text, take the first option that works.
+
+1. Translate on the server and pass strings or children into the interactive leaf.
+2. Move the state to the URL or the server so the text stays server-side.
+3. Nest a `NextIntlClientProvider` with only the needed namespaces (`pick(messages, ["Ns"])`).
+4. Pass the full catalog only when the client translates broadly and the payload is measured.
+
+This template passes the full catalog from its locale layout. Change that only for a measured payload problem. The provider inherits `locale`, `messages`, `now`, `timeZone`, and `formats`. It does not inherit `onError` or `getMessageFallback`, because functions cannot cross the boundary. Set those in a `"use client"` wrapper. `messages={null}` opts a subtree out.
+
+## Document attributes
+
+`<html lang>` comes from `localeConfig[locale].languageTag`. `dir` must come from data, not from a hardcoded check. This template's layout uses `locale === "ar"`. Add a `dir` field to `localeConfig` and read it in the layout, `LanguageSwitcher`, and `HomeIndex` before adding a second RTL locale.
+
+Route keys (`zh`) are not language tags (`zh-Hans-CN`). Route keys select routes. Tags go in `lang`, `hreflang`, and Open Graph.
 
 ## Verify
 
-- Request at least one route in the default locale and one prefixed or domain locale.
-- Check the rendered `lang`/`dir`, message selection, and no missing-locale fallback.
-- For static pages, verify the build's prerender output. If a route intentionally omits a locale from static params, test that locale's runtime behavior.
-- For Client Components, confirm the nearest provider and inspect whether message serialization is limited to what the component needs.
+- `/` and one prefixed locale respond 200, and `/xx/` responds 404.
+- View source for `<html lang dir>` per locale.
+- The build route table shows the intended static and dynamic markers.
+- A Client Component renders under the layout without a "no context" error.
+
+Sources, checked 2026-09-30: [routing setup](https://next-intl.dev/docs/routing/setup), [request configuration](https://next-intl.dev/docs/usage/configuration), [root params blog](https://next-intl.dev/blog/nextjs-root-params), [Next.js root params](https://nextjs.org/docs/app/api-reference/functions/next-root-params), [Server and Client Components](https://next-intl.dev/docs/environments/server-client-components), [next-intl 4.13.5](https://github.com/amannn/next-intl/releases/tag/v4.13.5) and [4.13.6](https://github.com/amannn/next-intl/releases/tag/v4.13.6) release notes.

@@ -1,44 +1,102 @@
 # AI and agentic discovery
 
-Use this playbook when a request mentions AI Overviews, AI Mode, answer engines, model crawlers, `llms.txt`, or agents that use a browser. These are related but separate cases. Identify the product and desired outcome before changing the site.
+Use when a request mentions AI Overviews, AI Mode, ChatGPT search, Claude, Perplexity, Copilot, answer engines, model crawlers, `llms.txt`, "GEO" or "AEO", or agents that browse and buy. These are separate systems. Name the product and the outcome before changing anything.
 
-## Choose the system and evidence
+Evidence tags: `[doc]` vendor documentation fetched, `[secondary]` third-party report, `[study]` published measurement with method, `[unverified]`. The evidence for AI-specific tactics is thin, and tags matter more here than anywhere else. See [evidence and reporting](evidence-and-reporting.md).
 
-| Goal | Check first | Evidence of outcome |
+Crawler tokens, policies, and `robots.ts` sketches are in [AI crawler reference](ai-crawler-reference.md).
+
+## Fundamentals first
+
+Google states that GEO and AEO are still SEO, and that AI Overviews and AI Mode need no additional technical requirements. [doc, 2026-05-15] Microsoft says Bing and Copilot share Bing's crawl, index, and ranking foundation. [secondary] Do these in order. Stop when a step reveals the fault.
+
+1. The page is public, crawlable, indexable, and snippet-eligible. Check the app's `robots.ts` and the host, CDN, firewall, and authentication layer. A permissive `robots.ts` proves nothing about the CDN.
+2. The search bots of each product you want are not blocked: `OAI-SearchBot`, `Claude-SearchBot`, `PerplexityBot`, Bingbot, Googlebot. Confirm the CDN allows their published IPs.
+3. The owner chose a policy for training, search, and user-initiated fetches, and recorded it. See the crawler reference.
+4. The content is original, factual, and in server-rendered HTML with clear headings and ordinary links.
+
+## Choose the system and the evidence
+
+| Goal | Check first | Outcome evidence |
 | --- | --- | --- |
-| Google AI Overviews or AI Mode | Search indexing eligibility and [Google's AI guide](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide) | Search Console's current Search performance rules and on-site visits; no promise of citation |
-| Gemini Apps or Vertex AI grounding | [Google-Extended's documented product controls](https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers) and the owner's content-use policy | Provider-visible outcomes where available; allowing this use does not establish inclusion |
-| ChatGPT search | `OAI-SearchBot` access and [OpenAI crawler guidance](https://developers.openai.com/api/docs/bots) | Live bot access where observable, attributable referrals, and sampled citations; these measure different things |
-| Microsoft Copilot or Bing AI | Bing indexability and [Webmaster Guidelines](https://www.bing.com/webmasters/help/bing-webmaster-guidelines-30fba23a) | [Bing AI Performance](https://www.bing.com/webmasters/help/ai-performance-9f8e7d6c) where available; citations are not clicks or rank |
-| Claude or Perplexity search | Their current crawler/user-fetch policies and live access | Provider data if offered, referrals, and reproducible sampled responses; do not infer global visibility from spot checks |
-| Browser agent completes a site task | Rendered UI, DOM, accessibility tree, and actual task flow | Task completion under the agent/browser being supported |
+| Google AI Overviews or AI Mode | Indexing and snippet eligibility. Snippet controls (`nosnippet`, `max-snippet`, `data-nosnippet`) limit what AI features may use. | Search Console's Generative AI performance report (impressions only, all sites since 2026-08-31) and the Web report |
+| Opt out of Google AI features | Search Console, Settings, Search generative AI: Include, Exclude, or Inherit per property | The setting itself. It does not affect training. `Google-Extended` is the training control. |
+| Gemini Apps and Vertex grounding | `Google-Extended` in robots.txt, plus the owner's content-use policy | None available. Allowing it does not establish inclusion. |
+| ChatGPT search | `OAI-SearchBot` allowed | Referrals, server logs, sampled citations |
+| Copilot and Bing AI | Bing indexability, IndexNow | Bing AI Performance (public preview, sampled, citations only) |
+| Claude or Perplexity search | `Claude-SearchBot`, `PerplexityBot` allowed | Referrals and reproducible sampled answers |
+| A browser agent completes a task | The real task flow, DOM, and accessibility tree | Task completion in the agent being supported |
 
-For crawler policy, identify the exact user agent or product token and owner decision. Google says `Google-Extended` controls specified Gemini training and grounding uses of Google-crawled content, but does not affect Google Search inclusion or ranking; it is not a distinct request user agent. OpenAI distinguishes `OAI-SearchBot` (search), `GPTBot` (training), and `ChatGPT-User` (user-initiated fetch); its documentation says robots rules may not apply to the last case. Anthropic and Perplexity also document separate crawler purposes. Verify their current names and behavior before editing `robots.ts`, and inspect host-level access. Do not silently change a search or training policy.
+## What has evidence and what does not
 
-## Apply established search fundamentals first
+Ranked by how much backing each has. Do the top first. Label anything below the line as correlation.
 
-- Make intended pages public, reachable, indexable, and useful. Confirm both app-level robots rules and host/CDN/authentication controls.
-- Put original, accurate content in crawlable HTML. Use descriptive headings, ordinary links, and a clear page structure.
-- Provide useful titles, metadata, and structured data only where relevant. Keep markup consistent with visible content and supported features.
-- Make pages usable across devices and address real performance or accessibility barriers.
-- Measure search visibility using the search provider's current webmaster tools. Use [Measurement](measurement.md) to keep citations, clicks, sessions, and conversions distinct.
+1. Be crawlable, indexed, and current. Vendor-stated. [doc]
+2. Write one topic per URL. State facts directly, keep entity names consistent, put key information near the top, and use clear headings and tables. This is Bing's grounding advice. Google separately says artificial chunking is unnecessary. The two agree: focused pages, not fragmented ones. [doc, secondary]
+3. Use IndexNow for Bing freshness, and keep `lastModified` true. [doc]
+4. Keep pages maintained. AI bot hits skew to content from the last year, and cited content is fresher than ordinary results. Correlation from vendor-run log studies. [study]
+5. Add quotations, statistics, and cited sources. The Princeton GEO paper reports position-adjusted gains of about 41 percent for quotations, 33 percent for statistics, and 28 percent for citing sources, and a 9 percent loss for keyword stuffing. It ran on a synthetic engine with 2023 models. The one finding that holds up is that keyword stuffing does not help. [study, weak]
+6. Brand mentions correlate with AI visibility across 75,000 brands (rho 0.664 with AI Overview presence). Correlation only, and manufactured mentions do not work. [study]
 
-## Reject unsupported AI-specific fixes
+Below the line, and unsupported:
 
-For Google Search, do not claim a ranking or citation benefit from `llms.txt`, special AI schema, artificial content chunking, or rewriting solely for AI. Google's current guidance says these tactics are not required and that Google Search does not use special AI text files. A public `llms.txt` can still serve tools that choose to use it, but it does not replace crawlable pages or ordinary links. Treat advice from an AI provider as applying to that provider only.
+| Claim | Evidence |
+| --- | --- |
+| `llms.txt`, special AI schema, chunking, or AI-only rewriting improves Google citations | Google says no. Ahrefs found 28 percent of 137,210 domains had a valid `llms.txt` and 97 percent of those got zero traffic. Requests came mostly from audit tools. [doc, study] |
+| GEO gives a fixed gain such as 40 percent | A lab result on a proxy engine |
+| Ranking in the top 10 predicts citation | Overlap fell from 76 to 38 percent in one study and is about 17 percent in another. Studies disagree. |
+| Reddit and Wikipedia weights are stable | One vendor saw ChatGPT's Reddit share swing from about 60 to 10 percent within weeks |
+| Blocking `GPTBot` or `ClaudeBot` removes you from AI answers | False by vendor docs. Search tokens are separate. |
+| `Content-Signal`, `ai.txt`, or `aipref` bind crawlers | No vendor documents honoring them |
+| `robots.txt` stops all agent traffic | User-initiated fetchers may ignore it |
 
-Do not add provider-specific directives from memory. Verify each provider's current crawler documentation, distinguish search access from model training, inspect hosting rules as well as `robots.txt`, and document the policy choice made by the site owner. Once access and content fundamentals are checked, an absent citation alone is not enough evidence for a code change.
+Treat advice from an AI vendor as applying to that vendor only.
+
+## `llms.txt`
+
+Keep `public/llms.txt` as an optional docs aid for tools that read it. It is not a ranking action and never replaces crawlable pages. The format has an H1 title, an optional blockquote summary, optional prose, then H2 sections of markdown link lists. Comment lines that start with `#` parse as extra H1s. Verify the file matches before claiming it follows the spec.
+
+## Markdown for agents and other standards
+
+| Item | Status | Advice |
+| --- | --- | --- |
+| Markdown via `Accept: text/markdown` | Cloudflare converts at the edge. No AI vendor documents production use. Google says Markdown is not needed for Search. | Useful for docs and coding agents only |
+| IETF `aipref` | Draft (`draft-ietf-aipref-vocab-08`). No vendor honors it. | Do not emit it |
+| Web Bot Auth | IETF drafts. OpenAI signs its agent requests. Google experiments with `agent.bot.goog`. | Verify signatures only if agent traffic is wanted |
+| WebMCP | Chrome developer trial only | Do not build for it yet |
+| NLWeb, MCP server cards | Draft or vendor-specific | Only for a concrete conversational product need |
+| schema.org `potentialAction` for AI | No vendor documents use | Skip |
 
 ## Make browser tasks legible
 
-When a site should support browser agents, check the actual task flow. Prefer semantic links and buttons, associated form labels, specific control names, visible state, keyboard access, and stable layouts. Confirm that important content and actions are available in the DOM and accessibility tree. Add protocols or agent-specific integrations only when the user has a concrete product need and the relevant standard is mature enough for the requested use.
+Agents read the DOM and the accessibility tree, or a screenshot. Apply in order.
 
-## References
+1. Semantic `<button>` and `<a>`. Native HTML over ARIA added for agents.
+2. A `<label for>` on every input, and specific control names.
+3. No transparent overlay over an interactive element.
+4. Stable layout across loads. Screenshot-driven agents fail on shifting pages.
+5. Important content and actions exist in the DOM and accessibility tree.
+6. Confirmation before a purchase or deletion.
+7. No CAPTCHA on public read paths. Anthropic says ClaudeBot does not solve them.
+8. Price and stock in server-rendered HTML, consistent with any feed.
+9. Test the real flow with a browser agent and a keyboard-only pass. No vendor certifies compatibility.
 
-- [Google guide to generative AI features in Search](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide)
-- [Google Search Essentials](https://developers.google.com/search/docs/essentials)
-- [Google common crawlers and Google-Extended](https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers)
-- [OpenAI crawler documentation](https://developers.openai.com/api/docs/bots)
-- [Anthropic crawler documentation](https://support.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler)
-- [Perplexity crawler documentation](https://docs.perplexity.ai/docs/resources/perplexity-crawlers)
-- [web.dev guidance for agent-friendly websites](https://web.dev/articles/ai-agent-site-ux)
+Comet and Claude in Chrome look like ordinary Chrome sessions, so there is no identity to allowlist. [secondary]
+
+## Multilingual AI search
+
+One practitioner test found ChatGPT and Perplexity often linked English URLs for non-English queries, Copilot returned the right localized URL most often, and Gemini was inconsistent. No vendor documents `hreflang` for AI. [secondary, weak] The low-regret work is the international SEO work: fully translated body content, one URL per language, self-canonicals, reciprocal alternates, and translated titles. Sample per language and per engine.
+
+## Measure
+
+1. Logs: match user-agent tokens, then verify with the vendor's IP list or reverse DNS, because tokens are spoofable. Bucket training, search, and user-fetch. A crawl count is not visibility.
+2. Referrers: `chatgpt.com`, `perplexity.ai`, `claude.ai`, `copilot.microsoft.com`, `gemini.google.com`. Many AI clicks arrive with no referrer and land in Direct.
+3. GA4 has a default "AI Assistant" channel. Add a custom channel group for the rest. See [measurement](measurement.md).
+4. Search Console's Generative AI report and Bing AI Performance.
+5. Prompt sampling: a fixed prompt set per language, logged out, fresh sessions, repeated runs, and each cited URL and date recorded. Never read one miss as a code defect.
+
+## Done when
+
+The policy for training, search, and user fetch is written down. Search bots are reachable through the CDN. Pages render their content in HTML. Any claim of AI visibility cites a report or a dated sample with its limits. Report what the owner still has to verify: CDN rules, Search Console settings, Merchant Center, and any vendor program enrollment.
+
+Sources, checked 2026-09-30: [Google AI features](https://developers.google.com/search/docs/appearance/ai-features), [Google guide to generative AI in Search](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide), [Search generative AI control](https://support.google.com/webmasters/answer/16908024), [Generative AI performance report](https://support.google.com/webmasters/answer/16984139), [web.dev agent-friendly sites](https://web.dev/articles/ai-agent-site-ux), [llms.txt spec](https://llmstxt.org/), [GEO paper](https://arxiv.org/abs/2311.09735), [Ahrefs llms.txt study](https://ahrefs.com/blog/llmstxt-study/), [Bing AI Performance](https://blogs.bing.com/webmaster/February-2026/Introducing-AI-Performance-in-Bing-Webmaster-Tools-Public-Preview).

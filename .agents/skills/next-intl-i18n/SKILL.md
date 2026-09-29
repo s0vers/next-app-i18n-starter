@@ -1,32 +1,73 @@
 ---
 name: next-intl-i18n
-description: Implement or debug next-intl localization in Next.js: locale routing, request configuration, translated UI, formatting, and framework integration. Use for concrete i18n work; use the SEO skill for search strategy and indexing policy.
+description: Implement, migrate, or debug next-intl in a Next.js App Router project. Use when a change touches a locale URL, proxy, request config, message file, ICU message, formatted number, date, or list, RTL or CJK layout, localized CMS content, a locale switcher, or a translated error page. Not for canonicals, hreflang, sitemaps, or indexing; use nextjs-i18n-seo for those, and load both when a route or locale is added.
 ---
 
-# next-intl in this repository
+# next-intl in a Next.js App Router project
 
-Keep each locale's URL, rendered language, messages, navigation, and regional formatting in agreement. Read the repository and nearest `AGENTS.md` first. Check `package.json` and installed types before applying live documentation examples: this template declares Next.js `^16.3.7`, pins next-intl `4.13.0`, and uses the supported `requestLocale` / `setRequestLocale` path. `src/i18n/AGENTS.md` requires that path until migration is explicitly in scope.
+Five things must agree for every locale: the URL, the rendered language (`lang` and `dir`), the messages, the navigation, and the formatting. Every i18n bug is one of the five disagreeing with another. Find which pair disagrees before editing.
 
-## Route to the relevant reference
+Checked 2026-09-30 against next-intl 4.14.8 and Next.js 16.3. Both move fast. Read the installed version in `package.json` before applying an example.
 
-| Task | Read |
+## Recon
+
+Always read `package.json` (`next` and `next-intl` versions) and the nearest `AGENTS.md`. Then read by task, and stop when the task is unambiguous.
+
+| Task | Also read |
 | --- | --- |
-| Request config, Server/Client Components, static rendering, or provider payload | [Architecture and rendering](references/architecture-and-rendering.md) |
-| Prefixes, proxy, pathnames, domains, navigation, or locale switching | [Routing and navigation](references/routing-and-navigation.md) |
-| Message catalogs, ICU, translations, regional formats, or RTL | [Messages and formatting](references/messages-and-formatting.md) |
-| Metadata and other server entry points, errors, typing, tooling, or tests | [Integrations and workflows](references/integrations-and-workflows.md) |
-| Pages Router or non-Next consumers | [Legacy and adjacent environments](references/integrations-and-workflows.md#legacy-and-adjacent-environments) |
+| A message or a formatted value | `dictionary/en.json` and one other locale for the namespace, `src/i18n/request.ts`, `src/i18n/regional.ts`, `global.d.ts` |
+| A redirect, prefix, cookie, or switcher problem | `src/i18n/routing.ts`, `src/proxy.ts`, `next.config.ts`, and host redirect rules (`vercel.json`, CDN) |
+| Rendering, static output, or a new page | `request.ts`, `[locale]/layout.tsx`, the affected page |
+| A new locale | `src/i18n/locales.ts`, every file in `dictionary/`, the layout, `LanguageSwitcher.tsx`, `HomeIndex.tsx` |
 
-Read a second reference only when the task crosses that boundary. For canonical URLs, `hreflang`, sitemap, indexing, content strategy, or search measurement, also read the [SEO skill](../nextjs-i18n-seo/SKILL.md).
+Then answer in one line each: which API path (below), which locale source, which rendering mode (static, dynamic, cached). A message-only task can answer the last two with "unchanged".
 
-## Work from the actual locale contract
+If the config already does what the user asks, the fault is the deployment or a stale cache, not the source. Check the deployed response before editing.
 
-1. Inspect `src/i18n/locales.ts`, `routing.ts`, `request.ts`, `navigation.ts`, `src/proxy.ts`, the affected route and dictionaries. Identify the route locale, HTML language tag, region, currency, time zone, direction, and content locale separately. Do not infer a market policy from a language code.
-2. Define the public URL and content availability for each affected locale. For a CMS item, identify the same logical item across translations before building a locale switcher or alternate URLs. A configured locale does not prove that a translated page exists.
-3. Make the smallest complete change in the established architecture. Keep `defineRouting` shared between proxy and navigation, validate route params with `hasLocale`, and use `@/i18n/navigation` for locale-aware navigation. Use awaitable `next-intl/server` APIs in async Server Components and framework entry points.
-4. Update all required dictionaries when keys change. Preserve ICU arguments and rich-text slots; do not mark machine or draft copy as reviewed production translation.
-5. Verify the behavior affected by the change: direct load and navigation in English and at least one prefixed locale, missing or invalid locale handling, rendered `lang`/`dir`, correct messages and formatting, and any affected static or metadata output. Run repository checks required by `AGENTS.md`; report exact checks and locale paths exercised.
+| API path | Signals | Locale reaches server code through |
+| --- | --- | --- |
+| Root params | Next >= 16.3 and `[locale]` hosts `<html>` | `next/root-params`, automatic inside `getTranslations` |
+| Legacy | `requestLocale` in `request.ts`, `setRequestLocale` in pages | Explicit `setRequestLocale(locale)` before any next-intl call |
+
+`requestLocale` and `setRequestLocale` are deprecated since next-intl 4.13.6 and 4.13.5. They still work. On an installed version older than 4.13.5 the deprecation does not apply yet, and the legacy path is simply current. This template still uses the legacy path, and the root `AGENTS.md` requires `setRequestLocale`, so keep it in ordinary edits. Migrate only when the task says so, and follow the migration steps in [architecture](references/architecture-and-rendering.md#migrate-to-root-params).
+
+## Read next
+
+| Task | Reference |
+| --- | --- |
+| Request config, static rendering, Cache Components, server versus client, provider payload, `lang` and `dir` | [Architecture and rendering](references/architecture-and-rendering.md) |
+| Prefix mode, proxy, cookies, `pathnames`, domains, `Link`, locale switcher | [Routing and navigation](references/routing-and-navigation.md) |
+| Catalogs, ICU, plural categories, rich text, formatters, typing, extraction, translation review | [Messages and formatting](references/messages-and-formatting.md) |
+| Arabic, Chinese, Japanese, Spanish, or German layout, numerals, plurals, fonts, line breaking | [RTL and scripts](references/rtl-and-scripts.md) |
+| Blog, product, or CMS content with per-locale slugs, partial translation, adding a locale | [Localized content](references/localized-content.md) |
+| Metadata, Open Graph, manifests, Server Actions, error pages, tests, Pages Router | [Integrations and workflows](references/integrations-and-workflows.md) |
+| Proving the change works, or diagnosing a symptom | [Verification](references/verification.md) |
+
+Load a second reference only when the change crosses into it. A new locale needs routing, messages, RTL and scripts, and localized content, and also the [SEO skill](../nextjs-i18n-seo/SKILL.md) for tags and alternates. A new translated string needs only messages. A string with a count also needs the plural table in [RTL and scripts](references/rtl-and-scripts.md#plural-categories).
+
+## Hard rules
+
+Each rule carries its reason. A rule applied without its reason gets applied where it does not belong.
+
+1. Every locale has its own URL. Crawlers and shared links carry no cookies, so a cookie-selected language cannot be found or shared.
+2. One `defineRouting` object feeds both the proxy and `createNavigation`. Two configs drift, and the drift shows up as links the proxy redirects.
+3. Validate the route locale with `hasLocale` and call `notFound()` for anything else. The request-config fallback to English would otherwise render a valid page under `/xx`.
+4. Build locale URLs with `@/i18n/navigation` and `getPathname`, never by string concatenation. Prefix rules and localized pathnames change, and hand-built URLs do not follow.
+5. Give translators the whole sentence. Use ICU `plural`, `select`, and `t.rich`. Never join fragments, branch on `count === 1`, or `join(", ")` a list. Word order and plural categories differ per language.
+6. A key change lands in every `dictionary/*.json` in the same edit. Types come from `en.json` only, so a missing key in `ar.json` compiles and fails at runtime.
+7. Language is not market. Currency, time zone, tax, and availability come from explicit config or data, not from the locale key.
+8. Use logical CSS (`ms-*`, `pe-*`, `text-start`, `border-s`). Physical `ml-*` and `text-left` break in RTL. Exempt: directional icons, which use `rtl:-scale-x-100`.
+9. Translate on the server. The catalog and the formatter stay off the client bundle, and the ICU parser stays out of it too.
+10. Dictionary parity is not localization. A locale is done when its rendered page has the right text, `lang`, `dir`, and formatting.
+11. Machine or draft copy is not reviewed copy. Label it as draft in the report and never mark it as production translation.
+
+## Done when
+
+1. `node .agents/skills/next-intl-i18n/scripts/check-messages.mjs` exits 0 after any message edit.
+2. `bun run lint` passes after TypeScript or TSX edits. `bun run build` passes after substantive changes, with `NEXT_PUBLIC_SITE_URL` set to the safe example from `.env.example`.
+3. The rendered check for the change type in [Verification](references/verification.md) ran against English and at least one prefixed locale. Arabic counts whenever layout or formatting changed. If no server may run, or nothing renders the change yet, run the static checks (message check, lint, build route table) and list every rendered check under Not verified.
+4. The report lists what was verified and what was not, using the shape in [Verification](references/verification.md#report-shape). "Not verified" is a valid entry. A guess presented as a result is not.
 
 ## Documentation boundary
 
-The [official next-intl docs](https://next-intl.dev/docs/getting-started) are the API source. Use the installed package and repository conventions to settle version differences. The [dated research inventory](../../../docs/next-intl-docs-research.md) records why the playbooks make their main recommendations; it is not a substitute for current API signatures.
+The [official next-intl docs](https://next-intl.dev/docs/getting-started) own API signatures. The installed package and repository conventions settle version differences. `next-intl.dev` publishes no `llms.txt`, so read the pages.

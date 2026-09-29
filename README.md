@@ -146,6 +146,8 @@ next-app-i18n-starter/
 │   │   ├── theme.ts                # Theme cookie helpers
 │   │   └── utils.ts                # cn() class merge helper
 │   └── proxy.ts                    # next-intl proxy (Next.js 16)
+├── .agents/skills/                 # next-intl and SEO skills: playbooks, scripts, evals
+├── AGENTS.md                       # Shared instructions for coding assistants
 ├── .env.example
 ├── global.d.ts                     # next-intl AppConfig types
 ├── next.config.ts
@@ -157,12 +159,59 @@ next-app-i18n-starter/
 
 ## Skills for coding assistants
 
-This repository includes two reusable skills. They guide work on this starter or a fork. The playbooks cover product, blog, and GA4 workflows; the starter itself has no product or blog routes and does not configure GA4.
+This repository ships two skills in `.agents/skills/`. They guide work on this starter and on forks. Each skill is a short router (`SKILL.md`) that sends the agent to playbooks in `references/`, and the agent loads only the playbooks the task needs. The playbooks cover products, blogs, and GA4, which the starter itself does not include.
 
-- **[next-intl i18n](.agents/skills/next-intl-i18n/SKILL.md):** locale routing, server and client rendering, translated messages, regional formatting, RTL, and framework integrations. Playbooks: [architecture](.agents/skills/next-intl-i18n/references/architecture-and-rendering.md), [routing](.agents/skills/next-intl-i18n/references/routing-and-navigation.md), [messages and formatting](.agents/skills/next-intl-i18n/references/messages-and-formatting.md), [integrations](.agents/skills/next-intl-i18n/references/integrations-and-workflows.md).
-- **[Next.js i18n SEO](.agents/skills/nextjs-i18n-seo/SKILL.md):** search audits and implementation for multilingual pages and different site types. Playbooks: [technical](.agents/skills/nextjs-i18n-seo/references/technical-seo.md), [international](.agents/skills/nextjs-i18n-seo/references/international-seo.md), [content](.agents/skills/nextjs-i18n-seo/references/content-and-onpage.md), [commerce](.agents/skills/nextjs-i18n-seo/references/commerce-and-products.md), [publishing](.agents/skills/nextjs-i18n-seo/references/editorial-and-publishing.md), [local and media](.agents/skills/nextjs-i18n-seo/references/site-types-and-search-features.md), [AI discovery](.agents/skills/nextjs-i18n-seo/references/ai-and-agentic-discovery.md), [measurement](.agents/skills/nextjs-i18n-seo/references/measurement.md), [audits and migrations](.agents/skills/nextjs-i18n-seo/references/audits-launches-migrations.md).
+### next-intl-i18n
 
-Invoke `next-intl-i18n` or `nextjs-i18n-seo` in an agent that supports repository skills. Otherwise, read the relevant `SKILL.md` and only the playbooks needed for the task. Start with [AGENTS.md](AGENTS.md) for repository conventions. The source inventories in [next-intl docs research](docs/next-intl-docs-research.md) and [SEO research](docs/seo-research.md) record dated checks; recheck current platform documentation for version-sensitive changes.
+Locale routing, request config, messages, formatting, RTL and CJK layout, and localized content, checked against next-intl 4.14 and Next.js 16.3.
+
+| Playbook | Covers |
+| --- | --- |
+| [Architecture and rendering](.agents/skills/next-intl-i18n/references/architecture-and-rendering.md) | Locale source decision, root params versus `setRequestLocale`, Cache Components, server and client split |
+| [Routing and navigation](.agents/skills/next-intl-i18n/references/routing-and-navigation.md) | Prefix modes, cookies, proxy, `pathnames`, domains, `Link`, locale switcher |
+| [Messages and formatting](.agents/skills/next-intl-i18n/references/messages-and-formatting.md) | ICU, rich text, formatters, typing, extraction |
+| [RTL and scripts](.agents/skills/next-intl-i18n/references/rtl-and-scripts.md) | Arabic, Chinese, Japanese, Spanish: direction, numerals, plurals, fonts, line breaking |
+| [Localized content](.agents/skills/next-intl-i18n/references/localized-content.md) | CMS content, per-locale slugs, partial translation, adding a locale |
+| [Integrations and workflows](.agents/skills/next-intl-i18n/references/integrations-and-workflows.md) | Metadata, Open Graph, Server Actions, error pages, tests |
+| [Verification](.agents/skills/next-intl-i18n/references/verification.md) | Done-when checks, symptom table, report shape |
+
+Check that every dictionary mirrors `en.json` (keys, ICU arguments, rich-text tags, plural `other` branches):
+
+```bash
+node .agents/skills/next-intl-i18n/scripts/check-messages.mjs
+```
+
+### nextjs-i18n-seo
+
+Search discovery for multilingual sites: international, technical, commerce, editorial, other site types, structured data, measurement, and AI search. Every playbook dates its sources and tags each claim as documented, standard, study, practice, or unverified.
+
+| Playbook | Covers |
+| --- | --- |
+| [Technical SEO](.agents/skills/nextjs-i18n-seo/references/technical-seo.md) | Indexing diagnosis, status codes, robots, sitemap, Next.js metadata |
+| [International SEO](.agents/skills/nextjs-i18n-seo/references/international-seo.md) | `hreflang`, tags, URL structure, partial translation, other engines, locale notes |
+| [Structured data](.agents/skills/nextjs-i18n-seo/references/structured-data.md) | Type chooser, supported and removed features, product fields, JSON-LD pattern |
+| [Commerce and products](.agents/skills/nextjs-i18n-seo/references/commerce-and-products.md) | Index rules, facets, stock states, currency markets, feeds, AI shopping |
+| [Editorial and publishing](.agents/skills/nextjs-i18n-seo/references/editorial-and-publishing.md) | Article gate, archives, news, syndication, refresh, content model |
+| [Content and on-page](.agents/skills/nextjs-i18n-seo/references/content-and-onpage.md) | Search intent, page elements, internal links, scaled content |
+| [Site types](.agents/skills/nextjs-i18n-seo/references/site-types-and-search-features.md) | SaaS, docs, marketplace, local, jobs, video, forums, and more |
+| [Measurement](.agents/skills/nextjs-i18n-seo/references/measurement.md) | Search Console, GA4, Bing, Core Web Vitals, drop diagnosis |
+| [AI and agentic discovery](.agents/skills/nextjs-i18n-seo/references/ai-and-agentic-discovery.md) | AI Overviews, ChatGPT, Claude, Perplexity, Copilot, agents, what has evidence |
+| [AI crawler reference](.agents/skills/nextjs-i18n-seo/references/ai-crawler-reference.md) | Crawler tokens, policy options, `robots.ts` sketch |
+| [Audits, launches, migrations](.agents/skills/nextjs-i18n-seo/references/audits-launches-migrations.md) | Audit layers, launch gate, migration, adding or removing a locale |
+| [Evidence and reporting](.agents/skills/nextjs-i18n-seo/references/evidence-and-reporting.md) | Evidence tags, certainty ladder, verdicts, report shapes |
+
+Check hreflang reciprocity, canonicals, `lang`, JSON-LD, sitemap agreement, and language redirects on a running site:
+
+```bash
+bun run dev
+node .agents/skills/nextjs-i18n-seo/scripts/verify-seo.mjs --base http://localhost:3000
+```
+
+For a production build served locally, add `--origin https://your-domain.example` so canonicals compare against the public origin. The script proves local implementation only. Indexing and canonical selection need Search Console.
+
+### Using the skills
+
+Invoke `next-intl-i18n` or `nextjs-i18n-seo` in an agent that supports repository skills. Otherwise, read the relevant `SKILL.md` and only the playbooks the task needs. Start with [AGENTS.md](AGENTS.md) for repository conventions. Each skill has an `evals/evals.json` with prompts and assertions for testing changes to the skill. Platform rules change, so recheck the owning platform's documentation for anything the playbooks date more than 90 days back.
 
 ---
 
@@ -758,7 +807,7 @@ The legacy static verification file `public/google52d37058772b10e6.html` remains
 
 AI search services need access to pages they can crawl and index. Put useful content in server-rendered HTML, use descriptive headings and internal links, and check crawler access in `robots.txt`, hosting rules, and any CDN configuration. These practices also support conventional search. Google does not require special AI schema and says `llms.txt` is not a Google Search ranking signal. This repository keeps `public/llms.txt` as an optional project reference for tools that read it.
 
-The current `robots.ts` allows all user agents. Search discovery and model-training crawlers have different purposes, and site owners should choose those policies explicitly. For example, OpenAI distinguishes `OAI-SearchBot` from `GPTBot`; Anthropic distinguishes `Claude-SearchBot` from `ClaudeBot`; Perplexity distinguishes `PerplexityBot` from its user-request fetcher. Review each provider's current documentation before setting rules: [OpenAI](https://developers.openai.com/api/docs/bots), [Anthropic](https://support.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler), and [Perplexity](https://docs.perplexity.ai/docs/resources/perplexity-crawlers). This starter does not impose a model-training policy for a fork.
+The current `robots.ts` allows all user agents. Search discovery and model-training crawlers have different purposes, and site owners should choose those policies explicitly. For example, OpenAI distinguishes `OAI-SearchBot` from `GPTBot`; Anthropic distinguishes `Claude-SearchBot` from `ClaudeBot`; Perplexity distinguishes `PerplexityBot` from its user-request fetcher. Review each provider's current documentation before setting rules: [OpenAI](https://developers.openai.com/api/docs/bots), [Anthropic](https://support.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler), and [Perplexity](https://docs.perplexity.ai/docs/resources/perplexity-crawlers). This starter does not impose a model-training policy for a fork. The SEO skill's [AI crawler reference](.agents/skills/nextjs-i18n-seo/references/ai-crawler-reference.md) lists current crawler tokens and three policy options, and its [AI discovery playbook](.agents/skills/nextjs-i18n-seo/references/ai-and-agentic-discovery.md) separates the documented controls from unsupported tactics.
 
 Locale routing keeps the default-language URL stable: `localeDetection` is disabled, so `/` does not redirect based on a visitor's saved locale cookie or `Accept-Language`. Visitors can choose a language through the visible switcher, and each locale keeps a directly crawlable URL. This avoids cookie-dependent content and follows Google's guidance to expose language versions at distinct URLs. Enable automatic detection only if it is an intentional product choice and verify that every locale remains directly accessible and self-canonical.
 
@@ -766,7 +815,7 @@ For measurement, verify the domain and sitemap in [Google Search Console](https:
 
 ### SEO implementation plan
 
-The research and implementation record is in [docs/seo-research.md](docs/seo-research.md) (checked 2026-09-29). The production-origin guard, optional verification setting, removal of meta-keywords, root-only site-name schema, visible localized launch guide, and crawler/measurement guidance are implemented. Deployment owners still need to set their real HTTPS origin, configure verification if needed, and verify the live property and crawler access through their hosting provider and webmaster tools.
+The production-origin guard, optional verification setting, removal of meta-keywords, root-only site-name schema, visible localized launch guide, and crawler/measurement guidance are implemented. Deployment owners still need to set their real HTTPS origin, configure verification if needed, and verify the live property and crawler access through their hosting provider and webmaster tools.
 
 ### Adding SEO to a new page
 
@@ -818,7 +867,7 @@ Add `metaTitle` and `metaDescription` keys to the `About` namespace in all dicti
 - [ ] Replace the demo site name, repository link, and author details in `src/lib/site.ts`
 - [ ] Replace `public/og-image.png` with your branded 1200×630 image
 - [ ] Set `GOOGLE_SITE_VERIFICATION` if using meta-tag verification; migrate the current static demo verification only if you control that Search Console property
-- [ ] Review the [SEO implementation record](docs/seo-research.md) and confirm the origin, identity, and page copy for your fork
+- [ ] Run the launch gate in the [SEO skill](.agents/skills/nextjs-i18n-seo/references/audits-launches-migrations.md#launch-gate) and confirm the origin, identity, and page copy for your fork
 - [ ] Translate `Metadata` namespace in all dictionary files
 - [ ] Submit `https://your-domain.com/sitemap.xml` in Google Search Console
 - [ ] Verify hreflang with [hreflang Tags Testing Tool](https://technicalseo.com/tools/hreflang/)

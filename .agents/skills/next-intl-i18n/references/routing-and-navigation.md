@@ -1,41 +1,93 @@
 # Routing and navigation
 
-Use this reference for locale URLs, route matching, localized pathnames, domain routing, or locale switching.
+Read this for locale URLs, prefix mode, the proxy, cookies, localized pathnames, domains, `Link`, and locale switching.
 
-## Make routing one shared contract
+## One routing contract
 
-Define the supported locales, default locale, prefixes, pathnames, domains, cookie/detection policy, and alternate-link behavior in one `defineRouting` configuration. Consume it from the proxy handler (`createMiddleware`) and `createNavigation`; if runtime locale lists require separate configs, keep their other settings aligned. This template uses `en` at `/`, prefixes `ar`, `zh`, `es`, and `ja`, and disables automatic locale detection. Preserve those URL contracts unless the task changes them. See [routing configuration](https://next-intl.dev/docs/routing/configuration), [middleware](https://next-intl.dev/docs/routing/middleware), and [navigation APIs](https://next-intl.dev/docs/routing/navigation).
+`defineRouting` holds locales, default locale, prefix mode, pathnames, domains, detection, and cookie policy. Import that object in exactly two places: the proxy (`createMiddleware(routing)`) and `createNavigation(routing)`. This template exports it from `src/i18n/routing.ts`: `en` at `/`, the others prefixed, `localeDetection: false`.
 
-Choose the URL shape from product and indexing needs:
+## Pick the prefix mode
 
-- `always`: every locale appears in the URL; this is the routing config default.
-- `as-needed`: the default locale is unprefixed and other locales are prefixed. Ensure the matcher sees unprefixed paths and understand that cookies/detection can redirect the unprefixed URL.
-- `never`: omit locale prefixes when the locale is determined by a domain or user preference. Consider whether distinct translations still need separately addressable URLs.
+| Mode | URLs | Consequences |
+| --- | --- | --- |
+| `always` (library default) | `/en`, `/ja` | Simplest. No redirect logic for the default locale. |
+| `as-needed` (this template) | `/`, `/ja` | Clean default URL. `/en/x` redirects to `/x`. The matcher must see unprefixed paths. |
+| `never` | `/` for every locale | Locale comes from a domain or a cookie. Alternate links turn off. One URL serves many languages, so it suits signed-in apps only. |
+| `{ mode, prefixes }` | `/us`, `/de` | Custom prefixes for region paths. Still verify the alternate set. |
 
-These modes change redirect/cookie behavior as well as URL appearance. Verify direct loads, explicit locale switches, and unprefixed requests; don't select a mode solely for visual URL cleanliness. See [routing configuration](https://next-intl.dev/docs/routing/configuration).
+The mode changes redirect and cookie behavior as well as the URL. Never choose one for URL aesthetics alone.
 
-## Proxy and locale detection
+## Detection and cookies
 
-In current Next.js 16 docs the file is `proxy.ts`; it was named `middleware.ts` through Next.js 15. Use the filename expected by the installed framework. The next-intl proxy handles negotiation, redirects/rewrites, and alternate links. Its matcher must cover all intended app routes while excluding framework assets and API paths only where appropriate. See [proxy/middleware](https://next-intl.dev/docs/routing/middleware).
+With detection on, the order is: URL prefix, saved cookie, `Accept-Language`, `defaultLocale`. An explicit prefix wins and updates the cookie.
 
-With detection enabled, the documented priority is explicit URL prefix, saved locale cookie, `Accept-Language`, then `defaultLocale`. An explicit locale URL takes precedence and can update the saved preference. Here, `localeDetection: false` keeps unprefixed English stable despite a cookie or browser language. If that setting changes, test direct visits to `/`, `/en`, and each supported prefix with and without a locale cookie. See [locale detection](https://next-intl.dev/docs/routing/middleware).
+`localeDetection: false` stops the cookie and `Accept-Language` from redirecting `/`. It does not stop the proxy from writing `NEXT_LOCALE`. This template's `/` still sets `NEXT_LOCALE=en` on the response. Since next-intl 4.0 only `localeCookie: false` disables the cookie. The cookie is a session cookie by default. Set `localeCookie: { maxAge }` when the preference must survive restarts.
 
-Compose other proxy logic with next-intl's response deliberately: retain the intended rewrite/redirect and response headers/cookies rather than accidentally replacing them. For static export or deployments without proxy/middleware support, use the documented no-proxy setup and accept its routing constraints: [proxy/middleware](https://next-intl.dev/docs/routing/middleware).
+A stale `NEXT_LOCALE` cookie does not redirect `/` while detection is off. A visitor who is still redirected meets a host redirect rule, a CDN, or a deployment built before the setting changed. After any change to detection or the cookie, test `/`, `/en`, and each prefix with and without `Cookie: NEXT_LOCALE=ja` and `Accept-Language: ja`. English at `/` must answer 200 in every case.
 
-## Localized paths and domains
+## Alternate links
 
-Use `pathnames` to map stable internal routes to external localized URLs. Define each route once internally; map locale-specific static segments in routing config and use typed internal route values through `Link`, `useRouter`, and `getPathname`. Dynamic and catch-all segments are supported, and next-intl encodes non-ASCII pathname segments where needed. For CMS or product/blog slugs, `pathnames` localizes the route pattern, not each entity's slug: resolve the target translation's slug from content data before building a switch link or alternate URL. If there is no target translation, follow the site's explicit missing-translation policy rather than pointing at a 404 or unrelated item. See [routing configuration](https://next-intl.dev/docs/routing/configuration) and [navigation APIs](https://next-intl.dev/docs/routing/navigation).
+The proxy adds an HTTP `Link` header with `hreflang` alternates for every route unless `alternateLinks: false`. Page metadata emits a second set in HTML. Two sources with two tag vocabularies contradict each other. In this template the header says `en`, `ar`, `zh`, `es`, `ja`, and the HTML says `en-US`, `ar-SA`, `zh-Hans-CN`, `es-ES`, `ja-JP`. The proxy also announces alternates for pages that have no translation.
 
-When content mutations invalidate localized routes, determine whether `revalidatePath` needs the public localized pathname or the internal pathname for that route's static/dynamic rendering mode. Do not derive this from the display URL alone. See [localized pathname revalidation](https://next-intl.dev/docs/routing/configuration).
+Decide once who owns alternates. In this template the page metadata owns them, so set `alternateLinks: false`, then confirm with `curl -I` that no `hreflang` remains in `Link`. Read [international SEO](../../nextjs-i18n-seo/references/international-seo.md) for the tag vocabulary.
 
-Use `domains` only when locale-market/domain mapping is an actual deployment requirement. Domain routing requires each locale to resolve unambiguously across domains; regional locale identifiers commonly express those variants. Test local development hosts and no-domain-match behavior as well as production hosts. See [domain routing](https://next-intl.dev/docs/routing/configuration).
+## The proxy
 
-## Localized navigation
+Next.js 16 names the file `proxy.ts`. It was `middleware.ts` through Next.js 15. The codemod is `npx @next/codemod@canary middleware-to-proxy .`.
 
-Export one central wrapper module from `createNavigation(routing)`. Use its `Link`, `redirect`, `usePathname`, `useRouter`, and `getPathname` throughout app navigation so locale prefixes and localized pathnames stay coherent. For locale switching, preserve the same logical route only when it exists in the target locale. Without `pathnames`, `usePathname` plus `router.replace(pathname, {locale})` can switch the current path; with `pathnames`, forward dynamic `params`, and for translated CMS slugs use the target item's slug. `Link` with an explicit `locale` initially emits a prefixed URL even in `as-needed` mode; next-intl uses it to update locale preference before redirecting to the canonical unprefixed URL. See [navigation APIs](https://next-intl.dev/docs/routing/navigation).
+- It runs on the Node.js runtime. Setting `runtime` throws.
+- It does not exist in static export. Without it, every prefix is required, there is no negotiation, and `pathnames` are unsupported.
+- Matcher values must be constants. A path the matcher skips also skips Server Function calls posted to it.
+- The matcher must exclude `api`, `_next`, and files with a dot. A dotted dynamic route such as `/users/jane.doe` needs its own matcher entry: `"/([\\w-]+)?/users/(.+)"`.
+- When composing other proxy logic, return next-intl's response object and add headers to it. Building a new response drops the rewrite.
 
-When `pathnames` is enabled, pass internal route templates and explicit params in the shape expected by generated types. Verify a direct load and refresh of each changed public pathname, switching both directions, query/hash preservation when relevant, and back/forward navigation. Use Next.js APIs directly for operations next-intl does not wrap, such as `notFound()`.
+## Localized pathnames and CMS slugs
 
-## SEO handoff
+`pathnames` maps one internal route to one external path per locale. It localizes route patterns such as `/about` to `/ja/about-ja`. It does not localize entity slugs.
 
-`createMiddleware` may emit alternate links and route config can change public URLs. Audit the actual rendered canonical/alternate URLs and localized route coverage when these settings change. Keep page-specific international SEO policy, translated metadata quality, sitemap completeness, and indexing decisions in the project's separate SEO guidance; do not infer all translations exist just because a locale is configured. See [middleware](https://next-intl.dev/docs/routing/middleware).
+For a blog post or product with a per-locale slug, the slug is data, not routing config. Resolve it from content before building any link:
+
+```text
+switch link or alternate for item X in locale L
+├── X has a published translation in L → its slug in L
+└── it does not → follow the missing-translation policy in localized-content.md, never a 404 or an unrelated item
+```
+
+`revalidatePath` takes the localized path for statically generated routes and the internal path for runtime-rendered routes. Check the route's rendering mode before choosing.
+
+`domains` maps hostnames to `{ domain, defaultLocale, locales }`. Each locale belongs to one domain, or resolution is ambiguous. Localhost falls back to prefix detection, so test both local and production hosts.
+
+## Navigation API
+
+Export once from `src/i18n/navigation.ts`, import everywhere from there.
+
+| Need | Use | Behavior to know |
+| --- | --- | --- |
+| Link | `Link` | `locale` prop emits a prefixed URL first, even in `as-needed`, and disables prefetch. next-intl then redirects to the canonical form. |
+| Server redirect | `redirect({ href, locale })` | `locale` is required. `forcePrefix` and `permanentRedirect` exist. |
+| Current path | `usePathname()` | Returns the path without the prefix. |
+| Programmatic navigation | `useRouter().replace(pathname, { locale })` | Locale switching without `pathnames`. |
+| URL for another locale | `getPathname({ locale, href })` | Feeds sitemaps and metadata. |
+| Not locale-aware | `notFound()`, `redirect` from `next/navigation` | Import from Next.js directly. |
+
+## Locale switcher
+
+```text
+Is there a `pathnames` map?
+├── No → usePathname() plus router.replace(pathname, { locale })
+└── Yes → pass the internal template plus params to router.replace
+Is the page CMS-driven?
+└── Yes → resolve the target slug from content; render a link only for locales that have the item
+```
+
+A switcher that lands on a 404 is a bug. It is also the most common crawlable dead link on a multilingual site. Query string and hash should survive the switch. Check back and forward in both directions.
+
+## Verify
+
+- Direct load and refresh of `/` and a prefixed route.
+- `/en` redirects to `/`. `/xx` returns 404.
+- Switch en to ja and back. The final URL has no `/en`.
+- `curl -I` shows the intended `Link` header and cookie.
+- After a matcher change, `/unknown.txt` and `/api/x` bypass the proxy.
+
+Sources, checked 2026-09-30: [routing configuration](https://next-intl.dev/docs/routing/configuration), [proxy and detection](https://next-intl.dev/docs/routing/middleware), [navigation](https://next-intl.dev/docs/routing/navigation), [Next.js proxy](https://nextjs.org/docs/app/api-reference/file-conventions/proxy), [next-intl 4.0 release](https://next-intl.dev/blog/next-intl-4-0).

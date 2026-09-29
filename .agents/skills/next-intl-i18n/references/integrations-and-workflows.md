@@ -1,45 +1,50 @@
-# Framework integrations and translation workflows
+# Integrations and workflows
 
-Use this reference for next-intl outside ordinary page rendering, translation operations, tooling, or non-App-Router environments.
+Read this for next-intl outside ordinary page rendering: metadata, Open Graph images, manifests, Server Actions, Route Handlers, error pages, tests, and non-App-Router environments.
 
-## Metadata and other server entry points
+## Server entry points
 
-In `generateMetadata`, Server Actions, Open Graph image generation, manifests, sitemaps, and Route Handlers, use the awaitable APIs from `next-intl/server`. Pass an explicit locale when that execution path cannot infer one from the request/route. In this template, await `params`, validate with `hasLocale`, call `getTranslations({locale, namespace})`, then pass the page's real internal pathname to `createLocalizedMetadata`; it calls `getPathname` to produce the public URL. A child page must not inherit the homepage canonical. For returned action messages, account for the user changing locale while a result remains visible. See [Server Actions, Metadata, and Route Handlers](https://next-intl.dev/docs/environments/actions-metadata-route-handlers).
+These run outside a normal locale render, so they cannot infer the locale. Pass it explicitly and validate it.
 
-next-intl supplies translations and locale-aware route helpers; the page's real translation inventory determines its canonical, valid alternate set, and sitemap entries. The current `createLocalizedMetadata` helper emits alternates for every configured locale, which is suitable only when every variant exists; adjust that contract when adding partially translated product or blog pages. Follow the project's [SEO skill](../../nextjs-i18n-seo/SKILL.md) for indexing and content policy.
+| Entry point | Locale source | Pattern |
+| --- | --- | --- |
+| `generateMetadata` | Awaited route `params` (legacy). No argument needed under root params. | `getTranslations({ locale, namespace: "Metadata" })` |
+| `opengraph-image`, `twitter-image` | Awaited `params` | Same call. Bypass the proxy matcher only when customizing prefixes. |
+| `manifest.ts` | None | Serve one manifest per locale from a route, or a default-locale manifest. Pass `locale` explicitly. |
+| Server Action | A hidden field or the current path | Validate with `hasLocale` first. The user can switch locale while a result is still visible, so return message keys or re-translate on render. |
+| Route Handler | Search param or header | Validate with `hasLocale`, then `getTranslations({ locale })`. |
+| `sitemap.ts` | Loops `routing.locales` | Build URLs with `getPathname({ locale, href })`. |
 
-## Error routes
+Page metadata rule for this template: await `params`, validate with `hasLocale`, translate, then call `createLocalizedMetadata` with the page's real internal pathname. A child page must not inherit the homepage canonical. The helper emits alternates for every configured locale, which is correct only for fully translated pages. For partial coverage see [localized content](localized-content.md).
 
-Decide which errors should be localized. A `[locale]/not-found` handles `notFound()` within that route subtree; it does not automatically catch every unmatched URL. Unknown route segments may need a catch-all that calls `notFound()`, while requests outside the proxy matcher may require a global not-found page and an explicit locale. See [error files](https://next-intl.dev/docs/environments/error-files).
+## Error pages
 
-## TypeScript
+- `[locale]/not-found.tsx` fires only on `notFound()` inside that subtree. Unknown segments need `[locale]/[...rest]/page.tsx` that calls `notFound()`. This template has it.
+- A request outside the proxy matcher (a dotted path, `/api`) never reaches `[locale]`, so localizing it needs Next.js `global-not-found` with an explicit locale.
+- An `error.tsx` renders translated text only where a provider exists above it. This template's `src/app/error.tsx` sits outside `[locale]`, above the provider. Force a throw in a page and confirm the boundary renders text and not a missing-context error. If it fails, move the boundary under `[locale]` or give it a nested provider with the error messages.
 
-Optional module augmentation can constrain the app's locale, message, and format types. Derive locale types from routing config and message types from the source catalog; keep imports resolvable in the repository's TypeScript setup. Use type errors as feedback for missing or malformed translation keys, not as a reason to weaken all message typing. See [TypeScript augmentation](https://next-intl.dev/docs/workflows/typescript).
+## Translation workflows
 
-## Translation authoring: catalogs or extraction
+The choice table is in [messages and formatting](messages-and-formatting.md#authoring-workflows). Two operational rules:
 
-Follow the repository's existing authoring workflow. With `useTranslations`, keep source strings in the catalog and use short stable keys; add AI instructions to the repository's model-agnostic instructions so agents follow the same rule. Use `useExtracted` only after verifying the installed next-intl version and accepting its experimental status, compiler integration, catalog mutation, and translation-management implications. The docs describe it as inline messages extracted at build/dev time, with generated IDs and target catalogs synchronized. See [AI agents](https://next-intl.dev/docs/workflows/agents), [`useExtracted`](https://next-intl.dev/docs/usage/extraction), and [plugin options](https://next-intl.dev/docs/usage/plugin).
+- Keep agent instructions for translation in the repository's model-agnostic files (`AGENTS.md`, `dictionary/AGENTS.md`) so every assistant follows the same rules.
+- After changing message keys, run the message check, `bun run lint`, and `bun run build`, in that order. The check is the fastest failure.
 
-For larger translation teams, next-intl works with platforms supporting the project's catalog format. The docs recommend Crowdin and describe CLI, Git integration, webhooks, SDK delivery, or manual workflows; choose based on actual team operations rather than adding a platform automatically. See [localization management](https://next-intl.dev/docs/workflows/localization-management).
+## Testing
 
-## Testing and component development
+Render client-context components under `NextIntlClientProvider` with `locale` and `messages`. Prefer sync shared components when they serve both the server and isolated tests, because async Server Components are hard to unit test.
 
-Render components that use client-context APIs under `NextIntlClientProvider` with representative locale/messages. Prefer sync/shared components when they can serve both server rendering and isolated tests. Choose verification from the changed behavior rather than asserting every locale on every task:
+- Vitest: `test.server.deps.inline: ["next-intl"]`.
+- Jest: `transformIgnorePatterns: ["node_modules/(?!next-intl)/"]`.
+- Storybook: a global decorator with `NextIntlClientProvider`, and stories in more than the source locale.
 
-| Change | Observable check |
-| --- | --- |
-| Routing/proxy | Direct load and refresh of `/` and a prefixed route, superfluous `/en` redirect, unsupported prefix, locale switch in both directions |
-| Dynamic localized content | Internal route resolves public slug for each available translation; switcher and alternates identify the same content item; missing translation follows policy |
-| Messages/formatting | Key/ICU parity and a rendered plural, date, or currency in a target locale with different rules |
-| RTL | `lang`, `dir`, mixed-direction identifiers, icon/layout direction, and keyboard interaction on an Arabic route |
-| Static/metadata | Build output for intended locale paths and page-specific translated metadata using the actual route |
+This template has no test runner script. Never claim an automated test passed unless one ran.
 
-For Vitest/Jest ESM constraints, follow the [testing guide](https://next-intl.dev/docs/environments/testing) and verify the installed test runner version. This template has no test runner script, so do not claim an automated test passed unless one was actually run.
+## Adjacent environments
 
-For Storybook, provide a global decorator with `NextIntlClientProvider` and test important components across more than the source locale. Async Server Component support depends on current Storybook support/config. See [Storybook integration](https://next-intl.dev/docs/workflows/storybook).
+- Pages Router: supported, and next-intl recommends the App Router for new work. Use the Pages Router provider and load messages in the page's data function. Do not carry App Router request config into it.
+- Plain React and React Native: `use-intl` covers translation and formatting, and none of the Next.js routing or awaitable APIs. Confirm the environment before importing `next-intl/server`.
+- Runtime support: check that target browsers support the `Intl` APIs the app uses. Add polyfills only for a browser you support.
+- Static export: no proxy, every prefix required, no negotiation, no `pathnames`. Decide before choosing export.
 
-## Legacy and adjacent environments
-
-- **Pages Router:** It remains supported, though next-intl recommends App Router for new work. Use the Pages Router provider and supply locale messages through the page's data-loading method; don't transplant App Router request config or server APIs into it. See [Pages Router setup](https://next-intl.dev/docs/getting-started/pages-router).
-- **Plain React / React Native:** The `use-intl` core covers translation and formatting but not Next.js routing, App Router integration, or Next-specific awaitable APIs. Confirm the environment before importing those APIs. See [core library](https://next-intl.dev/docs/environments/core-library).
-- **Runtime support:** Check target browser support for the `Intl` APIs the app actually uses and add polyfills only for unsupported target environments. See [runtime requirements](https://next-intl.dev/docs/environments/runtime-requirements).
+Sources, checked 2026-09-30: [Server Actions, metadata, Route Handlers](https://next-intl.dev/docs/environments/actions-metadata-route-handlers), [error files](https://next-intl.dev/docs/environments/error-files), [testing](https://next-intl.dev/docs/environments/testing), [Storybook](https://next-intl.dev/docs/workflows/storybook), [Pages Router](https://next-intl.dev/docs/getting-started/pages-router), [core library](https://next-intl.dev/docs/environments/core-library), [runtime requirements](https://next-intl.dev/docs/environments/runtime-requirements).

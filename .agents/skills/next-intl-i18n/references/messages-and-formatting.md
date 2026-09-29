@@ -1,36 +1,91 @@
-# Messages and locale-aware formatting
+# Messages and formatting
 
-Use this reference for catalogs, translated copy, ICU messages, regional formatting, language direction, or translation integrity.
+Read this for catalogs, ICU, rich text, number, date, and list formatting, typing, extraction, and translation review.
 
-## Structure message catalogs for ownership and type safety
+## Catalog structure
 
-Keep message keys stable and organized around a component or feature's translation needs. Namespace at the lowest common parent a component consumes. The `.` character denotes nesting and cannot be a literal key character. Use source-locale messages as the type source where the repository does so; preserve its catalog format and translation process. See [rendering translations](https://next-intl.dev/docs/usage/translations) and [TypeScript augmentation](https://next-intl.dev/docs/workflows/typescript).
+- `dictionary/en.json` defines the types through `global.d.ts`. Every other file mirrors its keys exactly.
+- Keys are short, stable, and named for meaning, not for the English text. `Checkout.payNow`, not `Checkout.clickHereToPay`. Renaming English copy must not rename a key.
+- `.` is the nesting separator and cannot appear in a key.
+- Scope a namespace at the lowest parent a component consumes: `useTranslations("Index.hero")`.
+- Page metadata lives in its own namespace, so a title change never touches UI strings.
+- Put a new key in the namespace of the component that will use it. Create a namespace only for a new feature area. Add a message without its consumer only when the user asked for the message alone, and say in the report that nothing renders it yet.
+- Do not add a `keywords` metadata field. Search engines ignore it.
 
-For each user-facing string, use the project's established API (`useTranslations`, `getTranslations`, or a deliberately adopted extraction workflow) rather than hardcoding text in a component. In this template, `dictionary/en.json` defines the message type and every `dictionary/*.json` must have the same key structure. Keep locale-specific page metadata and UI copy in their appropriate namespaces. If a locale is intentionally incomplete in another project, implement explicit fallback/optional-message behavior; do not report an untranslated fallback as completed localization. See [AI agent guidance](https://next-intl.dev/docs/workflows/agents) and [optional messages](https://next-intl.dev/docs/usage/translations).
+## ICU in one table
 
-## Give translators control of the whole sentence
+| Need | Write | Trap |
+| --- | --- | --- |
+| Insert a value | `Hello {name}` | Names use letters, digits, and underscore only. No dashes. |
+| Count | `{count, plural, =0 {No items} one {# item} other {# items}}` | `other` is mandatory in every locale. `=0` matches only the number 0, so it also covers Arabic's `zero` category. Do not add both. Categories per locale are in [RTL and scripts](rtl-and-scripts.md#plural-categories). |
+| Grammar or state | `{gender, select, female {her} male {his} other {their}}` | `other` is mandatory. |
+| Rank | `{n, selectordinal, one {#st} two {#nd} few {#rd} other {#th}}` | Only English needs these branches. Other locales collapse to `other`. |
+| Literal brace | `'{'` | A single quote escapes. |
+| Number, date | `{price, number, currency}` or `{d, date, ::yyyyMMMd}` | Skeletons need the `::` prefix. Named formats come from `formats` in request config. |
 
-Use ICU arguments for variable insertion and stateful wording. Use ICU `plural` for counts and `select` for grammatical variants; do not concatenate fragments or encode English singular/plural rules in application logic. Let each locale use its own plural categories while preserving argument names and required branches such as `other`. Use ICU ordinal syntax for rank/position, and escape literal braces as documented. See [ICU messages](https://next-intl.dev/docs/usage/translations).
+Each locale supplies its own plural branches. Arabic uses six categories and Spanish adds `many`. See [RTL and scripts](rtl-and-scripts.md#plural-categories) for the table. Never encode English singular and plural in application code.
 
-Use `t.rich` when a translated sentence contains React-rendered emphasis, links, or other safe component slots. Keep component attributes and destinations in code, not in translator-authored markup. `t.markup` returns a string of generated HTML; `t.raw` returns unparsed raw content and requires the same trust/sanitization care as any other HTML injection. Prefer React rich text over `dangerouslySetInnerHTML` for ordinary rich copy. See [rich text, markup, and raw messages](https://next-intl.dev/docs/usage/translations).
+## Rich text and raw HTML
 
-## Format data from locale, not English assumptions
+| API | Returns | Use |
+| --- | --- | --- |
+| `t.rich("key", { b: (c) => <b>{c}</b> })` | React nodes | Emphasis, links, and other slots. Attributes and destinations stay in code. |
+| `t.markup` | HTML string | Rare. Trust and sanitize like any HTML injection. |
+| `t.raw` | Unparsed message | Arrays or structured data. Not supported with `precompile`. |
+| `t.has("key")` | boolean | Optional messages. |
 
-Use `useFormatter` or `getFormatter` for plain values and configured shared formats for repeated presentation:
+Prefer `t.rich` over `dangerouslySetInnerHTML` for ordinary copy. Translators must never author `href` values.
 
-- Numbers and currencies: use `format.number`; allow locale-specific digits, separators, grouping, and currency position. Currency code and locale are distinct business inputs. See [number formatting](https://next-intl.dev/docs/usage/numbers).
-- Dates and times: use `format.dateTime`; choose the time zone from product/data requirements, not the server's implicit zone. Use relative time, ranges, and shared formats when those are the actual presentation needs. See [date and time formatting](https://next-intl.dev/docs/usage/dates-times).
-- Lists: use `format.list` for conjunction/disjunction and locale-aware separators; do not build grammatical lists with `join(', ')`. See [list formatting](https://next-intl.dev/docs/usage/lists).
-- Locale labels: use `format.displayName` for locale-aware language, region, currency, and script names rather than a hand-maintained English map when runtime support meets the need. See [display names](https://next-intl.dev/docs/usage/display-name).
+## Format values with the locale's rules
 
-Keep server and client formatting inputs consistent. For relative times or `now`-dependent output, provide a stable `now`/update interval when deterministic rendering is required; check the [date/time guide](https://next-intl.dev/docs/usage/dates-times) and [request config guide](https://next-intl.dev/docs/usage/configuration).
+| Value | API | Rule |
+| --- | --- | --- |
+| Number, currency, percent | `format.number` | Currency code is a business input. The locale only decides symbol placement and digits. |
+| Date and time | `format.dateTime`, `format.dateTimeRange` | Set `timeZone` from product needs, never from the server's zone. Store dates as ISO 8601 strings. |
+| Relative time | `format.relativeTime`, `useNow({ updateInterval })` | Pass a stable `now` or the server and client render different text and hydration warns. |
+| List | `format.list(items, { type })` | `conjunction` for "and", `disjunction` for "or". Never `join(", ")`. |
+| Language, region, currency name | `format.displayName(code, { type })` | Available from 4.11.0 and documented for `useFormatter` only. Check the installed types before using it in async server code. |
 
-## Treat locale as a bundle of language and conventions
+This template derives currency and time zone from `localeConfig` through `createRegionalFormats`. Use its named formats (`price`, `compact`, `short`, `long`) instead of inline options.
 
-A locale can include language and regional preferences; it does not automatically determine every market decision such as currency, tax, inventory, or time zone. Keep those choices explicit in application config or data. This template's route keys (`zh`, `ar`) differ from the BCP 47 tags in `localeConfig` (`zh-Hans-CN`, `ar-SA`); use the latter for HTML `lang` and language annotations while keeping routing keys for route selection. See [translations terminology](https://next-intl.dev/docs/usage/translations) and [routing configuration](https://next-intl.dev/docs/routing/configuration).
+## Typing
 
-For RTL locales, set document direction and audit layout behavior, punctuation, icons, mixed-direction identifiers, and inline content. Direction is part of the rendered experience, not a translation-key concern. Consult the RTL section of [rendering translations](https://next-intl.dev/docs/usage/translations).
+```ts
+declare module "next-intl" {
+  interface AppConfig {
+    Locale: (typeof routing.locales)[number];
+    Messages: typeof en;
+    Formats: typeof formats;
+  }
+}
+```
 
-## Keep catalogs valid
+The interface must be named `AppConfig`, and the file must be in `tsconfig` `include`. A type error on a message key is feedback. Fix the key, never widen the type.
 
-After message edits, check JSON validity, namespace/key parity, ICU argument and rich-text tag parity, and required locale coverage. Spot-check a plural or interpolated message in a target language with different grammar; a passing type check alone cannot judge linguistic quality. Follow `dictionary/AGENTS.md` for fluent-speaker review before production. The next-intl docs describe `@eloqnt/cli` for missing translations and inconsistent ICU arguments; adopt it only when the project accepts the new dependency and workflow. See [linting messages](https://next-intl.dev/docs/workflows/messages).
+## Authoring workflows
+
+| Workflow | Choose when | Cost |
+| --- | --- | --- |
+| Catalog with `useTranslations` (this template) | Default | You maintain keys by hand. |
+| `useExtracted` and `getExtracted` | The team wants inline source strings | Experimental. Literal messages only. Generated keys changed in 4.13.0 and `.po` users need an update in 4.14.0. |
+| `experimental.messages.precompile` | A measured client bundle problem | Static messages only, and no `t.raw`. |
+| Translation platform (Crowdin) | Several translators or a review process | Adds a service. Do not add one by default. |
+
+The next-intl docs warn against having an agent translate catalogs unsupervised. Missing context and drift produce wrong copy that type checks. Draft a translation when asked, mark it draft in the report, and leave production sign-off to a fluent reviewer.
+
+## Wrong and right
+
+| Wrong | Right | Why |
+| --- | --- | --- |
+| `` `${count} ${count === 1 ? "item" : "items"}` `` | `t("items", { count })` with ICU plural | Arabic has six plural forms. |
+| `t("greeting") + " " + name` | `t("greeting", { name })` | Word order differs. |
+| `items.join(", ")` | `format.list(items, { type: "conjunction" })` | Separators and the word for "and" differ. |
+| `"$" + price` | `format.number(price, "price")` | Symbol placement and digits differ. |
+| Hardcoded string in JSX | `t("key")` in all five files | Untranslated text ships silently. |
+| Key added to `en.json` only | Key added to every dictionary | Type checks read only `en.json`. |
+
+## Validate
+
+Run `node .agents/skills/next-intl-i18n/scripts/check-messages.mjs` after any edit. It reads `dictionary/*.json` and fails on invalid JSON, missing or extra keys, changed ICU arguments, changed rich-text tags, empty strings, and plurals without `other`. It does not judge meaning. Spot-check one plural and one interpolated message in a language whose grammar differs from English, and have a fluent speaker review production copy. `npx eloqnt lint` from `@eloqnt/cli` covers similar ground and adds a dependency, so adopt it only on request.
+
+Sources, checked 2026-09-30: [translations](https://next-intl.dev/docs/usage/translations), [messages](https://next-intl.dev/docs/usage/messages), [numbers](https://next-intl.dev/docs/usage/numbers), [dates and times](https://next-intl.dev/docs/usage/dates-times), [lists](https://next-intl.dev/docs/usage/lists), [display names](https://next-intl.dev/docs/usage/display-name), [TypeScript](https://next-intl.dev/docs/workflows/typescript), [extraction](https://next-intl.dev/docs/usage/extraction), [AI agents](https://next-intl.dev/docs/workflows/agents), [precompilation](https://next-intl.dev/blog/precompilation).

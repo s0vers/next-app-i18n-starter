@@ -1,15 +1,13 @@
 # Next.js i18n Starter
-# https://llmstxt.org/ project reference for AI assistants
-# Repository: https://github.com/s0vers/next-app-i18n-starter
-# Live demo: https://next-app-i18n-starter.vercel.app
-
-For repository changes, read the root `AGENTS.md` and the nearest scoped `AGENTS.md`; those files hold the shared instructions for coding assistants. This file is a public project overview.
-
-For SEO tasks, the repository workflow is in `.agents/skills/nextjs-i18n-seo/SKILL.md`.
 
 > Next.js 16 App Router starter with next-intl 4, locale-driven currency and date formatting, shadcn/ui, RTL support, cookie-based theme rendering, and SEO metadata, structured data, and sitemap generation.
 
----
+Repository: https://github.com/s0vers/next-app-i18n-starter. Live demo: https://next-app-i18n-starter.vercel.app. This file is a public project overview. For repository changes, read the root `AGENTS.md` and the nearest scoped `AGENTS.md`; those files hold the shared instructions for coding assistants.
+
+## Agent skills
+
+- [next-intl i18n skill](https://github.com/s0vers/next-app-i18n-starter/blob/main/.agents/skills/next-intl-i18n/SKILL.md): locale routing, request config, messages, formatting, RTL and CJK, localized content, and a message parity check script.
+- [Next.js i18n SEO skill](https://github.com/s0vers/next-app-i18n-starter/blob/main/.agents/skills/nextjs-i18n-seo/SKILL.md): international, technical, product, editorial, structured data, measurement, and AI-search playbooks, plus a script that verifies hreflang, canonicals, and sitemaps on a running site.
 
 ## Quick answers for common tasks
 

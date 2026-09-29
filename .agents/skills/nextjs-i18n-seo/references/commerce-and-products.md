@@ -1,49 +1,137 @@
 # Commerce and product SEO
 
-Read this for stores, catalogs, product reviews, and shopping surfaces. First identify the actual business model: direct seller, marketplace, affiliate/reviewer, or lead generation. The choice changes which page and structured-data features are eligible.
+Use when a task involves a store, catalog, category, product page, variants, prices, stock, reviews, a product feed, comparison content, or AI shopping surfaces. Field-level markup rules live in [structured data](structured-data.md#product-and-offer-fields). This page decides which pages to build, index, and mark up.
 
-## Choose the page job
+Evidence tags: `[doc]` platform documentation, `[practice]` practitioner evidence, `[unverified]`. See [evidence and reporting](evidence-and-reporting.md).
 
-| Page | Main job | Search checks |
+## Gate: what does the business do
+
+The answer picks the eligible features. Ask before proposing anything.
+
+| Model | Search feature | Notes |
 | --- | --- | --- |
-| Category or collection | Help shoppers narrow a real assortment | Distinct category purpose, crawlable product links, useful filters and pagination; no single-product `Product` markup |
-| Product detail | Explain one product or product group and support a decision | Accurate description, images, identifiers, variant choices, price/availability where offered, delivery/return information |
-| Editorial review or comparison | Help choose among products, perhaps sold elsewhere | First-hand evidence and tradeoffs; use product snippet rules when eligible, not merchant listing claims |
-| Policy or support | Answer fulfillment and trust questions | Real shipping, returns, contact, and payment terms; link from relevant products |
+| Direct seller, checkout on the site | Merchant listings and product snippets | Needs price, currency, and availability in initial HTML |
+| Reviewer, affiliate, or comparison site | Product snippets only | Never mark up as a seller. First-hand evidence is the value. |
+| Marketplace seller | Marketplace search (Amazon, Etsy) plus own site | Keep GTIN, brand, and MPN identical on both |
+| Lead generation, no price | Neither | Use ordinary page SEO |
 
-Plan category → subcategory → product links with ordinary `<a href>` elements. Search engines generally do not submit site-search forms to discover products. Include important product URLs in the sitemap; a Merchant Center feed can supplement discovery, but it does not replace usable navigation.
+Industry names for the work: category SEO (head terms, highest value), product page SEO (long-tail model and SKU terms), facet or programmatic SEO (indexed attribute pages generated from data), merchant or shopping SEO (feed plus markup plus Merchant Center), marketplace SEO, and AI shopping feeds. Intent runs transactional, commercial investigation ("best X", "X vs Y"), informational, and navigational. Give one intent to one page, or pages cannibalize each other. [practice]
 
-## Decide the canonical catalog
+## Page jobs
 
-1. Inventory product, variant, currency, pagination, sort, and filter URLs. Mark which combinations have distinct shopper value and should be indexable. Do not assume that every filter deserves a landing page.
-2. Give each indexable URL a stable response, self-canonical, unique useful content, crawlable links, and a sitemap entry. Keep internal links and feeds on the intended canonical URL.
-3. Handle alternate variants according to the actual URL model. One-page variants have one canonical product-group URL; multi-page variants need distinct URLs and the current Google `ProductGroup`/`Product` requirements. Localized equivalents also need the international SEO checks.
-4. Keep infinite or low-value faceted URL spaces from consuming crawl resources. Choose controls based on whether a URL must be fetched for indexing, not from a universal rule that all parameters should be blocked. Check current crawler guidance before applying robots, canonical, or `noindex` broadly.
-5. Make paginated content reachable through real URLs and sequential links. Verify product discovery beyond the first page and under JavaScript-disabled fetches.
+| Page | Job | Markup |
+| --- | --- | --- |
+| Category or collection | Help a shopper narrow a real assortment | `BreadcrumbList`. No `Product`. |
+| Product detail | Explain one product and support a purchase | `Product` and `Offer`, or `ProductGroup` |
+| Brand | Group a brand's products, state reseller status | Visible brand only |
+| Comparison or buying guide | Help choose among products | `Product` with review (snippets) |
+| Policy (shipping, returns, contact) | Answer trust questions per market | `Organization` policies |
 
-## Choose shopping data
+Link category to subcategory to product with `<a href>`. Search engines do not submit site-search forms, so a product reachable only by search is invisible. Put product URLs in the sitemap. A Merchant Center feed supplements discovery and does not replace navigation. [doc]
 
-- A directly purchasable product page may qualify for **merchant listings**. A review or page that refers shoppers to another seller may qualify for **product snippets** instead. Check each feature's required properties and policies before adding markup.
-- Populate `Product`/`Offer` from the same source as the visible price, currency, availability, shipping, and returns. Do not hardcode values that drift from live inventory. Google recommends product data in initial HTML for merchant experiences, especially when offers change quickly.
-- Distinct currencies offered for sale need distinct URLs under Google's merchant-listing guidance. Treat locale, country, and currency as separate decisions; a translation alone does not imply a different offer.
-- Add review/rating markup only for reviews genuinely shown and eligible under current review policies. Never synthesize ratings. For product variants, use `ProductGroup` only after confirming the site has real variant identifiers and a matching URL design.
-- Consider Merchant Center when shopping surfaces matter. Product markup and feeds can complement one another; some surfaces require Merchant Center participation. Compare feed values with page content and inspect Merchant Center diagnostics.
+## Decide which URLs to index
 
-## State changes
+An indexable URL has distinct shopper value, a stable 200, a self-canonical, unique content, a crawlable link, and a sitemap entry. Walk each URL class.
 
-For out-of-stock, discontinued, replaced, and temporarily unavailable products, decide from the shopper's best destination and expected return of stock. Keep a useful product page when it still serves demand; show truthful availability and alternatives. Redirect only to a genuinely equivalent replacement. Return a true 404/410 when the item and useful page are gone. Update feeds, markup, sitemaps, and internal links together. Verify the HTTP status and rendered offer after the change.
+```text
+Product with variants
+├── Variants are selectors on one page (?color=red) → index the parent; canonical is the unparameterized URL
+└── Each variant has its own URL → index each with demand; self-canonical; repeat the ProductGroup on each page
+Category
+├── Page 1 → index
+├── Page N → index, self-canonical (never canonical to page 1), sequential <a href>, no rel=next/prev
+└── Empty → 404
+Facet or filter
+├── One value with real demand, stable non-empty results, unique title and copy → static path (/shoes/nike/), self-canonical, sitemap
+├── Three or more combined facets, sort, view mode, session, tracking, location → robots disallow, or noindex. Never in the sitemap.
+└── Nonsense combination → 404
+Internal search results → noindex or disallow. A curated head query becomes a real collection.
+```
+
+Pick one mechanism per URL class. A disallowed URL is never fetched, so its `noindex` is never seen, and a linked disallowed URL can still be indexed by address alone. Google documents canonicals as weaker than robots for facet control. [doc] "Index a facet above about 50 searches a month" is a heuristic, not Google guidance. [practice]
+
+Use evergreen URLs for seasonal collections (`/deals/black-friday`), not year-stamped ones. Keep them at 200 off season with truthful copy. [practice]
+
+## Stock changes
+
+```text
+Stock state
+├── Out for now, return expected → keep 200 and URL; availability OutOfStock (or BackOrder, PreOrder); alternatives; keep in sitemap
+├── Discontinued but useful (parts, support, resale) → keep 200; availability Discontinued; show alternatives
+├── Discontinued with links and a real successor → 301 to the successor
+├── Gone, no equivalent → 404 or 410 (same handling); drop from sitemap, feeds, internal links
+└── Never redirect to home or an unrelated page. It reads as a soft 404.
+```
+
+Google publishes no out-of-stock guide, so present "keep the page" as a shopper-first choice, not as a Google rule. `Discontinued` exists in markup, and the Merchant Center feed accepts only in stock, out of stock, preorder, and backorder. [doc] Update feed, markup, sitemap, and links together. Verify the real HTTP status, because a streamed Next.js page can return 200 with a not-found body.
+
+## Markets, currency, and languages
+
+Google needs a distinct URL per currency. Merchant Center bans landing pages that switch language or currency by location, and shipping currency must match offer currency. [doc]
+
+| Situation | URL design |
+| --- | --- |
+| Same price, currency, shipping across a language | `/es/...`, tag `es` |
+| Same language, different country or currency | `/en-gb/...` and `/en-us/...`, own `priceCurrency`, shipping, returns, tags with region |
+| One country, several languages, one currency | `/es/`, `/ca/`, same currency |
+| Currency toggle by cookie | Not separate offers. One canonical currency per URL. Converted price is plain text, not markup. |
+
+This template's locales are language-only, and `localeConfig` ties one currency to each route locale (`en` is USD, `es` is EUR). That fits one market per locale. A second currency for the same language needs its own route locale. Example for UK pounds:
+
+1. Add `"en-gb"` to `localeConfig` in `src/i18n/locales.ts` with `languageTag: "en-GB"`, `currency: "GBP"`, `timeZone: "Europe/London"`, and add `dictionary/en-gb.json` (a copy of `en.json` with local spelling and terms).
+2. `routing.ts` reads `locales`, so `/en-gb` exists with no other change. `getLocaleUrl` builds its URLs.
+3. Each product gets `/en-gb/...` with its own `Offer` in GBP, shipping, and returns, and alternates `en-US` and `en-GB`, plus a language-only `en` if you want a catch-all.
+4. Confirm `<html lang>`, the price format, and the sitemap entry.
+
+Never hide the market behind a cookie or IP. See [international SEO](international-seo.md).
+
+## Markup and feeds
+
+Pick the type with [structured data](structured-data.md#choose-the-type). Rules that matter here:
+
+- Build `Product`, `Offer`, the visible price, the feed export, and any Merchant API push from one `getProduct()`. Two sources drift, and a mismatch between page and feed triggers disapproval.
+- Render offers in initial HTML. Google warns that script-generated markup makes Shopping crawls less frequent and less reliable for fast-changing price and stock. [doc]
+- Put shipping and return policy on `Organization` unless products differ. Search Console and Merchant Center settings override site markup. [doc]
+- Review markup only for visible, genuine reviews. Fake or undisclosed incentivized reviews break policy. A store rating on its own `Organization` is ineligible. [doc]
+- A feed and markup together maximize eligibility. Merchant Center is required for the Shopping tab and not for organic Search. The Content API for Shopping ended 2026-08-18, so use the Merchant API. Merchant Center will enforce images of at least 500 by 500 pixels from 2027-01-31. [doc]
+- FAQ rich results ended in May 2026. Do not add FAQ markup to product pages for a rich result. [doc]
+
+### AI shopping surfaces
+
+Google says AI Overviews and AI Mode need no special markup, only current Merchant Center and Business Profile data. [doc] Other programs take feeds. Record which the owner enrolled and mark the rest not verified. All are fast-moving, so recheck the program page before advising. [unverified]
+
+| Surface | What it takes |
+| --- | --- |
+| ChatGPT | Product feed to OpenAI's spec (`item_id`, `title`, `description`, `url`, `brand`, `seller_name`, `image_url`, `availability`, `price`). Allow `OAI-SearchBot`. Instant Checkout is limited to approved US partners. [doc] |
+| Google agentic checkout | Merchant Center `native_commerce` attribute, early access. UCP manifest at `/.well-known/ucp`. [doc] |
+| Copilot Checkout | Microsoft Merchant Center recommended. US first. [doc] |
+| Perplexity | Merchant Program feed, and allow `PerplexityBot`. [practice] |
+
+The same clean GTIN, brand, price, availability, shipping, and return data serves every surface. Set crawler policy per bot in [AI crawler reference](ai-crawler-reference.md).
+
+## Page checklists
+
+Product page: one indexable URL and a descriptive slug. A unique title, heading, and description, because manufacturer copy is duplicate content. Several sharp images (at least 50,000 pixels in markup). Price, currency, availability, shipping cost and time, and a returns summary visible without a click. Roughly 60 percent of shoppers look for the return policy on the product page. [study, Baymard] Visible genuine reviews. Links to parent category, brand, and related items with descriptive anchors. `BreadcrumbList`. A stock module with alternatives.
+
+Category page: a keyword-based name, a short intro above the grid, buying help below. Products in `<a href>`. Real pagination URLs. Filters and sorts users need (price, rating, size, color, brand). No `Product` markup. One primary page per commercial query, with informational content on guides.
+
+Comparison or guide: first-hand evidence, measurements, strengths and weaknesses, alternatives, and a substantiated ranking. Product snippet markup, never merchant listing.
+
+Policy pages: real terms per market, linked from the footer and product pages, mirrored in `Organization` policies.
+
+## Next.js notes
+
+- `generateMetadata` in `[locale]/products/[slug]/page.tsx`. Share the fetch with `React.cache`. Emit alternates only for locales where the product exists.
+- JSON-LD in the Server Component with `<` escaped. Native `<script>`, not `next/script`.
+- With Cache Components, keep the Offer price in the same cache unit as the visible price. Use a short `cacheLife` or invalidate by tag from an inventory webhook. A price in a cached shell is stale until revalidation.
+- `notFound()` returns 404 only before streaming starts. After a Suspense boundary starts streaming the status is 200, which is a soft 404. Decide existence before streaming, or return 404 or 410 from `proxy`. There is no built-in 410, so return `new Response(null, { status: 410 })`.
+- Redirect a replaced product with `permanentRedirect()` or a config redirect, to the true successor.
+- Sitemaps for large catalogs: `generateSitemaps()` splits at 50,000 URLs, and in Next 16 `id` is a promise, so coerce with `Number(await id)`. List the resulting files in a sitemap index or `robots.ts`. Each entry can carry `alternates.languages`.
+- Disallow facet, sort, and search parameters in `robots.ts`. Keep `_next/static` crawlable. Set `robots: { index: false }` in `generateMetadata` for non-indexable filter routes.
+- Format prices with the market's currency, not the locale's guess.
 
 ## Done when
 
-Sample a category, paginated category, product, variant, and unavailable item in each affected market. Confirm reachable product links, stable canonical URLs, rendered offer consistency, correct locale/currency, current sitemap/feed values, and applicable rich-result validation. Record which shopping surfaces and Merchant Center settings still require owner verification. Passing structured-data validation establishes eligibility, not display.
+Sample a product, out-of-stock product, category page 1 and 2, an indexable facet, a non-indexable facet, a sorted URL, an empty category, a removed product, and a redirected product in each market. For each, record status, canonical, robots, and alternates. View source without JavaScript shows title, heading, product links, and JSON-LD with price, currency, and availability equal to the visible UI. One product's price change reaches page, JSON-LD, and feed. The sitemap holds only 200 canonical URLs. Report which shopping programs the owner still has to verify. Rich Results Test proves eligibility, not display.
 
-## Primary sources
-
-- [Google ecommerce navigation](https://developers.google.com/search/docs/specialty/ecommerce/help-google-understand-your-ecommerce-site-structure)
-- [Google ecommerce URL structure](https://developers.google.com/search/docs/specialty/ecommerce/designing-a-url-structure-for-ecommerce-sites)
-- [Google faceted navigation crawling](https://developers.google.com/crawling/docs/faceted-navigation)
-- [Google pagination and incremental loading](https://developers.google.com/search/docs/specialty/ecommerce/pagination-and-incremental-page-loading)
-- [Google Product structured data](https://developers.google.com/search/docs/appearance/structured-data/product)
-- [Google merchant listings](https://developers.google.com/search/docs/appearance/structured-data/merchant-listing)
-- [Google product variants](https://developers.google.com/search/docs/appearance/structured-data/product-variants)
-- [Google product data and Merchant Center](https://developers.google.com/search/docs/specialty/ecommerce/share-your-product-data-with-google)
+Sources, checked 2026-09-30: [ecommerce site structure](https://developers.google.com/search/docs/specialty/ecommerce/help-google-understand-your-ecommerce-site-structure), [URL structure](https://developers.google.com/search/docs/specialty/ecommerce/designing-a-url-structure-for-ecommerce-sites), [faceted navigation](https://developers.google.com/crawling/docs/faceted-navigation), [pagination](https://developers.google.com/search/docs/specialty/ecommerce/pagination-and-incremental-page-loading), [merchant listings](https://developers.google.com/search/docs/appearance/structured-data/merchant-listing), [Merchant Center currency and location rules](https://support.google.com/merchants/answer/15404838), [Merchant API migration](https://developers.google.com/merchant/api/guides/compatibility/overview), [OpenAI product feed spec](https://developers.openai.com/commerce/product-feeds/spec), [Baymard product page UX](https://baymard.com/blog/current-state-ecommerce-product-page-ux), [Next.js generateSitemaps](https://nextjs.org/docs/app/api-reference/functions/generate-sitemaps).

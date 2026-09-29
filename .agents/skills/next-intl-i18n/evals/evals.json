@@ -1,0 +1,62 @@
+{
+  "skill": "next-intl-i18n",
+  "note": "Run each prompt with the skill and with the previous version or no skill. Grade every assertion as pass or fail from the transcript and the resulting diff. A good assertion fails without the skill.",
+  "evals": [
+    {
+      "id": "add-german",
+      "prompt": "Add German (de) as a new locale to this template.",
+      "assertions": [
+        "Adds the entry to src/i18n/locales.ts with languageTag, ogLocale, currency, timeZone, and font",
+        "Creates dictionary/de.json with every key from en.json and keeps every ICU argument",
+        "Runs or cites scripts/check-messages.mjs",
+        "Notes that German plural rules are one and other and keeps other branches",
+        "Leaves the hardcoded locale === \"ar\" direction checks alone or moves them to config, and does not add German to them",
+        "Says the German copy is draft until a fluent reviewer signs off",
+        "Ends with Verified and Not verified lines"
+      ]
+    },
+    {
+      "id": "plural-arabic",
+      "prompt": "Add a message that says how many items are in the cart, in all five languages.",
+      "assertions": [
+        "Uses one ICU plural message per locale, not a ternary in code",
+        "Arabic message has zero, one, two, few, many, and other branches",
+        "Spanish message includes a many branch or explains why other covers it",
+        "Chinese and Japanese messages use other only, or =1 plus other",
+        "Adds the key to every dictionary file in the same edit"
+      ]
+    },
+    {
+      "id": "migrate-root-params",
+      "prompt": "Migrate this project off setRequestLocale.",
+      "assertions": [
+        "Checks the installed Next.js version is at least 16.3 and next-intl at least 4.13.6 before editing",
+        "Rewrites request.ts to read next/root-params with a hasLocale check and notFound fallback",
+        "Removes setRequestLocale calls and keeps generateStaticParams",
+        "Updates the AGENTS.md rules that require setRequestLocale in the same change",
+        "Runs the build and checks the route table for static markers"
+      ]
+    },
+    {
+      "id": "slug-switcher",
+      "prompt": "Blog posts have different slugs per language and some are not translated. Build the language switcher for a post page.",
+      "assertions": [
+        "Resolves the target slug from content data, not from pathnames config",
+        "Renders a link only for locales with a published translation",
+        "Uses one function for the switcher, the alternates, and the sitemap",
+        "States a missing-translation policy",
+        "Does not link the switcher to a page that would return 404"
+      ]
+    },
+    {
+      "id": "redirect-bug",
+      "prompt": "Visitors with a Japanese browser get redirected from / to /ja and we do not want that. Fix it.",
+      "assertions": [
+        "Identifies localeDetection and the NEXT_LOCALE cookie as separate mechanisms",
+        "Checks the current routing config before editing",
+        "Verifies with curl using Accept-Language and a NEXT_LOCALE cookie that / returns 200",
+        "Does not add a manual redirect in the proxy"
+      ]
+    }
+  ]
+}

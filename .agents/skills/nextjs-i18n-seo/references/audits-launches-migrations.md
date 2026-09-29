@@ -1,59 +1,73 @@
 # Audits, launches, and migrations
 
-Use this playbook for a site-wide review, production SEO checklist, deployment verification, URL change, domain move, or drop in search traffic. Keep an audit evidence-based and give each finding a next action.
+Use for a site-wide review, a production launch gate, a URL or domain change, adding or removing a locale, or a traffic decline. Every finding needs evidence and a next action.
 
-## Scope the work
+Evidence tags: `[doc]` platform documentation, `[practice]` practitioner evidence. See [evidence and reporting](evidence-and-reporting.md).
 
-Before auditing, identify:
+## Scope first
 
-- Site origin and environment being reviewed.
-- Whether the request is a baseline audit, a launch gate, a migration, or a diagnosis of a measured decline.
-- The affected pages, locales, templates, markets, and search engines.
-- Access to rendered pages, logs, analytics, Search Console, or other webmaster tools.
-- The time period, device, country, and search type behind a reported change.
+Write one line each before auditing.
 
-If production access is unavailable, audit the repository and local output, then list the live checks an owner must complete. Never describe local output as a production audit.
+| Item | Answer |
+| --- | --- |
+| Origin and environment | Production, staging, or local |
+| Request type | Baseline audit, launch gate, migration, or diagnosis of a measured decline |
+| Surface | Templates, locales, markets, and engines in scope |
+| Access | Rendered pages, logs, analytics, Search Console, other webmaster tools |
+| Window | Time period, device, country, and search type behind any reported change |
 
-## Run a layered audit
+Without production access, audit the repository and local output, then list the live checks the owner must run. Never call a local audit a production audit.
 
-1. **Inventory:** list indexable routes by template and locale. Compare app routes, sitemap entries, canonical targets, and important internal links.
-2. **Technical sample:** select representative URLs and inspect status, redirects, crawl access, rendered HTML, `noindex`, canonical, title, language, and structured data. Expand the sample when templates or locales differ.
-3. **Content sample:** inspect whether each page has a distinct purpose, accurate metadata, useful main content, and sensible internal links. Use the content playbook for editorial work.
-4. **International sample:** verify body language, `<html lang>`, `dir`, canonicals, reciprocal alternates, locale switching, and sitemap output for every locale.
-5. **Platform data:** use Search Console or the relevant webmaster tool for indexing state, selected canonical, queries, pages, countries, and search appearance. Use [Measurement](measurement.md) for report definitions and attribution. Compare equivalent time periods and segments; identify analytics instrumentation changes before attributing a decline to search.
-6. **Performance and experience:** inspect field data and device behavior. Use local lab traces to diagnose problems; do not present a Lighthouse score alone as a ranking report.
-7. **Prioritize:** group duplicate symptoms by root cause and affected templates. Rate impact, number of URLs/users affected, confidence in evidence, and implementation cost. Separate blocking issues from enhancements and owner-only tasks.
+## Layered audit
 
-For every finding, record: evidence and affected URLs, observed problem, likely cause with confidence, recommended action, priority with rationale, verification method, and any dependency on the deployment owner. Call a finding inconclusive when the evidence cannot distinguish plausible causes.
+1. Inventory. List indexable routes by template and locale. Compare routes, sitemap entries, canonical targets, and key internal links.
+2. Technical sample. For representative URLs record status, redirects, crawl access, rendered HTML, `noindex`, canonical, title, language, and structured data. Widen the sample when templates or locales differ. `scripts/verify-seo.mjs` covers this.
+3. Content sample. Each page has a distinct purpose, accurate metadata, useful main content, and sensible links. See [content and on-page](content-and-onpage.md).
+4. International sample. Body language, `<html lang>` and `dir`, canonicals, reciprocal alternates, switcher behavior, and sitemap output for every locale. See [international SEO](international-seo.md).
+5. Platform data. Search Console and Bing for indexing state, selected canonical, queries, pages, countries. Compare equal periods and segments. Rule out an analytics change before blaming search. See [measurement](measurement.md).
+6. Experience. Field data and device behavior. A Lighthouse score alone is not a ranking report.
+7. Prioritize. Group symptoms by root cause and affected template. Rate impact, URLs affected, confidence, and cost. Separate blockers from enhancements and owner-only tasks.
 
-## Production launch checklist
+Priority is impact times confidence, divided by cost. A blocker on a template that serves 40 URLs outranks a polish item on one page.
 
-- Set the real public HTTPS origin and site identity. Confirm metadata base, canonical URLs, Open Graph URLs, sitemap, and robots sitemap URL use it.
-- Remove staging-only authentication, `noindex`, or crawl blocks from production. Keep staging protected from indexing.
-- Check representative route responses and rendered HTML in every locale. Confirm no accidental redirect changes the intended locale URL.
-- Validate canonicals, reciprocal `hreflang`, sitemap entries, robots behavior, structured data, and social previews.
-- Verify the site in the relevant webmaster tools, submit the sitemap, and record any warnings or exclusions.
-- Test internal links, 404 behavior, mobile layout, analytics collection, and the actual conversion or key-event path. For commerce, sample product variants, offers, and feeds; for publishing, sample article dates and archive pagination.
-- Save a baseline for indexed pages, impressions, clicks, conversions, and performance before launch when the existing site has data.
+Each finding records: evidence and URLs, observed problem, likely cause and confidence, action, priority and why, how to verify, and any owner dependency. Call a finding inconclusive when the evidence cannot separate plausible causes.
 
-## URL or domain migration
+## Launch gate
 
-1. Export old URLs from analytics, search reports, sitemaps, logs, and high-value backlinks. Include every locale and important media URL.
-2. Map each old URL to its closest equivalent new page. Do not redirect unrelated pages to the homepage.
-3. Test the new site before launch. Prepare redirects, and make sure staging restrictions will be removed at launch.
-4. Use server-side permanent redirects when URLs have permanently changed. Avoid redirect chains and loops.
-5. Update internal links, canonical URLs, `hreflang`, structured data URLs, and sitemap entries to the destination URLs.
-6. Launch and test a sample of old-to-new mappings and new canonical pages. Submit the new sitemap and use the appropriate change-of-address process when applicable.
-7. Monitor crawl errors, redirects, indexing, traffic, and conversions by old and new URL sets. Keep redirects in place long enough for users and crawlers to transition; follow current platform migration guidance for the specific move.
+Every line is a check with an observable result. Tick nothing without running it.
 
-Do not promise a recovery date. Search systems recrawl and process URLs on their own schedules, and performance can fluctuate during a move.
+- The real HTTPS origin is set. Metadata base, canonicals, Open Graph URLs, sitemap, and the `robots.txt` sitemap line use it.
+- Staging authentication, `noindex`, and crawl blocks are gone from production and stay on staging.
+- Representative routes in every locale return 200 with the intended locale URL and no accidental redirect.
+- Canonicals, reciprocal alternates, sitemap, robots, structured data, and social previews validate.
+- The property is verified in Search Console and Bing, the sitemap is submitted, and warnings and exclusions are recorded.
+- Internal links, the 404 page, mobile layout, analytics collection, and the real conversion path work. Commerce: sample variants, offers, and feeds. Publishing: sample dates and pagination.
+- A baseline of indexed pages, impressions, clicks, conversions, and performance is saved when the old site has data.
+- The crawler policy for training, search, and user-fetch is written down. See [AI crawler reference](ai-crawler-reference.md).
 
-## References
+## Migration
 
-- [Google Search Console](https://search.google.com/search-console/about)
-- [Google URL Inspection](https://support.google.com/webmasters/answer/9012289)
-- [Google Search performance report](https://support.google.com/webmasters/answer/7576553)
-- [Google site moves with URL changes](https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes)
-- [Google redirects](https://developers.google.com/search/docs/crawling-indexing/301-redirects)
-- [Google sitemap guidance](https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap)
-- [web.dev Core Web Vitals](https://web.dev/articles/vitals)
+```text
+Old URL → closest equivalent new URL
+├── Exists → 301 or 308
+├── No equivalent but a close category → 301 to that category
+└── Nothing relevant → 404 or 410. Never redirect to the homepage.
+```
+
+1. Export old URLs from analytics, search reports, sitemaps, logs, and backlinks, for every locale and important media.
+2. Map each to its closest new page.
+3. Test the new site before launch. Prepare redirects and confirm staging restrictions will lift.
+4. Use server-side permanent redirects. No chains, no loops.
+5. Update internal links, canonicals, alternates, structured-data URLs, and sitemap entries to the new URLs.
+6. Launch. Test a sample of mappings and new canonical pages. Submit the new sitemap. Use the change-of-address tool when it applies. [doc]
+7. Monitor crawl errors, redirects, indexing, traffic, and conversions by old and new URL sets. Keep redirects for at least a year. [doc]
+
+Do not promise a recovery date. Recrawling runs on the search engine's schedule, and performance moves during a migration.
+
+### Adding or removing a locale
+
+Adding: treat it as a launch for that locale. Run the launch gate on that locale's URLs only, and confirm existing locales' alternates gained the new one.
+
+Removing: 301 every URL to the closest equivalent in the default locale, remove the locale from alternates and the sitemap of every remaining page, then delete routes. A removed locale that still returns 200 competes with the pages that replaced it.
+
+Sources, checked 2026-09-30: [Search Console](https://search.google.com/search-console/about), [URL Inspection](https://support.google.com/webmasters/answer/9012289), [site moves with URL changes](https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes), [redirects](https://developers.google.com/search/docs/crawling-indexing/301-redirects), [sitemaps](https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap), [Core Web Vitals](https://web.dev/articles/vitals).
