@@ -62,6 +62,6 @@ bun install
 
 ## Using an AI agent
 
-The repository ships two skills in `.agents/skills/`, a short guide for an agent to follow when it works on locales or search. In this repository the instruction map in `AGENTS.md` sends an agent to the right one. In your own project, install them with `npx skills add s0vers/next-app-i18n-starter`. The [README](README.md#skills-for-coding-assistants) lists what each playbook covers.
+The repository ships eight skills in `.agents/skills/`, short guides an agent follows when it works on locales or search: one for next-intl and seven for SEO. In this repository the instruction map in `AGENTS.md` sends an agent to the right one. In your own project, install them with `npx skills add s0vers/next-app-i18n-starter`. The [README](README.md#skills-for-coding-assistants) lists what each playbook covers.
 
 Every check an agent runs is a script you can run yourself: `bun run check` for lint, locales, messages, and skills, and `bun run seo:verify` for search signals.
