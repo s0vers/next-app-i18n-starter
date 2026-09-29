@@ -6,6 +6,8 @@ A multilingual Next.js starter built with **Next.js 16**, **React 19**, **next-i
 
 **Live demo:** [next-app-i18n-starter.vercel.app](https://next-app-i18n-starter.vercel.app)
 
+**New to i18n in Next.js?** Start with the [ten minute guide](GUIDE.md). It traces one request end to end, lists the mistakes this repository already made, and gives six exercises that break things on purpose.
+
 ---
 
 ## Table of contents
@@ -148,6 +150,7 @@ next-app-i18n-starter/
 │   └── proxy.ts                    # next-intl proxy (Next.js 16)
 ├── .agents/skills/                 # next-intl and SEO skills: playbooks, scripts, evals
 ├── AGENTS.md                       # Shared instructions for coding assistants
+├── GUIDE.md                        # Ten minute tour of how i18n works here
 ├── .env.example
 ├── global.d.ts                     # next-intl AppConfig types
 ├── next.config.ts
@@ -212,7 +215,7 @@ For a production build served locally, add `--origin https://your-domain.example
 
 ### Using the skills
 
-Invoke `next-intl-i18n` or `nextjs-i18n-seo` in an agent that supports repository skills. Otherwise, read the relevant `SKILL.md` and only the playbooks the task needs. Start with [AGENTS.md](AGENTS.md) for repository conventions. Each skill has an `evals/evals.json` with prompts and assertions for testing changes to the skill. Platform rules change, so recheck the owning platform's documentation for anything the playbooks date more than 90 days back.
+In a clone of this repository, the instruction map in [AGENTS.md](AGENTS.md) points agents at the right skill. In your own project, install them with `npx skills add s0vers/next-app-i18n-starter`, which copies each skill into the folder your agent reads (Claude Code reads `.claude/skills`, and does not scan `.agents/skills` by itself). Otherwise, read the relevant `SKILL.md` and only the playbooks the task needs. Start with [AGENTS.md](AGENTS.md) for repository conventions. Each skill has an `evals/evals.json` with prompts and assertions for testing changes to the skill. Platform rules change, so recheck the owning platform's documentation for anything the playbooks date more than 90 days back.
 
 ---
 

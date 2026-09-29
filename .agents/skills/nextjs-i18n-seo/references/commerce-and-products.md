@@ -2,7 +2,7 @@
 
 Use when a task involves a store, catalog, category, product page, variants, prices, stock, reviews, a product feed, comparison content, or AI shopping surfaces. Field-level markup rules live in [structured data](structured-data.md#product-and-offer-fields). This page decides which pages to build, index, and mark up.
 
-Evidence tags: `[doc]` platform documentation, `[practice]` practitioner evidence, `[unverified]`. See [evidence and reporting](evidence-and-reporting.md).
+Evidence tags: see [evidence and reporting](evidence-and-reporting.md).
 
 ## Gate: what does the business do
 
@@ -97,16 +97,7 @@ Pick the type with [structured data](structured-data.md#choose-the-type). Rules 
 
 ### AI shopping surfaces
 
-Google says AI Overviews and AI Mode need no special markup, only current Merchant Center and Business Profile data. [doc] Other programs take feeds. Record which the owner enrolled and mark the rest not verified. All are fast-moving, so recheck the program page before advising. [unverified]
-
-| Surface | What it takes |
-| --- | --- |
-| ChatGPT | Product feed to OpenAI's spec (`item_id`, `title`, `description`, `url`, `brand`, `seller_name`, `image_url`, `availability`, `price`). Allow `OAI-SearchBot`. Instant Checkout is limited to approved US partners. [doc] |
-| Google agentic checkout | Merchant Center `native_commerce` attribute, early access. UCP manifest at `/.well-known/ucp`. [doc] |
-| Copilot Checkout | Microsoft Merchant Center recommended. US first. [doc] |
-| Perplexity | Merchant Program feed, and allow `PerplexityBot`. [practice] |
-
-The same clean GTIN, brand, price, availability, shipping, and return data serves every surface. Set crawler policy per bot in [AI crawler reference](ai-crawler-reference.md).
+Google says AI Overviews and AI Mode need no special markup, only current Merchant Center and Business Profile data. [doc] ChatGPT (a feed to OpenAI's spec, with `OAI-SearchBot` allowed), Google's agentic checkout (a Merchant Center `native_commerce` attribute and a UCP manifest), Copilot Checkout, and Perplexity's Merchant Program each take a feed or a program enrollment, and each is early access or US first. These change monthly, so read the program's own page before advising, record which ones the owner enrolled, and mark the rest not verified. [unverified] The same clean GTIN, brand, price, availability, shipping, and return data serves every surface. Set crawler policy per bot in [AI crawler reference](ai-crawler-reference.md).
 
 ## Page checklists
 
@@ -121,13 +112,10 @@ Policy pages: real terms per market, linked from the footer and product pages, m
 ## Next.js notes
 
 - `generateMetadata` in `[locale]/products/[slug]/page.tsx`. Share the fetch with `React.cache`. Emit alternates only for locales where the product exists.
-- JSON-LD in the Server Component with `<` escaped. Native `<script>`, not `next/script`.
 - With Cache Components, keep the Offer price in the same cache unit as the visible price. Use a short `cacheLife` or invalidate by tag from an inventory webhook. A price in a cached shell is stale until revalidation.
-- `notFound()` returns 404 only before streaming starts. After a Suspense boundary starts streaming the status is 200, which is a soft 404. Decide existence before streaming, or return 404 or 410 from `proxy`. There is no built-in 410, so return `new Response(null, { status: 410 })`.
-- Redirect a replaced product with `permanentRedirect()` or a config redirect, to the true successor.
+- Decide existence before streaming (see [technical SEO](technical-seo.md#status-codes-and-soft-404s)). Next.js has no built-in 410, so return `new Response(null, { status: 410 })` from `proxy`.
 - Sitemaps for large catalogs: `generateSitemaps()` splits at 50,000 URLs, and in Next 16 `id` is a promise, so coerce with `Number(await id)`. List the resulting files in a sitemap index or `robots.ts`. Each entry can carry `alternates.languages`.
 - Disallow facet, sort, and search parameters in `robots.ts`. Keep `_next/static` crawlable. Set `robots: { index: false }` in `generateMetadata` for non-indexable filter routes.
-- Format prices with the market's currency, not the locale's guess.
 
 ## Done when
 

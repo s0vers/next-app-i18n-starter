@@ -2,7 +2,7 @@
 
 Use when a request mentions AI Overviews, AI Mode, ChatGPT search, Claude, Perplexity, Copilot, answer engines, model crawlers, `llms.txt`, "GEO" or "AEO", or agents that browse and buy. These are separate systems. Name the product and the outcome before changing anything.
 
-Evidence tags: `[doc]` vendor documentation fetched, `[unverified]` third-party report, `[study]` published measurement with method, `[unverified]`. The evidence for AI-specific tactics is thin, and tags matter more here than anywhere else. See [evidence and reporting](evidence-and-reporting.md).
+Evidence tags: see [evidence and reporting](evidence-and-reporting.md).
 
 Crawler tokens, policies, and `robots.ts` sketches are in [AI crawler reference](ai-crawler-reference.md).
 
@@ -56,16 +56,9 @@ Treat advice from an AI vendor as applying to that vendor only.
 
 Keep `public/llms.txt` as an optional docs aid for tools that read it. It is not a ranking action and never replaces crawlable pages. The format has an H1 title, an optional blockquote summary, optional prose, then H2 sections of markdown link lists. Comment lines that start with `#` parse as extra H1s. Verify the file matches before claiming it follows the spec.
 
-## Markdown for agents and other standards
+## Standards that do not change the plan
 
-| Item | Status | Advice |
-| --- | --- | --- |
-| Markdown via `Accept: text/markdown` | Cloudflare converts at the edge. No AI vendor documents production use. Google says Markdown is not needed for Search. | Useful for docs and coding agents only |
-| IETF `aipref` | Draft (`draft-ietf-aipref-vocab-08`). No vendor honors it. | Do not emit it |
-| Web Bot Auth | IETF drafts. OpenAI signs its agent requests. Google experiments with `agent.bot.goog`. | Verify signatures only if agent traffic is wanted |
-| WebMCP | Chrome developer trial only | Do not build for it yet |
-| NLWeb, MCP server cards | Draft or vendor-specific | Only for a concrete conversational product need |
-| schema.org `potentialAction` for AI | No vendor documents use | Skip |
+Markdown via `Accept: text/markdown` (Cloudflare converts at the edge), IETF `aipref`, Web Bot Auth, WebMCP, NLWeb, MCP server cards, and schema.org `potentialAction` for AI are drafts, developer trials, or vendor-specific. No AI vendor documents production use of any of them, and Google says Markdown is not needed for Search. Do not build for them, and do not emit `aipref` syntax. Verify Web Bot Auth signatures only if the owner wants agent traffic. [unverified]
 
 ## Make browser tasks legible
 

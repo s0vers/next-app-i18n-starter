@@ -34,8 +34,8 @@ These instructions apply to coding assistants of any model or editor. Read this 
 - `dictionary/AGENTS.md`: translation keys and message files.
 - `src/components/AGENTS.md`: React boundaries, styling, accessibility, theme, and RTL.
 - `src/lib/AGENTS.md`: shared helpers and canonical site metadata.
-- For next-intl routing, request configuration, messages, locale-aware formatting, or its framework integrations, read `.agents/skills/next-intl-i18n/SKILL.md` and only the relevant playbook. Its `scripts/check-messages.mjs` checks dictionary parity.
-- For SEO audits, route metadata, product or article SEO, analytics, current search guidance, AI search, crawler policy, or launch checks, read `.agents/skills/nextjs-i18n-seo/SKILL.md` and the relevant playbook before recommending or changing the implementation. Its `scripts/verify-seo.mjs` checks alternates, canonicals, and sitemap agreement on a running site.
+- Read `.agents/skills/next-intl-i18n/SKILL.md` and only the relevant playbook before you add or change a locale, a message or plural, a formatted number, date, or list (including digits and calendars), RTL layout, the language switcher, the error page, or the proxy and routing config. `bun run i18n:check` validates the locale registry and dictionaries.
+- Read `.agents/skills/nextjs-i18n-seo/SKILL.md` and the relevant playbook before you touch hreflang, canonicals, the sitemap, `robots.ts`, JSON-LD, page metadata, product or blog pages, search analytics, or AI crawler policy, and before you answer a question about rankings, traffic, indexing, or Search Console. Its `scripts/verify-seo.mjs` checks alternates, canonicals, and sitemap agreement on a running site.
 - `README.md`: human setup and implementation reference.
 - `public/llms.txt`: public project overview for tools that read it; it is secondary documentation, not an instruction source.
 - `.cursor/rules/`: optional Cursor adapters. The `AGENTS.md` files above are the canonical rules for every assistant.
