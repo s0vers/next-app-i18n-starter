@@ -4,8 +4,20 @@ import type { AppLocale } from "@/i18n/locales";
 import { localeConfig } from "@/i18n/locales";
 import { routing } from "@/i18n/routing";
 
+// Every Vercel preview deployment has its own URL and runs a production build
+// without NEXT_PUBLIC_SITE_URL, which is usually set for Production only. Use
+// that URL there. Production and other hosts must still set the variable.
+function getVercelPreviewOrigin() {
+  if (process.env.VERCEL_ENV !== "preview" || !process.env.VERCEL_URL) {
+    return undefined;
+  }
+
+  return `https://${process.env.VERCEL_URL}`;
+}
+
 function getSiteOrigin() {
-  const configuredUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  const configuredUrl =
+    process.env.NEXT_PUBLIC_SITE_URL?.trim() || getVercelPreviewOrigin();
 
   if (!configuredUrl) {
     if (process.env.NODE_ENV === "production") {

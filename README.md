@@ -923,7 +923,7 @@ View the page source for `/` and search for `application/ld+json`. The default h
 
 | Variable               | Required | Default                                    | Description                                  |
 | ---------------------- | -------- | ------------------------------------------ | -------------------------------------------- |
-| `NEXT_PUBLIC_SITE_URL` | Production required | Project origin in `.env.example`; localhost fallback when unset in development | HTTPS origin for canonical URLs, sitemap, and social metadata |
+| `NEXT_PUBLIC_SITE_URL` | Production required | Project origin in `.env.example`; localhost fallback when unset in development; the deployment's own URL on Vercel preview deployments | HTTPS origin for canonical URLs, sitemap, and social metadata |
 | `GOOGLE_SITE_VERIFICATION` | No | Unset | Optional Search Console meta-tag verification token |
 
 
@@ -935,6 +935,8 @@ GOOGLE_SITE_VERIFICATION=your-search-console-token
 ```
 
 See `.env.example` for the template.
+
+On Vercel, preview deployments (every pull request) build without `NEXT_PUBLIC_SITE_URL` when it is set for Production only, so `src/lib/site.ts` uses the preview's own `VERCEL_URL`. Production builds and other hosts still fail without the variable, which is deliberate: a missing value there would publish canonical URLs on the wrong domain. If you deploy previews somewhere else, set the variable for that environment too.
 
 ---
 
