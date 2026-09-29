@@ -2,8 +2,6 @@
 
 Use when a task involves a blog, article template, publication workflow, archive, author page, feed, syndication, news, or a content refresh. A blog is not automatically a news site. Choose the reader task first and the search feature second.
 
-Evidence tags: see evidence and reporting (`nextjs-seo-technical`).
-
 ## Gate: should this article exist
 
 ```text

@@ -2,8 +2,6 @@
 
 Use when installing analytics, evaluating an SEO change, diagnosing a traffic drop or a silent locale, or reporting visibility. State the question first, then pick the report. Search Console, GA4, Bing, and AI citation reports count different events. Never add their numbers together.
 
-Evidence tags: see evidence and reporting (`nextjs-seo-technical`).
-
 This starter uses Vercel Analytics and Speed Insights. It has no GA4. The setup below applies to a fork that adds it.
 
 ## Pick the evidence
@@ -117,6 +115,6 @@ Start from "Diagnose a drop" and apply every segment step to that locale only. F
 
 The default locale has no prefix. "English" is every path that does not match `^/(ar|zh|es|ja)(/|$)`. Search Console custom filters use RE2, are partial match, and are case-insensitive by default. Example page filter: `^https://example\.com/(ar|zh|es|ja)(/|$)`. GA4 page path: `^/(ar|zh|es|ja)(/|$)`.
 
-Report every finding in the shape in evidence and reporting (`nextjs-seo-technical`). When access is missing, list the exact report and fields the owner should export. Never fill a gap with an estimate.
+Report every finding in the shape in this skill's Evidence and report section. When access is missing, list the exact report and fields the owner should export. Never fill a gap with an estimate.
 
 Sources, checked 2026-09-30: [Search Console Performance](https://support.google.com/webmasters/answer/7576553), [dimensions and grouping](https://support.google.com/webmasters/answer/17011259), [metrics](https://support.google.com/webmasters/answer/7042828), [Generative AI report](https://support.google.com/webmasters/answer/16984139), [data anomalies](https://support.google.com/webmasters/answer/6211453), [GA4 default channel group](https://support.google.com/analytics/answer/9756891), [GA4 and Search Console link](https://support.google.com/analytics/answer/10737381), [custom dimensions](https://support.google.com/analytics/answer/14239696), [Consent Mode](https://developers.google.com/tag-platform/security/guides/consent), [Next.js third-party libraries](https://nextjs.org/docs/app/guides/third-party-libraries), [Bing AI Performance](https://blogs.bing.com/webmaster/February-2026/Introducing-AI-Performance-in-Bing-Webmaster-Tools-Public-Preview), [web.dev vitals](https://web.dev/articles/vitals), [IndexNow](https://www.indexnow.org/documentation).

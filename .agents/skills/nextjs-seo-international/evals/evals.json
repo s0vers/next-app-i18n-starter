@@ -17,14 +17,24 @@
     }
   ],
   "should_trigger": [
-    "Only half our posts are translated into Japanese. What do we emit for hreflang?",
-    "Should Spanish use es or es-MX?",
-    "Can we redirect visitors by browser language?",
-    "Is it fine to machine translate the whole site?"
+    "Only half our posts are translated into Japanese. What do we emit for hreflang on the untranslated ones?",
+    "Should our Spanish pages use es or es-MX? Most of our customers are in Mexico but we also get Spain.",
+    "Can we redirect visitors to their browser language automatically on the homepage without hurting SEO?",
+    "The client wants to machine translate the whole site into six languages overnight. Is that fine for search?",
+    "Our /de pages canonicalize to the English page. Is that right?",
+    "Google shows the English snippet to German users even though a /de page exists. What could cause that?",
+    "Is the language switcher enough for crawlers to find our Arabic pages, or do we need something else?",
+    "We are launching in Brazil next quarter. Do we need pt-BR separate from pt-PT?",
+    "How do I keep the hreflang tags in the HTML and in the sitemap identical?"
   ],
   "should_not_trigger": [
     "Add a message with a plural in five languages.",
-    "Why is my sitemap missing pages?",
-    "Block AI crawlers from training on the site."
+    "Why is my sitemap missing half the pages?",
+    "Block AI crawlers from training on the site.",
+    "Our Arabic pages lost 40 percent of clicks last month according to Search Console.",
+    "How do I format a price in euros for the German locale with next-intl?",
+    "Write Product JSON-LD for a shoe with two sizes.",
+    "The /fr page returns 404 in production. Fix the routing.",
+    "Plan a content calendar for the blog."
   ]
 }

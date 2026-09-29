@@ -17,12 +17,22 @@
   ],
   "should_trigger": [
     "Block AI companies from training on our site but keep us in ChatGPT and Google AI answers.",
-    "Should we add an llms.txt file?",
-    "How do we get cited by Perplexity?"
+    "Should we add an llms.txt file? Someone on Twitter says it is required.",
+    "How do we get cited by Perplexity when people ask about Next.js i18n?",
+    "Do we show up in ChatGPT answers at all, and how would I check?",
+    "What is the difference between GPTBot and OAI-SearchBot and which should robots.txt allow?",
+    "Is there anything we should do so Google AI Overviews can use our pages?",
+    "Can browser agents like Operator complete our signup form? What breaks them?",
+    "Do I need special schema markup for AI search?"
   ],
   "should_not_trigger": [
-    "Why is /es not indexed?",
-    "Add FAQ schema.",
-    "Traffic dropped last month."
+    "Why is /es not indexed by Google?",
+    "Add FAQ schema to the support page.",
+    "Traffic dropped last month, what happened?",
+    "Redirect old product URLs to their new locations.",
+    "Which hreflang tags does the Japanese page need?",
+    "Plan the content for a new blog.",
+    "Add the sitemap to robots.txt.",
+    "Set up GA4 events for signups."
   ]
 }

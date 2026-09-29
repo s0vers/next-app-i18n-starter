@@ -17,13 +17,23 @@
     }
   ],
   "should_trigger": [
-    "We are launching product pages in English and Spanish, selling in USD and EUR.",
-    "Should filtered category URLs be indexable?",
-    "What do we do with a discontinued product page?"
+    "We are launching product pages in English and Spanish and selling in USD and EUR. What do we need to do for SEO?",
+    "Should filtered category URLs like /shoes?color=red&size=9 be indexable?",
+    "What do we do with a discontinued product page that still gets backlinks?",
+    "A product is out of stock for two weeks. Should we keep the page live, and what should the availability say?",
+    "We have 40,000 variant URLs (size and color). Do they each need to be indexed?",
+    "How should we set up a Google Merchant Center feed alongside the site so prices match?",
+    "Do we need a separate URL for each currency, or can we switch currency with a cookie?",
+    "Which product URLs should go in the sitemap for a store with seasonal items?"
   ],
   "should_not_trigger": [
     "Write JSON-LD for an article.",
     "Our blog posts are not indexed.",
-    "Add a language switcher."
+    "Add a language switcher to the header.",
+    "Search Console clicks dropped after the migration.",
+    "What schema type should a recipe page use?",
+    "Should we translate our About page into Japanese?",
+    "Set up robots.txt rules for AI crawlers.",
+    "How do I format a price in yen with next-intl?"
   ]
 }

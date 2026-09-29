@@ -25,14 +25,23 @@
     }
   ],
   "should_trigger": [
-    "Plan the SEO for a new blog with author pages.",
-    "How should I write titles and headings for the pricing page?",
-    "We want 500 city landing pages. Good idea?",
-    "How do we refresh old articles safely?"
+    "Plan the SEO for a new company blog with author pages and categories.",
+    "How should I write titles and headings for the pricing page of our SaaS?",
+    "Marketing wants 500 city landing pages generated from a template. Good idea?",
+    "How do we refresh our 40 oldest blog posts safely? Someone suggested just bumping the dates.",
+    "Our docs site has no internal links between guides. How should we link them?",
+    "Should our changelog entries be indexable, and how should they be structured?",
+    "How do I decide whether two blog posts target the same search intent and should be merged?",
+    "We run a local plumbing business with three service areas. How do we structure the pages?"
   ],
   "should_not_trigger": [
     "Product pages are not indexed.",
-    "Add BlogPosting JSON-LD.",
-    "Check GA4 sessions for the blog."
+    "Add BlogPosting JSON-LD to the article template.",
+    "Check GA4 sessions for the blog.",
+    "Which hreflang tags do the translated posts need?",
+    "Discontinued product pages return 200. What should they do?",
+    "Block ClaudeBot in robots.txt.",
+    "Why does /blog/[slug] show the wrong canonical?",
+    "Add a plural message to the dictionary."
   ]
 }

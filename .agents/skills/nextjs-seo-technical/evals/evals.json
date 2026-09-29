@@ -40,16 +40,25 @@
     }
   ],
   "should_trigger": [
-    "Our /es page is not showing up on Google. Fix it.",
-    "Why does this page return 200 for a deleted product?",
-    "Check robots.ts and the sitemap before we launch.",
-    "We are moving from example.com to example.org. What breaks?",
-    "Is generateMetadata setting the canonical correctly?"
+    "Search Console says our /pricing page is 'Crawled - currently not indexed' and it has been like that for a month. What do I check?",
+    "Google keeps showing the www version of our homepage even though we canonicalize to the bare domain. Why?",
+    "We deleted about 300 old product pages and Search Console now lists them as soft 404s. What should they return?",
+    "Before launch on Friday, run through everything that could stop this site from being indexed: robots, sitemap, canonicals, status codes.",
+    "We are moving from example.com to example.org next month. Plan the redirects and what to monitor.",
+    "Is generateMetadata setting the canonical correctly on the /blog/[slug] route? View source shows a trailing slash difference.",
+    "Why does /es/nothing return 200 with a not found page instead of 404?",
+    "Our sitemap.xml lists URLs that redirect. Should I clean it up and how do I find them all?",
+    "Someone added a noindex header in the CDN and now half the site dropped out. How do I confirm which URLs are affected?",
+    "LCP on our product pages is 4.8 seconds in the field data. Where do I start?"
   ],
   "should_not_trigger": [
-    "Which hreflang value should Spanish for Mexico use?",
-    "Add FAQ schema to our product pages.",
+    "What hreflang value should Spanish for Mexico use?",
+    "Add FAQ schema to our product pages so we get rich results.",
     "Organic traffic dropped 40 percent last month. Why?",
-    "Add a German locale."
+    "Add a German locale to the app and translate the dictionary.",
+    "How do I write a blog post that ranks for 'best running shoes'?",
+    "Should we add an llms.txt file so ChatGPT cites us?",
+    "Which products in our catalog should be indexable and which faceted URLs should not?",
+    "Set up GA4 with consent mode for our site."
   ]
 }

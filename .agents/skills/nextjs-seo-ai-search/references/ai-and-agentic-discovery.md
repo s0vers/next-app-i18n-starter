@@ -2,8 +2,6 @@
 
 Use when a request mentions AI Overviews, AI Mode, ChatGPT search, Claude, Perplexity, Copilot, answer engines, model crawlers, `llms.txt`, "GEO" or "AEO", or agents that browse and buy. These are separate systems. Name the product and the outcome before changing anything.
 
-Evidence tags: see evidence and reporting (`nextjs-seo-technical`).
-
 Crawler tokens, policies, and `robots.ts` sketches are in [AI crawler reference](ai-crawler-reference.md).
 
 ## Fundamentals first

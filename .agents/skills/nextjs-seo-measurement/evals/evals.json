@@ -17,12 +17,22 @@
   ],
   "should_trigger": [
     "Organic traffic to our Arabic pages dropped 40 percent last month. Why?",
-    "Set up Search Console and GA4 for a multilingual site.",
-    "Our German locale gets zero impressions."
+    "Set up Search Console and GA4 properly for a multilingual site with locale prefixes.",
+    "Our German locale gets zero impressions in Search Console. Where do I start?",
+    "Clicks in Search Console and sessions in GA4 do not match. Which one is right?",
+    "How do I see performance for only the /ja pages when English has no prefix?",
+    "Impressions fell overnight on the 12th. Was it a Google update or our site?",
+    "Which Core Web Vitals report should I look at, field data or lab?",
+    "Can I see referrals from ChatGPT in our analytics?"
   ],
   "should_not_trigger": [
     "Fix the canonical on /de.",
-    "Add product markup.",
-    "Do we show up in ChatGPT?"
+    "Add product markup to the item page.",
+    "Do we show up when people ask ChatGPT for the best i18n starter?",
+    "Add a new locale with a plural message.",
+    "Why does the sitemap contain URLs that redirect?",
+    "Write a title tag for the pricing page.",
+    "Should we allow PerplexityBot in robots.txt?",
+    "Speed up the LCP image on the homepage."
   ]
 }

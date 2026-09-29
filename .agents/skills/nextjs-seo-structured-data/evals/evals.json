@@ -14,12 +14,22 @@
   ],
   "should_trigger": [
     "Add FAQ schema to our product pages so we get rich results.",
-    "Which JSON-LD type fits a blog post?",
-    "Our Product markup shows a warning in the Rich Results Test."
+    "Which JSON-LD type fits a blog post with an author and a publish date?",
+    "The Rich Results Test says my Product markup is missing an 'offers' field. What do I add?",
+    "Can you add Organization markup with our logo and social links to the homepage layout?",
+    "Is it okay to put the JSON-LD in a client component, or does it need to be on the server?",
+    "Google stopped showing our FAQ dropdowns in search. Did we break something?",
+    "How do I include the price and availability in JSON-LD when they come from an API?",
+    "Which schema types does Google still show rich results for this year?"
   ],
   "should_not_trigger": [
     "Set the canonical URL on the pricing page.",
-    "Which products should be indexed?",
-    "How do I write a blog post that ranks?"
+    "Which products should be indexed and which shouldn't?",
+    "How do I write a blog post that ranks?",
+    "Our sitemap has redirecting URLs. Clean it up.",
+    "Explain how hreflang works for a bilingual site.",
+    "Check GA4 sessions for the blog over the last 28 days.",
+    "Block GPTBot but allow OAI-SearchBot in robots.txt.",
+    "Why is the homepage title showing a different language in Google?"
   ]
 }

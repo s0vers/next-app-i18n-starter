@@ -2,8 +2,6 @@
 
 Use when adding, changing, or auditing JSON-LD, or when someone asks for "schema", rich results, or a search feature. Markup describes visible content. It does not rank a page and does not guarantee a rich result. Google says AI Overviews and AI Mode need no special markup. [doc]
 
-Evidence tags: see evidence and reporting (`nextjs-seo-technical`).
-
 ## Rules
 
 1. Every value in the markup is visible on the page or derives from the same data as the visible value. Hidden or mismatched markup breaks Google's structured data policy. [doc]

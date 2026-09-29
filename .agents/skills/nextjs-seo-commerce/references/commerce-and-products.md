@@ -2,8 +2,6 @@
 
 Use when a task involves a store, catalog, category, product page, variants, prices, stock, reviews, a product feed, comparison content, or AI shopping surfaces. Field-level markup rules live in structured data (`nextjs-seo-structured-data`). This page decides which pages to build, index, and mark up.
 
-Evidence tags: see evidence and reporting (`nextjs-seo-technical`).
-
 ## Gate: what does the business do
 
 The answer picks the eligible features. Ask before proposing anything.
