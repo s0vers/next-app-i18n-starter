@@ -152,7 +152,7 @@ Request
 - `src/components/LanguageSwitcher.tsx`: locale changes through `router.replace(pathname, { locale })`
 - `src/components/ModeToggle.tsx`: light/dark toggle via `useTheme()`
 - `src/components/theme-provider.tsx`: client theme context and cookie updates
-- `src/components/OmmitRlt.tsx`: forces left-to-right text in RTL locales; the filename is retained for compatibility
+- `src/components/OmitRtl.tsx`: forces left-to-right text in RTL locales
 - `src/components/ui/*`: shadcn/ui primitives (button, card, tabs, dropdown-menu)
 
 ### Lib
@@ -286,7 +286,7 @@ Cookie name: `theme` (see `src/lib/theme.ts`).
 Arabic (`ar`) sets `dir="rtl"` on `<html>`. Code blocks, terminal commands, and formatted numbers should stay LTR:
 
 ```tsx
-import OmitRTL from "@/components/OmmitRlt";
+import OmitRTL from "@/components/OmitRtl";
 <OmitRTL omitRTL>{children}</OmitRTL>
 ```
 

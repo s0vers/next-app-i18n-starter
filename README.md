@@ -124,17 +124,20 @@ next-app-i18n-starter/
 │   │   │   ├── layout.tsx          # Metadata, theme SSR, providers
 │   │   │   ├── page.tsx            # Home + JSON-LD structured data
 │   │   │   ├── not-found.tsx       # Localized 404
+│   │   │   ├── error.tsx           # Localized error boundary
 │   │   │   └── [...rest]/          # Catch-all → not-found
+│   │   ├── global-error.tsx        # Last-resort error page (replaces the root layout)
 │   │   ├── globals.css             # Tailwind + CSS variables
 │   │   ├── favicon.ico             # Site icon
 │   │   ├── robots.ts               # Dynamic robots.txt
 │   │   └── sitemap.ts              # Sitemap with hreflang alternates
 │   ├── components/
-│   │   ├── pages/HomeIndex.tsx     # Landing page (hero + tabs)
+│   │   ├── pages/HomeIndex.tsx     # Landing page (hero + tabs), a Server Component
+│   │   ├── CopyableCode.tsx        # Copy button, the page's client island
 │   │   ├── LocalizationTab.tsx     # Locale formatting demo
 │   │   ├── LanguageSwitcher.tsx    # Locale dropdown
 │   │   ├── ModeToggle.tsx          # Light/dark toggle
-│   │   ├── OmmitRlt.tsx            # OmitRTL utility
+│   │   ├── OmitRtl.tsx             # Forces LTR inside RTL pages
 │   │   ├── theme-provider.tsx      # Client theme context
 │   │   └── ui/                     # shadcn/ui primitives
 │   ├── i18n/
@@ -150,6 +153,8 @@ next-app-i18n-starter/
 │   └── proxy.ts                    # next-intl proxy (Next.js 16)
 ├── .agents/skills/                 # next-intl and SEO skills: playbooks, scripts, evals
 ├── AGENTS.md                       # Shared instructions for coding assistants
+├── CONTRIBUTING.md                 # How to set up and send a change
+├── SECURITY.md                     # How to report a vulnerability
 ├── GUIDE.md                        # Ten minute tour of how i18n works here
 ├── .env.example
 ├── global.d.ts                     # next-intl AppConfig types
@@ -461,7 +466,7 @@ Arabic sets `dir="rtl"` on `<html>`. Some content (code, terminal commands, logo
 Wrap those elements with `OmitRTL`:
 
 ```tsx
-import OmitRTL from "@/components/OmmitRlt";
+import OmitRTL from "@/components/OmitRtl";
 
 function CodeBlock({ code }: { code: string }) {
   return (
@@ -472,7 +477,7 @@ function CodeBlock({ code }: { code: string }) {
 }
 ```
 
-The file is named `OmmitRlt.tsx` for compatibility with existing imports; import its default export as `OmitRTL`.
+Import the default export from `@/components/OmitRtl`. The examples name it `OmitRTL`.
 
 ---
 
@@ -659,12 +664,12 @@ The root layout sets semantic HTML attributes on `<html>`:
 ```tsx
 <html
   lang={localeConfig[locale].languageTag} // e.g. "ar-SA", "zh-Hans-CN"
-  dir={isArabic ? "rtl" : "ltr"}  // text direction for the whole document
+  dir={localeConfig[locale].dir}   // "rtl" or "ltr", set per locale in locales.ts
   className={initialTheme}
 >
 ```
 
-`localeConfig` maps route keys to BCP 47 language tags and Open Graph locale tags. For example, the `/zh` route is marked `zh-Hans-CN` because its content and regional formats target Simplified Chinese in mainland China. `dir="rtl"` sets Arabic reading and layout direction. Search engines primarily determine page language from visible content, so translate the page itself as well as its metadata.
+`localeConfig` maps route keys to BCP 47 language tags and Open Graph locale tags. For example, the `/zh` route is marked `zh-Hans-CN` because its content and regional formats target Simplified Chinese in mainland China. `dir` comes from the same registry, so a new right-to-left locale needs one field, not a code change. Search engines primarily determine page language from visible content, so translate the page itself as well as its metadata.
 
 `generateStaticParams` enumerates the supported locale routes. The layout reads a theme cookie, so the homepage is rendered per request:
 
@@ -895,7 +900,7 @@ curl -s http://localhost:3000 | grep -E '<title>|<meta|<link rel="canonical"|<li
 
 ```bash
 curl -s http://localhost:3000/ar | grep '<html'
-# Should show: <html lang="ar" dir="rtl" ...>
+# Should show: <html lang="ar-SA" dir="rtl" ...>
 
 curl -s http://localhost:3000/ja | grep '<title>'
 # Should show Japanese title from dictionary/ja.json Metadata
@@ -943,7 +948,7 @@ Works on [Vercel](https://vercel.com) out of the box.
 3. Set `NEXT_PUBLIC_SITE_URL` to `https://next-app-i18n-starter.vercel.app` for this project; forks must use their own production origin
 4. Deploy
 
-The proxy (`src/proxy.ts`) runs automatically on Vercel's edge. No extra configuration needed for i18n routing.
+The proxy (`src/proxy.ts`) runs on the Node.js runtime, which is the Next.js 16 default. No extra configuration is needed for i18n routing.
 
 For other hosts, configure:
 
@@ -957,13 +962,14 @@ For other hosts, configure:
 
 ```bash
 bun run dev    # Start the development server (Turbopack)
-bun run build  # Build for production and check types
+bun run build  # Build for production
 bun run start  # Start the production server
 bun run lint   # Run ESLint
-bun run check  # ESLint, locale registry and message parity, and skills structure
+bun run typecheck  # Run the TypeScript compiler without emitting
+bun run check  # ESLint, types, locale registry and message parity, and skills structure
 ```
 
-GitHub Actions runs lint, `bun run i18n:check`, `bun run skills:check`, the build, and `node .agents/skills/nextjs-seo-technical/scripts/verify-seo.mjs` against the production build on every push and pull request. A second workflow opens a monthly issue listing skill references whose sources are older than 90 days and any drift from the latest `next` and `next-intl`. In a fork, set `NEXT_PUBLIC_SITE_URL` in `.github/workflows/ci.yml` to your own HTTPS origin.
+GitHub Actions runs lint, the typecheck, `bun run i18n:check`, `bun run skills:check`, the build, and `node .agents/skills/nextjs-seo-technical/scripts/verify-seo.mjs` against the production build on every push and pull request. A second workflow opens a monthly issue listing skill references whose sources are older than 90 days and any drift from the latest `next` and `next-intl`. In a fork, set `NEXT_PUBLIC_SITE_URL` in `.github/workflows/ci.yml` to your own HTTPS origin.
 
 ---
 

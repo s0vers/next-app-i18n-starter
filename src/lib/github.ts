@@ -7,6 +7,8 @@ export async function getGithubStarCount(): Promise<number | null> {
   try {
     const response = await fetch(`https://api.github.com/repos/${REPO_PATH}`, {
       next: { revalidate: 3600 },
+      // A slow GitHub response must not hold up the page render.
+      signal: AbortSignal.timeout(3000),
       headers: { Accept: "application/vnd.github+json" },
     });
 

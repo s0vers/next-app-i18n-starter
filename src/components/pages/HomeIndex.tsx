@@ -9,7 +9,7 @@ import CopyableCode from "../CopyableCode";
 import LanguageSwitcher from "../LanguageSwitcher";
 import LocalizationTab from "../LocalizationTab";
 import { ModeToggle } from "../ModeToggle";
-import OmitRTL from "../OmmitRlt";
+import OmitRTL from "../OmitRtl";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
@@ -31,7 +31,7 @@ const CODE_EXAMPLES = {
   branch: "git checkout -b feature/your-feature",
   commit: "git commit -am 'Add some feature'",
   push: "git push origin feature/your-feature",
-  omitRTLExample: `import OmitRTL from '@/components/OmmitRlt';
+  omitRTLExample: `import OmitRTL from '@/components/OmitRtl';
 
 function MyComponent() {
   return (
