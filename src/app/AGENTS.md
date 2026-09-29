@@ -11,4 +11,4 @@ The repository-level `AGENTS.md` applies here too.
 - Add every indexable localized page variant to `src/app/sitemap.ts`, and give each translation a matching canonical and reciprocal alternate map. Include only locale variants that actually exist. Include `lastModified` only when an actual content timestamp is available.
 - Keep `robots.ts` aligned with the deployment's crawler policy and sitemap origin. App rules do not override hosting, CDN, firewall, or authentication restrictions.
 - Render JSON-LD in a Server Component, match it to visible content, and serialize safely with `JSON.stringify(data).replace(/</g, "\\u003c")`.
-- Update `README.md` when changing route or SEO conventions. See its SEO section and the `nextjs-seo-*` skills in `.agents/skills/` before changing the shared SEO design.
+- Update `README.md` when changing route or SEO conventions. See `SEO.md` and the `nextjs-seo-*` skills in `.agents/skills/` before changing the shared SEO design.
