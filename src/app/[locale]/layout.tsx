@@ -1,4 +1,4 @@
-import { DirectionProvider } from "@radix-ui/react-direction";
+import { DirectionProvider } from "@base-ui/react/direction-provider";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
@@ -63,8 +63,8 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${useGeist ? "font-sans [font-synthesis:none]" : ""} antialiased`}
       >
         <ThemeProvider initialTheme={initialTheme}>
-          {/* Radix menus and tabs read direction from here, not from the DOM. */}
-          <DirectionProvider dir={localeConfig[locale].dir}>
+          {/* Base UI menus and tabs read direction from here, not from the DOM. */}
+          <DirectionProvider direction={localeConfig[locale].dir}>
             {/* Inherits the locale, messages, time zone, and formats from src/i18n/request.ts */}
             <NextIntlClientProvider>
               <div className="flex min-h-dvh flex-col">

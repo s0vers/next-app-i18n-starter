@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 
 export default async function NotFound() {
   const t = await getTranslations("NotFound");
@@ -13,9 +13,10 @@ export default async function NotFound() {
       <p className="mb-8 max-w-prose text-lg leading-relaxed text-pretty text-muted-foreground">
         {t("description")}
       </p>
-      <Button asChild>
-        <Link href="/">{t("homeLink")}</Link>
-      </Button>
+      {/* A real link styled as a button keeps its link role. */}
+      <Link href="/" className={buttonVariants()}>
+        {t("homeLink")}
+      </Link>
     </div>
   );
 }

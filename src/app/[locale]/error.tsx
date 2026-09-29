@@ -3,7 +3,7 @@
 import { ServerCrash } from "lucide-react";
 import { useEffect } from "react";
 
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 
@@ -33,9 +33,10 @@ export default function Error({
         <Button onClick={() => retry()} variant="default">
           {t("tryAgain")}
         </Button>
-        <Button variant="outline" asChild>
-          <Link href="/">{t("returnHome")}</Link>
-        </Button>
+        {/* A real link styled as a button keeps its link role. */}
+        <Link href="/" className={buttonVariants({ variant: "outline" })}>
+          {t("returnHome")}
+        </Link>
       </div>
     </div>
   );
