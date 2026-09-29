@@ -43,3 +43,9 @@ next-env.d.ts
 
 # internal research notes, not part of the template
 /docs/
+
+# bun.lock is the only lockfile
+/pnpm-lock.yaml
+/pnpm-workspace.yaml
+/package-lock.json
+/yarn.lock

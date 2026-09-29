@@ -20,11 +20,13 @@ jobs:
       # Safe example origin from .env.example. Forks: use your own HTTPS origin.
       NEXT_PUBLIC_SITE_URL: https://next-app-i18n-starter.vercel.app
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: package.json
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
 
@@ -36,6 +38,9 @@ jobs:
 
       - name: Locale registry and message parity
         run: bun run i18n:check
+
+      - name: Typecheck
+        run: bun run typecheck
 
       - name: Skills structure
         run: bun run skills:check

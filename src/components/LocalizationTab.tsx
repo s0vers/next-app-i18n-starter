@@ -8,7 +8,7 @@ import {
   useTimeZone,
   useTranslations,
 } from "next-intl";
-import OmitRTL from "./OmmitRlt";
+import OmitRTL from "./OmitRtl";
 
 const LICENSE_PRICE = 29.99;
 const SUBSCRIPTION_PRICE = 9.99;
