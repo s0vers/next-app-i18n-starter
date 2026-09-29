@@ -29,7 +29,7 @@ A stale `NEXT_LOCALE` cookie does not redirect `/` while detection is off. A vis
 
 The proxy adds an HTTP `Link` header with `hreflang` alternates for every route unless `alternateLinks: false`. It builds them from route keys (`en`, `ar`, `zh`), and page metadata builds a second set in HTML from language tags (`en-US`, `ar-SA`, `zh-Hans-CN`). Two sources with two vocabularies contradict each other, and the header announces alternates for pages that have no translation. Before 2026-09-30 this template shipped exactly that.
 
-Decide once who owns alternates. In this template page metadata and the sitemap own them, so `routing.ts` sets `alternateLinks: false`. Confirm with `curl -I` that no `hreflang` remains in `Link`. Read [international SEO](../../nextjs-i18n-seo/references/international-seo.md) for the tag vocabulary.
+Decide once who owns alternates. In this template page metadata and the sitemap own them, so `routing.ts` sets `alternateLinks: false`. Confirm with `curl -I` that no `hreflang` remains in `Link`. Use the `nextjs-seo-international` skill for the tag vocabulary.
 
 ## The proxy
 

@@ -22,9 +22,9 @@ Without production access, audit the repository and local output, then list the 
 
 1. Inventory. List indexable routes by template and locale. Compare routes, sitemap entries, canonical targets, and key internal links.
 2. Technical sample. For representative URLs record status, redirects, crawl access, rendered HTML, `noindex`, canonical, title, language, and structured data. Widen the sample when templates or locales differ. `scripts/verify-seo.mjs` covers this.
-3. Content sample. Each page has a distinct purpose, accurate metadata, useful main content, and sensible links. See [content and on-page](content-and-onpage.md).
-4. International sample. Body language, `<html lang>` and `dir`, canonicals, reciprocal alternates, switcher behavior, and sitemap output for every locale. See [international SEO](international-seo.md).
-5. Platform data. Search Console and Bing for indexing state, selected canonical, queries, pages, countries. Compare equal periods and segments. Rule out an analytics change before blaming search. See [measurement](measurement.md).
+3. Content sample. Each page has a distinct purpose, accurate metadata, useful main content, and sensible links. See content and on-page (`nextjs-seo-content`).
+4. International sample. Body language, `<html lang>` and `dir`, canonicals, reciprocal alternates, switcher behavior, and sitemap output for every locale. See international SEO (`nextjs-seo-international`).
+5. Platform data. Search Console and Bing for indexing state, selected canonical, queries, pages, countries. Compare equal periods and segments. Rule out an analytics change before blaming search. See measurement (`nextjs-seo-measurement`).
 6. Experience. Field data and device behavior. A Lighthouse score alone is not a ranking report.
 7. Prioritize. Group symptoms by root cause and affected template. Rate impact, URLs affected, confidence, and cost. Separate blockers from enhancements and owner-only tasks.
 
@@ -43,7 +43,7 @@ Every line is a check with an observable result. Tick nothing without running it
 - The property is verified in Search Console and Bing, the sitemap is submitted, and warnings and exclusions are recorded.
 - Internal links, the 404 page, mobile layout, analytics collection, and the real conversion path work. Commerce: sample variants, offers, and feeds. Publishing: sample dates and pagination.
 - A baseline of indexed pages, impressions, clicks, conversions, and performance is saved when the old site has data.
-- The crawler policy for training, search, and user-fetch is written down. See [AI crawler reference](ai-crawler-reference.md).
+- The crawler policy for training, search, and user-fetch is written down. See AI crawler reference (`nextjs-seo-ai-search`).
 
 ## Migration
 

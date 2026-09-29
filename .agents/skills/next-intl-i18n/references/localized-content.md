@@ -46,7 +46,7 @@ Is the item useful to this locale's readers as written?
 Draft machine output is `draft` status until a fluent reviewer signs off.
 ```
 
-Publishing bulk unreviewed machine translation is a search-quality risk as well as a quality one. See [international SEO](../../nextjs-i18n-seo/references/international-seo.md).
+Publishing bulk unreviewed machine translation is a search-quality risk as well as a quality one. See the `nextjs-seo-international` skill.
 
 ## Keep caches honest
 
@@ -62,7 +62,7 @@ Do these in one change. Skipping one leaves a locale that half works.
 4. Fonts: decide system or web font. Measure the payload if web.
 5. `routing.ts` needs no change because it reads `locales`. The sitemap and the switcher iterate `routing.locales`, so they pick the locale up.
 6. Metadata and the SEO guide copy: translate the `Metadata` and `SeoGuide` namespaces, since search results show them.
-7. Tag choice: decide whether the locale targets a language or a country. Follow [international SEO](../../nextjs-i18n-seo/references/international-seo.md#choose-the-tag). Propose a tag, default to language-only (`de`), and flag it as an owner decision in the report. Never present a region tag as settled.
+7. Tag choice: decide whether the locale targets a language or a country. Follow the tag guidance in the `nextjs-seo-international` skill. Propose a tag, default to language-only (`de`), and flag it as an owner decision in the report. Never present a region tag as settled.
 8. Documentation: update the README locale tables and file tree, `public/llms.txt`, the dictionary list in `dictionary/AGENTS.md`, and the language names inside `Metadata.description` and `SeoGuide` in every dictionary.
 9. Verify per [Verification](verification.md): direct load, switcher both ways, `lang` and `dir`, formatting, sitemap entry, alternates.
 

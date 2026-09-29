@@ -162,7 +162,7 @@ next-app-i18n-starter/
 
 ## Skills for coding assistants
 
-This repository ships two skills in `.agents/skills/`. They guide work on this starter and on forks. Each skill is a short router (`SKILL.md`) that sends the agent to playbooks in `references/`, and the agent loads only the playbooks the task needs. The playbooks cover products, blogs, and GA4, which the starter itself does not include.
+This repository ships eight skills in `.agents/skills/`: one for next-intl and seven for SEO. They guide work on this starter and on forks. Each skill is a short `SKILL.md` that sends the agent to playbooks in its own `references/` folder, and the agent loads only what the task needs. A skill installed on its own carries everything it needs, and the SEO skills name each other instead of linking. The playbooks cover products, blogs, and GA4, which the starter itself does not include.
 
 ### next-intl-i18n
 
@@ -184,31 +184,25 @@ Validate the locale registry (route keys, language tags, currency, time zone, di
 bun run i18n:check
 ```
 
-### nextjs-i18n-seo
+### The SEO skills
 
-Search discovery for multilingual sites: international, technical, commerce, editorial, other site types, structured data, measurement, and AI search. Every playbook dates its sources and tags each claim as documented, standard, study, practice, or unverified.
+Search work is split into seven skills, so an agent loads only the one a task needs. Each has a narrow description that names what it is not for, and each keeps its playbooks in its own `references/` folder. Every playbook dates its sources and tags each claim as documented, standard, study, practice, or unverified.
 
-| Playbook | Covers |
+| Skill | Use it for |
 | --- | --- |
-| [Technical SEO](.agents/skills/nextjs-i18n-seo/references/technical-seo.md) | Indexing diagnosis, status codes, robots, sitemap, Next.js metadata |
-| [International SEO](.agents/skills/nextjs-i18n-seo/references/international-seo.md) | `hreflang`, tags, URL structure, partial translation, other engines, locale notes |
-| [Structured data](.agents/skills/nextjs-i18n-seo/references/structured-data.md) | Type chooser, supported and removed features, product fields, JSON-LD pattern |
-| [Commerce and products](.agents/skills/nextjs-i18n-seo/references/commerce-and-products.md) | Index rules, facets, stock states, currency markets, feeds, AI shopping |
-| [Editorial and publishing](.agents/skills/nextjs-i18n-seo/references/editorial-and-publishing.md) | Article gate, archives, news, syndication, refresh, content model |
-| [Content and on-page](.agents/skills/nextjs-i18n-seo/references/content-and-onpage.md) | Search intent, page elements, internal links, scaled content |
-| [Site types](.agents/skills/nextjs-i18n-seo/references/site-types-and-search-features.md) | SaaS, docs, marketplace, local, jobs, video, forums, and more |
-| [Measurement](.agents/skills/nextjs-i18n-seo/references/measurement.md) | Search Console, GA4, Bing, Core Web Vitals, drop diagnosis |
-| [AI and agentic discovery](.agents/skills/nextjs-i18n-seo/references/ai-and-agentic-discovery.md) | AI Overviews, ChatGPT, Claude, Perplexity, Copilot, agents, what has evidence |
-| [AI crawler reference](.agents/skills/nextjs-i18n-seo/references/ai-crawler-reference.md) | Crawler tokens, policy options, `robots.ts` sketch |
-| [Audits, launches, migrations](.agents/skills/nextjs-i18n-seo/references/audits-launches-migrations.md) | Audit layers, launch gate, migration, adding or removing a locale |
-| [Evidence and reporting](.agents/skills/nextjs-i18n-seo/references/evidence-and-reporting.md) | Evidence tags, how far a claim got, verdicts, report shape, unattended runs |
-| [This template](.agents/skills/nextjs-i18n-seo/references/template-notes.md) | Helpers, routing flags, and defaults in this starter |
+| [nextjs-seo-technical](.agents/skills/nextjs-seo-technical/SKILL.md) | Pages that are not indexed, robots, sitemap, canonicals, redirects, metadata, audits, launch checks, migrations. Holds `verify-seo.mjs` |
+| [nextjs-seo-international](.agents/skills/nextjs-seo-international/SKILL.md) | `hreflang`, language tags, locale URLs, partial translation, the switcher, market launches, this starter's helpers |
+| [nextjs-seo-structured-data](.agents/skills/nextjs-seo-structured-data/SKILL.md) | JSON-LD, rich results, Product and Offer fields, removed features |
+| [nextjs-seo-commerce](.agents/skills/nextjs-seo-commerce/SKILL.md) | Store URLs, facets, variants, stock states, currency markets, feeds |
+| [nextjs-seo-content](.agents/skills/nextjs-seo-content/SKILL.md) | Blogs, articles, page copy, internal links, SaaS, docs, local, and other page types |
+| [nextjs-seo-measurement](.agents/skills/nextjs-seo-measurement/SKILL.md) | Search Console, GA4, Bing, traffic-drop diagnosis |
+| [nextjs-seo-ai-search](.agents/skills/nextjs-seo-ai-search/SKILL.md) | AI Overviews, ChatGPT, Claude, Perplexity, AI crawler policy, `llms.txt` |
 
 Check hreflang reciprocity, canonicals, `lang`, JSON-LD, sitemap agreement, and language redirects on a running site:
 
 ```bash
 bun run dev
-node .agents/skills/nextjs-i18n-seo/scripts/verify-seo.mjs --base http://localhost:3000
+bun run seo:verify -- --base http://localhost:3000
 ```
 
 For a production build served locally, add `--origin https://your-domain.example` so canonicals compare against the public origin. The script proves local implementation only. Indexing and canonical selection need Search Console.
@@ -816,7 +810,7 @@ The legacy static verification file `public/google52d37058772b10e6.html` remains
 
 AI search services need access to pages they can crawl and index. Put useful content in server-rendered HTML, use descriptive headings and internal links, and check crawler access in `robots.txt`, hosting rules, and any CDN configuration. These practices also support conventional search. Google does not require special AI schema and says `llms.txt` is not a Google Search ranking signal. This repository keeps `public/llms.txt` as an optional project reference for tools that read it.
 
-The current `robots.ts` allows all user agents. Search discovery and model-training crawlers have different purposes, and site owners should choose those policies explicitly. For example, OpenAI distinguishes `OAI-SearchBot` from `GPTBot`; Anthropic distinguishes `Claude-SearchBot` from `ClaudeBot`; Perplexity distinguishes `PerplexityBot` from its user-request fetcher. Review each provider's current documentation before setting rules: [OpenAI](https://developers.openai.com/api/docs/bots), [Anthropic](https://support.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler), and [Perplexity](https://docs.perplexity.ai/docs/resources/perplexity-crawlers). This starter does not impose a model-training policy for a fork. The SEO skill's [AI crawler reference](.agents/skills/nextjs-i18n-seo/references/ai-crawler-reference.md) lists current crawler tokens and three policy options, and its [AI discovery playbook](.agents/skills/nextjs-i18n-seo/references/ai-and-agentic-discovery.md) separates the documented controls from unsupported tactics.
+The current `robots.ts` allows all user agents. Search discovery and model-training crawlers have different purposes, and site owners should choose those policies explicitly. For example, OpenAI distinguishes `OAI-SearchBot` from `GPTBot`; Anthropic distinguishes `Claude-SearchBot` from `ClaudeBot`; Perplexity distinguishes `PerplexityBot` from its user-request fetcher. Review each provider's current documentation before setting rules: [OpenAI](https://developers.openai.com/api/docs/bots), [Anthropic](https://support.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler), and [Perplexity](https://docs.perplexity.ai/docs/resources/perplexity-crawlers). This starter does not impose a model-training policy for a fork. The [AI crawler reference](.agents/skills/nextjs-seo-ai-search/references/ai-crawler-reference.md) lists current crawler tokens and three policy options, and its [AI discovery playbook](.agents/skills/nextjs-seo-ai-search/references/ai-and-agentic-discovery.md) separates the documented controls from unsupported tactics.
 
 Locale routing keeps the default-language URL stable: `localeDetection` is disabled, so `/` does not redirect based on a visitor's saved locale cookie or `Accept-Language`. Visitors can choose a language through the visible switcher, and each locale keeps a directly crawlable URL. This avoids cookie-dependent content and follows Google's guidance to expose language versions at distinct URLs. Enable automatic detection only if it is an intentional product choice and verify that every locale remains directly accessible and self-canonical.
 
@@ -876,7 +870,7 @@ Add `metaTitle` and `metaDescription` keys to the `About` namespace in all dicti
 - [ ] Replace the demo site name, repository link, and author details in `src/lib/site.ts`
 - [ ] Replace `public/og-image.png` with your branded 1200×630 image
 - [ ] Set `GOOGLE_SITE_VERIFICATION` if using meta-tag verification; migrate the current static demo verification only if you control that Search Console property
-- [ ] Run the launch gate in the [SEO skill](.agents/skills/nextjs-i18n-seo/references/audits-launches-migrations.md#launch-gate) and confirm the origin, identity, and page copy for your fork
+- [ ] Run the launch gate in the [`nextjs-seo-technical` skill](.agents/skills/nextjs-seo-technical/references/audits-launches-migrations.md#launch-gate) and confirm the origin, identity, and page copy for your fork
 - [ ] Translate `Metadata` namespace in all dictionary files
 - [ ] Submit `https://your-domain.com/sitemap.xml` in Google Search Console
 - [ ] Verify hreflang with [hreflang Tags Testing Tool](https://technicalseo.com/tools/hreflang/)
@@ -969,7 +963,7 @@ bun run lint   # Run ESLint
 bun run check  # ESLint, locale registry and message parity, and skills structure
 ```
 
-GitHub Actions runs lint, `bun run i18n:check`, `bun run skills:check`, the build, and `node .agents/skills/nextjs-i18n-seo/scripts/verify-seo.mjs` against the production build on every push and pull request. A second workflow opens a monthly issue listing skill references whose sources are older than 90 days and any drift from the latest `next` and `next-intl`. In a fork, set `NEXT_PUBLIC_SITE_URL` in `.github/workflows/ci.yml` to your own HTTPS origin.
+GitHub Actions runs lint, `bun run i18n:check`, `bun run skills:check`, the build, and `node .agents/skills/nextjs-seo-technical/scripts/verify-seo.mjs` against the production build on every push and pull request. A second workflow opens a monthly issue listing skill references whose sources are older than 90 days and any drift from the latest `next` and `next-intl`. In a fork, set `NEXT_PUBLIC_SITE_URL` in `.github/workflows/ci.yml` to your own HTTPS origin.
 
 ---
 

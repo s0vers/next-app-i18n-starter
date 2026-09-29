@@ -1,0 +1,29 @@
+{
+  "skill": "nextjs-seo-commerce",
+  "note": "Run each prompt with the skill and with the previous version or no skill. Grade every assertion as pass or fail from the transcript and the resulting diff. A good assertion fails without the skill. should_trigger prompts must load this skill. should_not_trigger prompts are near misses that belong to another skill and must not load this one.",
+  "evals": [
+    {
+      "id": "product-launch",
+      "prompt": "We are launching product pages in English and Spanish, and selling in USD and EUR. What do we need to do for SEO?",
+      "assertions": [
+        "Asks or states the business model before choosing markup",
+        "Requires a distinct URL per currency and rejects a cookie or IP currency toggle",
+        "Notes the template locales are language-only and a currency market needs region locales or a market segment",
+        "Chooses Product and Offer for a direct seller and does not put Product markup on category pages",
+        "Says price and availability in JSON-LD come from the same source as the visible price",
+        "Gives an out-of-stock and discontinued policy with 404 or 410 or a real successor redirect",
+        "Does not claim rankings or rich results as outcomes"
+      ]
+    }
+  ],
+  "should_trigger": [
+    "We are launching product pages in English and Spanish, selling in USD and EUR.",
+    "Should filtered category URLs be indexable?",
+    "What do we do with a discontinued product page?"
+  ],
+  "should_not_trigger": [
+    "Write JSON-LD for an article.",
+    "Our blog posts are not indexed.",
+    "Add a language switcher."
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "skill": "nextjs-seo-international",
+  "note": "Run each prompt with the skill and with the previous version or no skill. Grade every assertion as pass or fail from the transcript and the resulting diff. A good assertion fails without the skill. should_trigger prompts must load this skill. should_not_trigger prompts are near misses that belong to another skill and must not load this one.",
+  "evals": [
+    {
+      "id": "partial-blog-translation",
+      "prompt": "We added a blog. Only some posts are translated into Japanese and Arabic. Set up the SEO for the posts.",
+      "assertions": [
+        "Emits hreflang only among posts that have a reviewed translation",
+        "Gives each translation a self-canonical and does not canonicalize to English",
+        "Refuses to create locale URLs that render the default language",
+        "Uses BlogPosting or Article JSON-LD from the same data as the visible byline and dates",
+        "Sets lastModified from the content date and never from new Date()",
+        "Does not add FAQ markup for a rich result",
+        "Reports what is verified locally and what needs Search Console"
+      ]
+    }
+  ],
+  "should_trigger": [
+    "Only half our posts are translated into Japanese. What do we emit for hreflang?",
+    "Should Spanish use es or es-MX?",
+    "Can we redirect visitors by browser language?",
+    "Is it fine to machine translate the whole site?"
+  ],
+  "should_not_trigger": [
+    "Add a message with a plural in five languages.",
+    "Why is my sitemap missing pages?",
+    "Block AI crawlers from training on the site."
+  ]
+}

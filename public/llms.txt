@@ -7,7 +7,7 @@ Repository: https://github.com/s0vers/next-app-i18n-starter. Live demo: https://
 ## Agent skills
 
 - [next-intl i18n skill](https://github.com/s0vers/next-app-i18n-starter/blob/main/.agents/skills/next-intl-i18n/SKILL.md): locale routing, request config, messages, formatting, RTL and CJK, localized content, and a message parity check script.
-- [Next.js i18n SEO skill](https://github.com/s0vers/next-app-i18n-starter/blob/main/.agents/skills/nextjs-i18n-seo/SKILL.md): international, technical, product, editorial, structured data, measurement, and AI-search playbooks, plus a script that verifies hreflang, canonicals, and sitemaps on a running site.
+- [Next.js SEO skills](https://github.com/s0vers/next-app-i18n-starter/tree/main/.agents/skills): seven focused skills (technical, international, structured data, commerce, content, measurement, AI search), plus a script in nextjs-seo-technical that verifies hreflang, canonicals, and sitemaps on a running site.
 
 ## Quick answers for common tasks
 

@@ -1,8 +1,8 @@
 # Site types and search features
 
-Use when the site is not a plain store or blog: SaaS, documentation, marketplace, local business, jobs, recipes, events, video, podcasts, apps, courses, forums, portfolio, real estate, travel, or nonprofit. For stores use [commerce](commerce-and-products.md). For articles and news use [editorial](editorial-and-publishing.md). Types and eligibility change, so open the [search gallery](https://developers.google.com/search/docs/appearance/structured-data/search-gallery) before promising a feature.
+Use when the site is not a plain store or blog: SaaS, documentation, marketplace, local business, jobs, recipes, events, video, podcasts, apps, courses, forums, portfolio, real estate, travel, or nonprofit. For stores use commerce (`nextjs-seo-commerce`). For articles and news use [editorial](editorial-and-publishing.md). Types and eligibility change, so open the [search gallery](https://developers.google.com/search/docs/appearance/structured-data/search-gallery) before promising a feature.
 
-Evidence tags: see [evidence and reporting](evidence-and-reporting.md).
+Evidence tags: see evidence and reporting (`nextjs-seo-technical`).
 
 ## Pick the row
 

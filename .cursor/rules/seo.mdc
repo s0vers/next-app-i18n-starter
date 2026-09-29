@@ -4,4 +4,4 @@ globs: src/lib/site.ts,src/app/**/layout.tsx,src/app/**/page.tsx,src/app/sitemap
 alwaysApply: false
 ---
 
-For SEO changes, follow [`.agents/skills/nextjs-i18n-seo/SKILL.md`](../../.agents/skills/nextjs-i18n-seo/SKILL.md), [`src/app/AGENTS.md`](../../src/app/AGENTS.md), [`src/lib/AGENTS.md`](../../src/lib/AGENTS.md), and the root [`AGENTS.md`](../../AGENTS.md). Shared metadata and URL helpers live in `src/lib/site.ts`.
+For SEO changes, follow the `nextjs-seo-*` skills in [`.agents/skills/`](../../.agents/skills/), [`src/app/AGENTS.md`](../../src/app/AGENTS.md), [`src/lib/AGENTS.md`](../../src/lib/AGENTS.md), and the root [`AGENTS.md`](../../AGENTS.md). Shared metadata and URL helpers live in `src/lib/site.ts`.
