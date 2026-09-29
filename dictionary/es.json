@@ -42,9 +42,18 @@
     "githubLink": "GitHub"
   },
   "Metadata": {
-    "title": "Plantilla i18n Next.js 16 - Por S0vers",
-    "description": "Kit de inicio de internacionalización para Next.js 16 con next-intl 4. Moneda, fechas y zonas horarias según el idioma. Soporte para árabe, chino, inglés, español y japonés con shadcn UI, RTL y SEO.",
-    "keywords": "Next.js 16, next-intl, i18n, internacionalización, formato local, árabe, chino, español, japonés, plantilla, shadcn UI, RTL, S0vers"
+    "title": "Plantilla i18n Next.js 16 - Por s0vers",
+    "description": "Kit de inicio de internacionalización para Next.js 16 con next-intl 4. Moneda, fechas y zonas horarias según el idioma. Soporte para árabe, chino, inglés, español y japonés con shadcn UI y RTL."
+  },
+  "SeoGuide": {
+    "title": "Prepara esta plantilla para publicarla",
+    "description": "Antes de publicar una copia, ofrece información precisa sobre tu sitio a los buscadores y a tus visitantes.",
+    "step1Title": "Configura la URL del sitio",
+    "step1Description": "Define NEXT_PUBLIC_SITE_URL con el origen HTTPS de producción. Las URL canónicas, las alternativas de idioma, el sitemap y las vistas previas sociales usan este valor.",
+    "step2Title": "Cambia la identidad de ejemplo",
+    "step2Description": "Actualiza el nombre del sitio, los datos y enlaces sociales del autor, los títulos y descripciones traducidos y la imagen Open Graph.",
+    "step3Title": "Revisa el HTML publicado",
+    "step3Description": "Tras desplegar, comprueba cada versión de idioma, sitemap.xml, robots.txt y los datos estructurados. Envía el sitemap a las herramientas para webmasters."
   },
   "Localization": {
     "title": "Formato según idioma",

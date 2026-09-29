@@ -42,9 +42,18 @@
     "githubLink": "GitHub"
   },
   "Metadata": {
-    "title": "Next.js 16 i18n テンプレート - S0vers 作",
-    "description": "Next.js 16 と next-intl 4 の国際化スターター。ロケールごとに通貨・日時・タイムゾーンを設定。アラビア語、中国語、英語、スペイン語、日本語に対応。shadcn UI、RTL、SEO 付き。",
-    "keywords": "Next.js 16, next-intl, i18n, 国際化, ロケールフォーマット, アラビア語, 中国語, スペイン語, 日本語, テンプレート, shadcn UI, RTL, S0vers"
+    "title": "Next.js 16 i18n テンプレート - s0vers 作",
+    "description": "Next.js 16 と next-intl 4 の国際化スターター。ロケールごとに通貨・日時・タイムゾーンを設定。アラビア語、中国語、英語、スペイン語、日本語に対応。shadcn UI と RTL を備えています。"
+  },
+  "SeoGuide": {
+    "title": "公開前にテンプレートを設定する",
+    "description": "テンプレートの複製を公開する前に、検索エンジンと訪問者に正確なサイト情報を伝えましょう。",
+    "step1Title": "サイト URL を設定",
+    "step1Description": "NEXT_PUBLIC_SITE_URL に本番環境の HTTPS オリジンを設定します。canonical、言語別 URL、サイトマップ、SNS プレビューに使われます。",
+    "step2Title": "テンプレートの情報を置き換える",
+    "step2Description": "サイト名、著者と SNS リンク、各言語のページタイトルと説明、プロジェクト用の Open Graph 画像を更新します。",
+    "step3Title": "公開 HTML を確認",
+    "step3Description": "デプロイ後、各言語のページ、sitemap.xml、robots.txt、構造化データを確認し、ウェブマスターツールにサイトマップを送信します。"
   },
   "Localization": {
     "title": "ロケール連動フォーマット",

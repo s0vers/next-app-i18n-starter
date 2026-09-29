@@ -2,7 +2,7 @@
 
 A multilingual Next.js starter built with **Next.js 16**, **React 19**, **next-intl 4**, and **shadcn/ui**. It includes locale-driven formatting, Arabic RTL support, cookie-based light/dark mode, and SEO metadata for every locale.
 
-**Author:** [Sovers Tonmoy Pandey](https://s0vers.com) (S0vers) · [GitHub](https://github.com/S0vers) · [@s0ver5](https://twitter.com/s0ver5)
+**Author:** [Sovers Tonmoy Pandey](https://s0vers.com) (s0vers) · [GitHub](https://github.com/s0vers) · [@s0ver5](https://twitter.com/s0ver5)
 
 **Live demo:** [next-app-i18n-starter.vercel.app](https://next-app-i18n-starter.vercel.app)
 
@@ -37,6 +37,8 @@ A multilingual Next.js starter built with **Next.js 16**, **React 19**, **next-i
   - [Open Graph and Twitter Cards](#open-graph-and-twitter-cards)
   - [Open Graph image](#open-graph-image)
   - [Google Search Console verification](#google-search-console-verification)
+  - [AI search and crawler access](#ai-search-and-crawler-access)
+  - [SEO implementation plan](#seo-implementation-plan)
   - [Adding SEO to a new page](#adding-seo-to-a-new-page)
   - [Production SEO checklist](#production-seo-checklist)
   - [Verifying SEO output](#verifying-seo-output)
@@ -79,15 +81,15 @@ A multilingual Next.js starter built with **Next.js 16**, **React 19**, **next-i
 
 ```bash
 # Clone
-git clone https://github.com/S0vers/i18n-Nextjs-BoilerPlate.git
+git clone https://github.com/s0vers/next-app-i18n-starter.git
 cd i18n-Nextjs-BoilerPlate
 
 # Install
 bun install
 
-# Optional: set production URL for local SEO preview
+# Set this project's public URL for local SEO preview (forks should replace it)
 cp .env.example .env.local
-# Edit .env.local → NEXT_PUBLIC_SITE_URL=https://your-domain.com
+# NEXT_PUBLIC_SITE_URL=https://next-app-i18n-starter.vercel.app
 
 # Run
 bun dev
@@ -95,7 +97,7 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000). Use the language switcher in the header to see translations and regional formatting update.
 
-Before deploying a fork, set `NEXT_PUBLIC_SITE_URL`, update the site and author details in `src/lib/site.ts`, replace the Open Graph image, and replace the demo site's Google verification token and file. See the [production SEO checklist](#production-seo-checklist).
+Before deploying a fork, set `NEXT_PUBLIC_SITE_URL`, update the site and author details in `src/lib/site.ts`, and replace the Open Graph image. Set `GOOGLE_SITE_VERIFICATION` if your Search Console property uses meta-tag verification. See the [production SEO checklist](#production-seo-checklist).
 
 ---
 
@@ -279,7 +281,7 @@ All strings live in `dictionary/{locale}.json`. Namespaces:
 | -------------- | ----------------------------------------------------- |
 | `Index`        | Landing page UI, tabs, installation steps             |
 | `Footer`       | Copyright, links                                      |
-| `Metadata`     | SEO title, description, keywords (`generateMetadata`) |
+| `Metadata`     | Localized SEO title and description (`generateMetadata`) |
 | `Localization` | Formatting demo tab labels                            |
 | `NotFound`     | Localized 404 page                                    |
 
@@ -451,7 +453,7 @@ The SEO setup uses the Next.js Metadata API, next-intl URL helpers, JSON-LD stru
   (head tags)         (structured data)
          │
          ▼
-  dictionary/{locale}/Metadata  ←  translated title, description, keywords
+  dictionary/{locale}/Metadata  ←  translated title and description
          │
          ▼
   getPathname({ locale, href })  ←  correct URLs per locale (as-needed)
@@ -465,10 +467,10 @@ The SEO setup uses the Next.js Metadata API, next-intl URL helpers, JSON-LD stru
 | `src/lib/site.ts`             | Site name, canonical base URL, author info, URL helpers                 |
 | `src/i18n/locales.ts`         | Locale settings, including fonts and Open Graph locale tags            |
 | `src/app/[locale]/layout.tsx` | `generateMetadata` — all `<head>` meta tags per locale                  |
-| `src/app/[locale]/page.tsx`   | JSON-LD `WebSite` + `Person` schemas on home page                       |
+| `src/app/[locale]/page.tsx`   | Root homepage `WebSite` JSON-LD and localized launch guide               |
 | `src/app/sitemap.ts`          | `/sitemap.xml` with hreflang language alternates                        |
 | `src/app/robots.ts`           | `/robots.txt` with sitemap reference                                    |
-| `dictionary/*/Metadata`       | Locale-specific `title`, `description`, `keywords`                      |
+| `dictionary/*/Metadata`       | Locale-specific `title` and `description`                                 |
 | `public/og-image.png`         | Social sharing preview image (1200×630)                                 |
 | `public/llms.txt`             | Machine-readable project reference                                      |
 
@@ -479,48 +481,38 @@ Shared site identity and the URL used by SEO helpers live in `src/lib/site.ts`:
 
 ```ts
 export const siteConfig = {
-  name: "Next.js i18n Starter",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://next-app-i18n-starter.vercel.app",
-  github: "https://github.com/S0vers/i18n-Nextjs-BoilerPlate",
+  name: "Next.js 16 i18n Starter",
+  url: getSiteOrigin(), // local default: http://localhost:3000; production requires NEXT_PUBLIC_SITE_URL
+  github: "https://github.com/s0vers/next-app-i18n-starter",
   author: {
     name: "Sovers Tonmoy Pandey",
-    alias: "S0vers",
-    url: "https://s0vers.com",
+    alias: "s0vers",
+    url: "https://s0vers.com/",
     twitter: "@s0ver5",
-    github: "https://github.com/S0vers",
+    github: "https://github.com/s0vers",
   },
+  googleSiteVerification: process.env.GOOGLE_SITE_VERIFICATION,
 } as const;
 
 ```
 
-Set `NEXT_PUBLIC_SITE_URL` in production so `metadataBase`, canonical URLs, sitemap entries, and OG absolute URLs all resolve to your real domain. Also replace the demo author's details in this file, translated metadata in `dictionary/*.json`, and the Search Console verification in `layout.tsx`.
+In local development, the URL defaults to `http://localhost:3000`. Production builds require `NEXT_PUBLIC_SITE_URL` to be a valid HTTPS origin with no path, query, or fragment; the build rejects local and common example domains. Also replace the site identity and author details in this file and translate metadata in `dictionary/*.json`. Set `GOOGLE_SITE_VERIFICATION` only when you have a token for the deployed domain.
 
 ### Metadata API (`generateMetadata`)
 
-Defined in `src/app/[locale]/layout.tsx`. Next.js calls this per locale at build/request time and injects the result into `<head>`.
+`src/lib/site.ts` exports `createLocalizedMetadata`, which is used by the locale layout and should be reused by page-level routes. It centralizes canonical URLs, reciprocal language alternates, Open Graph, Twitter, robots, and optional verification fields.
 
 ```ts
 export async function generateMetadata({ params }): Promise<Metadata> {
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
   const t = await getTranslations({ locale, namespace: "Metadata" });
-  const canonical = getLocaleUrl(locale);
-  const languages = getAlternateLanguages();
-
-  return {
-    metadataBase: new URL(siteConfig.url),
+  return createLocalizedMetadata({
+    locale,
     title: t("title"),
     description: t("description"),
-    keywords: t("keywords"),
-    authors: [{ name: siteConfig.author.name, url: siteConfig.author.url }],
-    creator: siteConfig.author.twitter,
-    applicationName: siteConfig.name,
-    openGraph: { /* see below */ },
-    twitter: { /* see below */ },
-    alternates: { canonical, languages },
-    robots: { index: true, follow: true, /* googleBot directives */ },
-    verification: { google: "..." },
-  };
+    pathname: "/",
+  });
 }
 ```
 
@@ -532,7 +524,6 @@ export async function generateMetadata({ params }): Promise<Metadata> {
 | `metadataBase`         | Base for resolving relative URLs        | Makes `/og-image.png` resolve to full absolute URL |
 | `title`                | `<title>`                               | Browser tab + search result headline               |
 | `description`          | `<meta name="description">`             | Search snippet text                                |
-| `keywords`             | `<meta name="keywords">`                | Legacy keyword hint (low weight today)             |
 | `authors`              | `<meta name="author">`                  | Content author attribution                         |
 | `creator`              | `<meta name="creator">`                 | Creator handle (@s0ver5)                           |
 | `applicationName`      | `<meta name="application-name">`        | PWA / app identity                                 |
@@ -558,13 +549,13 @@ function getLocaleUrl(locale: AppLocale) {
 Because routing uses `localePrefix: "as-needed"`, paths differ per locale:
 
 
-| Locale | `getPathname` result | Full canonical URL (example) |
-| ------ | -------------------- | ---------------------------- |
-| `en`   | `/`                  | `https://your-domain.com/`   |
-| `ar`   | `/ar`                | `https://your-domain.com/ar` |
-| `zh`   | `/zh`                | `https://your-domain.com/zh` |
-| `es`   | `/es`                | `https://your-domain.com/es` |
-| `ja`   | `/ja`                | `https://your-domain.com/ja` |
+| Route locale | `lang` / `hreflang` | `getPathname` result | Full canonical URL (example) |
+| ------------ | ------------------- | -------------------- | ---------------------------- |
+| `en`         | `en-US`             | `/`                  | `https://your-domain.com/`   |
+| `ar`         | `ar-SA`             | `/ar`                | `https://your-domain.com/ar` |
+| `zh`         | `zh-Hans-CN`        | `/zh`                | `https://your-domain.com/zh` |
+| `es`         | `es-ES`             | `/es`                | `https://your-domain.com/es` |
+| `ja`         | `ja-JP`             | `/ja`                | `https://your-domain.com/ja` |
 
 
 **Why `getPathname` matters:** Hardcoding `/en`, `/ar` breaks with `as-needed` (English has no prefix). Always use `getPathname` for canonical, hreflang, and sitemap URLs.
@@ -572,29 +563,28 @@ Because routing uses `localePrefix: "as-needed"`, paths differ per locale:
 `alternates.languages` produces hreflang tags like:
 
 ```html
-<link rel="alternate" hreflang="en" href="https://your-domain.com/" />
-<link rel="alternate" hreflang="ar" href="https://your-domain.com/ar" />
-<link rel="alternate" hreflang="zh" href="https://your-domain.com/zh" />
-<link rel="alternate" hreflang="es" href="https://your-domain.com/es" />
-<link rel="alternate" hreflang="ja" href="https://your-domain.com/ja" />
+<link rel="alternate" hreflang="en-US" href="https://your-domain.com/" />
+<link rel="alternate" hreflang="ar-SA" href="https://your-domain.com/ar" />
+<link rel="alternate" hreflang="zh-Hans-CN" href="https://your-domain.com/zh" />
+<link rel="alternate" hreflang="es-ES" href="https://your-domain.com/es" />
+<link rel="alternate" hreflang="ja-JP" href="https://your-domain.com/ja" />
 ```
 
 Each locale's page includes hreflang links pointing to **all** language versions, including itself. This helps search engines serve the correct language to users.
 
 ### Translation-driven metadata
 
-SEO text is not hardcoded in components — it comes from the `Metadata` namespace in each dictionary file:
+Page titles and descriptions come from the `Metadata` namespace in each dictionary file. The `keywords` field has been removed because Google says the meta-keywords tag has no effect on indexing or ranking.
 
 ```json
 // dictionary/en.json
 "Metadata": {
-  "title": "Next.js 16 i18n Starter - Multilingual Template by S0vers",
-  "description": "Next.js 16 internationalization starter with next-intl 4...",
-  "keywords": "Next.js 16, next-intl, i18n, internationalization..."
+  "title": "Next.js 16 i18n Starter - Multilingual Template by s0vers",
+  "description": "Next.js 16 internationalization starter with next-intl 4..."
 }
 ```
 
-Every locale (`ar.json`, `zh.json`, `es.json`, `ja.json`) has its own translated `Metadata` block. When a user visits `/ar`, Arabic title and description are served — not English with an Arabic URL.
+Every locale (`ar.json`, `zh.json`, `es.json`, `ja.json`) has its own translated `Metadata` and `SeoGuide` blocks. When a user visits `/ar`, Arabic title, description, and crawlable setup guidance are served — not English with an Arabic URL.
 
 To update SEO copy: edit `dictionary/{locale}/Metadata` in all 5 files, then rebuild.
 
@@ -604,13 +594,13 @@ The root layout sets semantic HTML attributes on `<html>`:
 
 ```tsx
 <html
-  lang={locale}           // e.g. "ar", "ja" — BCP 47 language tag
+  lang={localeConfig[locale].languageTag} // e.g. "ar-SA", "zh-Hans-CN"
   dir={isArabic ? "rtl" : "ltr"}  // text direction for the whole document
   className={initialTheme}
 >
 ```
 
-Search engines and screen readers use `lang` to identify page language. `dir="rtl"` for Arabic ensures correct text flow without affecting SEO negatively — Google fully indexes RTL pages.
+`localeConfig` maps route keys to BCP 47 language tags and Open Graph locale tags. For example, the `/zh` route is marked `zh-Hans-CN` because its content and regional formats target Simplified Chinese in mainland China. `dir="rtl"` sets Arabic reading and layout direction. Search engines primarily determine page language from visible content, so translate the page itself as well as its metadata.
 
 `generateStaticParams` enumerates the supported locale routes. The layout reads a theme cookie, so the homepage is rendered per request:
 
@@ -622,53 +612,22 @@ export function generateStaticParams() {
 
 ### JSON-LD structured data
 
-The home page (`src/app/[locale]/page.tsx`) emits two JSON-LD blocks as server-rendered `<script type="application/ld+json">` tags. This follows the [official Next.js JSON-LD guide](https://nextjs.org/docs/app/guides/json-ld) — no `next/script`, no `react-schemaorg`, React 19 safe.
+The default-locale homepage (`/`) emits one server-rendered `WebSite` JSON-LD node. Other locale homepages do not emit a domain-level site-name node, and the starter does not assert an author identity in structured data. This follows Google's [site-name requirements](https://developers.google.com/search/docs/appearance/site-names) and the [Next.js JSON-LD guidance](https://nextjs.org/docs/app/guides/json-ld).
 
-**Serialization helper (XSS prevention):**
-
-```ts
-function serializeJsonLd(data: Record<string, unknown>) {
-  return JSON.stringify(data).replace(/</g, "\\u003c");
-}
-```
-
-Escaping `<` prevents script injection if user-controlled strings ever end up in schema data.
-
-**WebSite schema** (one per locale visit):
+The node describes the site's canonical root:
 
 ```json
 {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  "name": "Next.js i18n Starter",
-  "description": "<locale-specific from Metadata namespace>",
-  "url": "https://your-domain.com/ar",
-  "inLanguage": "ar",
-  "author": {
-    "@type": "Person",
-    "name": "Sovers Tonmoy Pandey",
-    "url": "https://s0vers.com"
-  }
+  "name": "Next.js 16 i18n Starter",
+  "alternateName": "Next.js i18n Template",
+  "url": "https://your-domain.com/",
+  "inLanguage": "en"
 }
 ```
 
-**Person schema** (author, same on all locales):
-
-```json
-{
-  "@context": "https://schema.org",
-  "@type": "Person",
-  "name": "Sovers Tonmoy Pandey",
-  "alternateName": "S0vers",
-  "url": "https://s0vers.com",
-  "sameAs": [
-    "https://github.com/S0vers",
-    "https://twitter.com/s0ver5"
-  ]
-}
-```
-
-Validate with [Google Rich Results Test](https://search.google.com/test/rich-results) or [Schema Markup Validator](https://validator.schema.org/).
+The serialization helper escapes `<` before embedding JSON in an HTML script element. Validate structured data with [Schema Markup Validator](https://validator.schema.org/). Google site-name markup is not supported by the Rich Results Test; verify it with Search Console URL Inspection.
 
 ### Sitemap
 
@@ -692,11 +651,11 @@ Example output structure:
 ```xml
 <url>
   <loc>https://your-domain.com/</loc>
-  <xhtml:link rel="alternate" hreflang="en" href="https://your-domain.com/" />
-  <xhtml:link rel="alternate" hreflang="ar" href="https://your-domain.com/ar" />
-  <xhtml:link rel="alternate" hreflang="zh" href="https://your-domain.com/zh" />
-  <xhtml:link rel="alternate" hreflang="es" href="https://your-domain.com/es" />
-  <xhtml:link rel="alternate" hreflang="ja" href="https://your-domain.com/ja" />
+  <xhtml:link rel="alternate" hreflang="en-US" href="https://your-domain.com/" />
+  <xhtml:link rel="alternate" hreflang="ar-SA" href="https://your-domain.com/ar" />
+  <xhtml:link rel="alternate" hreflang="zh-Hans-CN" href="https://your-domain.com/zh" />
+  <xhtml:link rel="alternate" hreflang="es-ES" href="https://your-domain.com/es" />
+  <xhtml:link rel="alternate" hreflang="ja-JP" href="https://your-domain.com/ja" />
   <xhtml:link rel="alternate" hreflang="x-default" href="https://your-domain.com/" />
 </url>
 <!-- Repeat with /ar, /zh, /es, and /ja as each entry's <loc>. -->
@@ -771,17 +730,29 @@ Replace this file with your own branded image before production launch. Recommen
 
 ### Google Search Console verification
 
-Site ownership verification is configured via the Metadata API `verification` field:
+The Google verification meta tag is optional and reads the server-only `GOOGLE_SITE_VERIFICATION` environment variable. Leave it unset when you do not need meta-tag verification:
 
 ```ts
-verification: {
-  google: "sVYBYfSJfXdBca3QoqsZtD6lsWVH6sk02RCH4YAbcm8",
-},
+verification: siteConfig.googleSiteVerification
+  ? { google: siteConfig.googleSiteVerification }
+  : undefined,
 ```
 
-This renders `<meta name="google-site-verification" content="...">` in `<head>`. Replace with your own verification token from [Google Search Console](https://search.google.com/search-console) when deploying to a new domain.
+When configured, this renders `<meta name="google-site-verification" content="...">` in `<head>`. Obtain your token from [Google Search Console](https://search.google.com/search-console) and set it in deployment secrets; do not commit it to source control.
 
-A static verification file also exists at `public/google52d37058772b10e6.html` (alternate verification method).
+The legacy static verification file `public/google52d37058772b10e6.html` remains for the current demo property's alternate verification. Remove or replace it only after the demo property's Search Console ownership has been migrated.
+
+### AI search and crawler access
+
+AI search services rely on pages they can crawl and index. Keep useful page content in server-rendered HTML, use clear headings and internal links, and ensure the applicable crawlers are not blocked by `robots.txt`, hosting rules, or a CDN. These are the same foundations as conventional search; no special AI schema is required. Google's current guidance says `llms.txt` is not a Google Search ranking signal. This repository's `public/llms.txt` is a supplementary project reference for tools that choose to use it.
+
+The current `robots.ts` allows all user agents. Search discovery and model-training crawlers have different purposes, and site owners should choose those policies explicitly. For example, OpenAI distinguishes `OAI-SearchBot` from `GPTBot`; Anthropic distinguishes `Claude-SearchBot` from `ClaudeBot`; Perplexity distinguishes `PerplexityBot` from its user-request fetcher. Review each provider's current documentation before setting rules: [OpenAI](https://developers.openai.com/api/docs/bots), [Anthropic](https://support.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler), and [Perplexity](https://docs.perplexity.ai/docs/resources/perplexity-crawlers). This starter does not impose a model-training policy for a fork.
+
+For measurement, verify the domain and sitemap in [Google Search Console](https://search.google.com/search-console) and [Bing Webmaster Tools](https://www.bing.com/webmasters). Bing Webmaster Tools provides an AI Performance report. ChatGPT referrals may include `utm_source=chatgpt.com`; analytics can use that value when the selected provider captures query parameters. None of these steps guarantees indexing, rankings, or AI citations.
+
+### SEO implementation plan
+
+The research and implementation record is in [docs/seo-research.md](docs/seo-research.md) (checked 2026-09-29). The production-origin guard, optional verification setting, removal of meta-keywords, root-only site-name schema, visible localized launch guide, and crawler/measurement guidance are implemented. Deployment owners still need to set their real HTTPS origin, configure verification if needed, and verify the live property and crawler access through their hosting provider and webmaster tools.
 
 ### Adding SEO to a new page
 
@@ -794,7 +765,7 @@ import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { routing } from "@/i18n/routing";
-import { getAlternateLanguages, getLocaleUrl } from "@/lib/site";
+import { createLocalizedMetadata } from "@/lib/site";
 import type { Metadata } from "next";
 
 export async function generateMetadata({
@@ -806,14 +777,12 @@ export async function generateMetadata({
   if (!hasLocale(routing.locales, locale)) notFound();
   const t = await getTranslations({ locale, namespace: "About" });
 
-  return {
+  return createLocalizedMetadata({
+    locale,
     title: t("metaTitle"),
     description: t("metaDescription"),
-    alternates: {
-      canonical: getLocaleUrl(locale, "/about"),
-      languages: getAlternateLanguages("/about"),
-    },
-  };
+    pathname: "/about",
+  });
 }
 ```
 
@@ -834,11 +803,12 @@ Add `metaTitle` and `metaDescription` keys to the `About` namespace in all dicti
 - [ ] Set `NEXT_PUBLIC_SITE_URL` to your production domain
 - [ ] Replace the demo site name, repository link, and author details in `src/lib/site.ts`
 - [ ] Replace `public/og-image.png` with your branded 1200×630 image
-- [ ] Replace the demo Search Console token in `src/app/[locale]/layout.tsx` and remove or replace `public/google52d37058772b10e6.html`
+- [ ] Set `GOOGLE_SITE_VERIFICATION` if using meta-tag verification; migrate the current static demo verification only if you control that Search Console property
+- [ ] Review the [SEO implementation record](docs/seo-research.md) and confirm the origin, identity, and page copy for your fork
 - [ ] Translate `Metadata` namespace in all dictionary files
 - [ ] Submit `https://your-domain.com/sitemap.xml` in Google Search Console
 - [ ] Verify hreflang with [hreflang Tags Testing Tool](https://technicalseo.com/tools/hreflang/)
-- [ ] Test JSON-LD with [Rich Results Test](https://search.google.com/test/rich-results)
+- [ ] Validate JSON-LD with [Schema Markup Validator](https://validator.schema.org/); check site-name eligibility with Search Console URL Inspection
 - [ ] Test social previews with [opengraph.xyz](https://www.opengraph.xyz/) or Twitter Card Validator
 - [ ] Confirm `/robots.txt` and `/sitemap.xml` return 200 in production
 - [ ] Add new pages to `sitemap.ts` with locale alternates
@@ -871,7 +841,7 @@ curl http://localhost:3000/sitemap.xml
 curl http://localhost:3000/robots.txt
 ```
 
-**JSON-LD:** View page source on `/` and search for `application/ld+json` — two script blocks should appear before page content.
+**JSON-LD:** View page source on `/` and search for `application/ld+json` — `/` emits one `WebSite` node whose URL is the site root; localized homepages such as `/ar` do not emit it.
 
 ---
 
@@ -880,12 +850,15 @@ curl http://localhost:3000/robots.txt
 
 | Variable               | Required | Default                                    | Description                                  |
 | ---------------------- | -------- | ------------------------------------------ | -------------------------------------------- |
-| `NEXT_PUBLIC_SITE_URL` | No       | `https://next-app-i18n-starter.vercel.app` | Canonical URL for metadata, sitemap, OG tags |
+| `NEXT_PUBLIC_SITE_URL` | Production required | Project origin in `.env.example`; localhost fallback when unset in development | HTTPS origin for canonical URLs, sitemap, and social metadata |
+| `GOOGLE_SITE_VERIFICATION` | No | Unset | Optional Search Console meta-tag verification token |
 
 
 ```bash
 # .env.local
-NEXT_PUBLIC_SITE_URL=https://your-domain.com
+NEXT_PUBLIC_SITE_URL=https://next-app-i18n-starter.vercel.app
+# Optional
+GOOGLE_SITE_VERIFICATION=your-search-console-token
 ```
 
 See `.env.example` for the template.
@@ -898,7 +871,7 @@ Works on [Vercel](https://vercel.com) out of the box.
 
 1. Push to GitHub
 2. Import project in Vercel
-3. Set `NEXT_PUBLIC_SITE_URL` to your production domain
+3. Set `NEXT_PUBLIC_SITE_URL` to `https://next-app-i18n-starter.vercel.app` for this project; forks must use their own production origin
 4. Deploy
 
 The proxy (`src/proxy.ts`) runs automatically on Vercel's edge. No extra configuration needed for i18n routing.
@@ -992,8 +965,8 @@ Open source libraries and community projects that made this starter possible: [A
 
 ## AI / LLM context
 
-Machine-readable project reference for AI coding assistants: [llms.txt](https://next-app-i18n-starter.vercel.app/llms.txt)
+Machine-readable project reference for AI coding assistants: [llms.txt](https://next-app-i18n-starter.vercel.app/llms.txt). It documents this repository; it is not a Google Search ranking signal.
 
-Includes a complete SEO implementation reference — metadata field-to-HTML mapping, hreflang URL table, JSON-LD schemas, sitemap/robots structure, verification commands, and project-specific pitfalls.
+Includes repository conventions, the localized SEO metadata helper, sitemap and crawler behavior, and project-specific implementation notes.
 
 **Cursor IDE:** agent onboarding in [AGENTS.md](AGENTS.md); scoped rules in [`.cursor/rules/`](.cursor/rules/) (see [`.cursor/README.md`](.cursor/README.md)).

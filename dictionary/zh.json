@@ -43,9 +43,18 @@
     "githubLink": "GitHub仓库"
   },
   "Metadata": {
-    "title": "Next.js 16 国际化模板 - S0vers 出品",
-    "description": "Next.js 16 国际化入门套件，基于 next-intl 4。按语言自动设置货币、日期和时区。支持中文、英文、阿拉伯语、西班牙语和日语，含 shadcn UI、RTL 和 SEO。",
-    "keywords": "Next.js 16, next-intl, i18n, 国际化, 本地化格式, 中文, 阿拉伯语, 西班牙语, 日语, 模板, shadcn UI, RTL, S0vers"
+    "title": "Next.js 16 国际化模板 - s0vers 出品",
+    "description": "Next.js 16 国际化入门套件，基于 next-intl 4。按语言自动设置货币、日期和时区。支持中文、英文、阿拉伯语、西班牙语和日语，含 shadcn UI 和 RTL。"
+  },
+  "SeoGuide": {
+    "title": "发布前配置此模板",
+    "description": "发布模板副本前，请为搜索引擎和访客提供准确的网站信息。",
+    "step1Title": "设置网站网址",
+    "step1Description": "将 NEXT_PUBLIC_SITE_URL 设置为生产环境的 HTTPS 源站地址。规范链接、语言版本、站点地图和社交分享预览都会使用它。",
+    "step2Title": "替换模板身份信息",
+    "step2Description": "更新网站名称、作者和社交链接、各语言的页面标题与描述，以及项目的 Open Graph 图片。",
+    "step3Title": "检查已发布的 HTML",
+    "step3Description": "部署后检查各语言页面、sitemap.xml、robots.txt 和结构化数据，并在搜索站长工具中提交站点地图。"
   },
   "Localization": {
     "title": "按语言格式化",

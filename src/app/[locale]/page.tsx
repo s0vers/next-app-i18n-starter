@@ -1,10 +1,11 @@
 import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
-import { setRequestLocale, getTranslations } from "next-intl/server";
+import { setRequestLocale } from "next-intl/server";
 import HomeIndex from "@/components/pages/HomeIndex";
 import { getGithubStarCount } from "@/lib/github";
-import { getLocaleUrl, siteConfig } from "@/lib/site";
+import { siteConfig } from "@/lib/site";
 import { routing } from "@/i18n/routing";
+import SeoGuide from "@/components/pages/SeoGuide";
 
 function serializeJsonLd(data: Record<string, unknown>) {
   return JSON.stringify(data).replace(/</g, "\\u003c");
@@ -21,48 +22,32 @@ export default async function HomePage({
   }
   setRequestLocale(locale);
 
-  const [t, starCount] = await Promise.all([
-    getTranslations({ locale, namespace: "Metadata" }),
-    getGithubStarCount(),
-  ]);
+  const starCount = await getGithubStarCount();
 
-  const websiteJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: siteConfig.name,
-    description: t("description"),
-    url: getLocaleUrl(locale),
-    inLanguage: locale,
-    author: {
-      "@type": "Person",
-      name: siteConfig.author.name,
-      url: siteConfig.author.url,
-    },
-  };
-
-  const personJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: siteConfig.author.name,
-    alternateName: siteConfig.author.alias,
-    url: siteConfig.author.url,
-    sameAs: [
-      siteConfig.author.github,
-      `https://twitter.com/${siteConfig.author.twitter.replace("@", "")}`,
-    ],
-  };
+  const websiteJsonLd =
+    locale === routing.defaultLocale
+      ? {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: siteConfig.name,
+          alternateName: "Next.js i18n Template",
+          url: siteConfig.url,
+          inLanguage: locale,
+        }
+      : null;
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: serializeJsonLd(websiteJsonLd) }}
+      {websiteJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: serializeJsonLd(websiteJsonLd) }}
+        />
+      )}
+      <HomeIndex
+        starCount={starCount}
+        guide={<SeoGuide locale={locale} />}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: serializeJsonLd(personJsonLd) }}
-      />
-      <HomeIndex starCount={starCount} />
     </>
   );
 }

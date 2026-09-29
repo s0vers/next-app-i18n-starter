@@ -15,11 +15,7 @@ import { localeConfig } from "@/i18n/locales";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import {
-  getAlternateLanguages,
-  getLocaleUrl,
-  siteConfig,
-} from "@/lib/site";
+import { createLocalizedMetadata } from "@/lib/site";
 import {
   resolveSSRTheme,
   THEME_COOKIE_NAME,
@@ -61,7 +57,7 @@ export default async function RootLayout({
 
   return (
     <html
-      lang={locale}
+      lang={localeConfig[locale].languageTag}
       dir={isArabic ? "rtl" : "ltr"}
       className={initialTheme}
     >
@@ -98,57 +94,10 @@ export async function generateMetadata({
     notFound();
   }
   const t = await getTranslations({ locale, namespace: "Metadata" });
-  const canonical = getLocaleUrl(locale);
-  const languages = getAlternateLanguages();
-
-  return {
-    metadataBase: new URL(siteConfig.url),
+  return createLocalizedMetadata({
+    locale,
     title: t("title"),
     description: t("description"),
-    keywords: t("keywords"),
-    authors: [{ name: siteConfig.author.name, url: siteConfig.author.url }],
-    creator: siteConfig.author.twitter,
-    applicationName: siteConfig.name,
-    verification: {
-      google: "sVYBYfSJfXdBca3QoqsZtD6lsWVH6sk02RCH4YAbcm8",
-    },
-    openGraph: {
-      title: t("title"),
-      description: t("description"),
-      url: canonical,
-      siteName: siteConfig.name,
-      images: [
-        {
-          url: "/og-image.png",
-          width: 1200,
-          height: 630,
-          alt: t("title"),
-        },
-      ],
-      locale: localeConfig[locale].ogLocale,
-      type: "website",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: t("title"),
-      description: t("description"),
-      images: ["/og-image.png"],
-      creator: siteConfig.author.twitter,
-    },
-    alternates: {
-      canonical,
-      languages,
-    },
-    robots: {
-      index: true,
-      follow: true,
-      googleBot: {
-        index: true,
-        follow: true,
-        "max-video-preview": -1,
-        "max-image-preview": "large",
-        "max-snippet": -1,
-      },
-    },
-  };
+    pathname: "/",
+  });
 }

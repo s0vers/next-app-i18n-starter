@@ -1,6 +1,7 @@
 export const localeConfig = {
   en: {
     label: "English",
+    languageTag: "en-US",
     ogLocale: "en_US",
     currency: "USD",
     timeZone: "America/New_York",
@@ -8,6 +9,7 @@ export const localeConfig = {
   },
   ar: {
     label: "العربية",
+    languageTag: "ar-SA",
     ogLocale: "ar_SA",
     currency: "SAR",
     timeZone: "Asia/Riyadh",
@@ -15,6 +17,7 @@ export const localeConfig = {
   },
   zh: {
     label: "中文",
+    languageTag: "zh-Hans-CN",
     ogLocale: "zh_CN",
     currency: "CNY",
     timeZone: "Asia/Shanghai",
@@ -22,6 +25,7 @@ export const localeConfig = {
   },
   es: {
     label: "Español",
+    languageTag: "es-ES",
     ogLocale: "es_ES",
     currency: "EUR",
     timeZone: "Europe/Madrid",
@@ -29,6 +33,7 @@ export const localeConfig = {
   },
   ja: {
     label: "日本語",
+    languageTag: "ja-JP",
     ogLocale: "ja_JP",
     currency: "JPY",
     timeZone: "Asia/Tokyo",

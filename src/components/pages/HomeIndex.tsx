@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type { ReactNode } from "react";
 import { Check, Copy, Globe, Star } from "lucide-react";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 
@@ -138,8 +139,10 @@ function InstallationStep({
 
 export default function HomeIndex({
   starCount,
+  guide,
 }: {
   starCount: number | null;
+  guide: ReactNode;
 }) {
   const t = useTranslations("Index");
   const l = useTranslations("Localization");
@@ -315,6 +318,7 @@ export default function HomeIndex({
             </section>
           </div>
         </div>
+        {guide}
       </main>
 
       <footer className="w-full shrink-0 border-t bg-background">
