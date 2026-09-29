@@ -56,7 +56,7 @@ When a translation is published or unpublished, revalidate that locale's route, 
 
 Do these in one change. Skipping one leaves a locale that half works.
 
-1. `src/i18n/locales.ts`: add the entry with `label`, `languageTag`, `ogLocale`, `currency`, `timeZone`, `font`. This template has no `dir` field yet, so add `dir` to every entry first and move the three hardcoded Arabic checks onto it: `isArabic` in `[locale]/layout.tsx`, `currentLanguage === "ar"` in `LanguageSwitcher.tsx`, and `isRTL = locale === "ar"` in `HomeIndex.tsx`. Skip this only for a locale that is left to right, and then leave the three checks alone.
+1. `src/i18n/locales.ts`: add the entry with `label`, `languageTag`, `ogLocale`, `currency`, `timeZone`, `font`. Set `dir` to `"rtl"` for a right-to-left language and `"ltr"` otherwise. The layout, `LanguageSwitcher`, and `HomeIndex` read it, so nothing else needs a language check. Run `bun run i18n:check` afterward. It validates the route key, tag, Open Graph tag, currency, time zone, direction, and dictionary file.
 2. `dictionary/<locale>.json`: copy `en.json`, translate every value, keep every ICU argument and tag. Run the message check.
 3. Plural branches: add the locale's categories to every `plural` message. See [RTL and scripts](rtl-and-scripts.md#plural-categories).
 4. Fonts: decide system or web font. Measure the payload if web.

@@ -7,7 +7,8 @@
 //   --base    where to send requests (default http://localhost:3000)
 //   --origin  the public origin used in canonicals and the sitemap, when it differs from --base
 //             (a production build run locally). Defaults to the sitemap's own origin.
-//   --urls    comma-separated paths to check instead of the sitemap URLs
+//   --urls    comma-separated paths or full URLs to check instead of the sitemap URLs.
+//             In Git Bash on Windows a leading "/" is rewritten to a Windows path; pass full URLs instead.
 //   --max     cap on pages checked (default 50)
 //
 // Exits 1 when any check fails. Warnings do not fail the run.
@@ -137,7 +138,7 @@ async function main() {
   const toPublic = (u) => norm(u.startsWith(base) ? origin + u.slice(base.length) : u);
 
   const pageUrls = explicitUrls
-    ? explicitUrls.split(",").map((p) => norm(origin + (p.startsWith("/") ? p : `/${p}`)))
+    ? explicitUrls.split(",").map((p) => norm(isAbsolute(p) ? p : origin + (p.startsWith("/") ? p : `/${p}`)))
     : entries.map((e) => e.loc);
   const sample = [...new Set(pageUrls)].slice(0, max);
   const sitemapAlternates = new Map(entries.map((e) => [e.loc, e.alternates]));

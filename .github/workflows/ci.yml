@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      # Safe example origin from .env.example. Forks: use your own HTTPS origin.
+      NEXT_PUBLIC_SITE_URL: https://next-app-i18n-starter.vercel.app
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install
+        run: bun install --frozen-lockfile
+
+      - name: Lint
+        run: bun run lint
+
+      - name: Locale registry and message parity
+        run: bun run i18n:check
+
+      - name: Skills structure
+        run: bun run skills:check
+
+      - name: Build
+        run: bun run build
+
+      - name: Verify SEO signals on the production build
+        run: |
+          bun run start -- -p 3000 &
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:3000/robots.txt > /dev/null && break
+            sleep 2
+          done
+          node .agents/skills/nextjs-i18n-seo/scripts/verify-seo.mjs \
+            --base http://localhost:3000 \
+            --origin "$NEXT_PUBLIC_SITE_URL"

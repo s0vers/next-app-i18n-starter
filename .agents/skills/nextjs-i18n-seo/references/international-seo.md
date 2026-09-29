@@ -108,26 +108,19 @@ A Vercel-hosted `/zh` mostly serves Simplified readers outside mainland China on
 
 ## This template
 
-- `src/i18n/locales.ts` owns tags and Open Graph tags. `src/lib/site.ts` owns `getLocaleUrl`, `getAlternateLanguages`, and `createLocalizedMetadata`. The helpers emit every configured locale, which fits the fully translated homepage. Before adding a partially translated route, give them a per-page locale set. Sketch:
+- `src/i18n/locales.ts` owns tags and Open Graph tags. `src/lib/site.ts` owns `getLocaleUrl`, `getAlternateLanguages`, and `createLocalizedMetadata`. The helpers emit every configured locale, which fits the fully translated homepage. For a partially translated page, pass the locales that have a reviewed translation:
 
 ```ts
-// src/lib/site.ts (sketch). The caller passes the locales that have a reviewed
-// translation and, for content with per-locale slugs, each locale's own path.
-export function getAlternateLanguages(
-  hrefFor: (locale: AppLocale) => "/" | `/${string}`,
-  locales: readonly AppLocale[] = routing.locales,
-) {
-  const languages = Object.fromEntries(
-    locales.map((l) => [localeConfig[l].languageTag, getLocaleUrl(l, hrefFor(l))]),
-  );
-  const fallback = locales.includes(routing.defaultLocale)
-    ? { "x-default": getLocaleUrl(routing.defaultLocale, hrefFor(routing.defaultLocale)) }
-    : {};
-  return { ...languages, ...fallback };
-}
+createLocalizedMetadata({
+  locale, title, description,
+  pathname: "/blog/my-post",
+  locales: ["en", "ja"],      // only these get alternates; x-default only if the default locale is here
+  hrefFor: (l) => slugs[l],     // optional: per-locale internal pathname when slugs differ
+  type: "article", publishedTime, image,
+});
 ```
 
-  `createLocalizedMetadata` then needs the same `locales` and `hrefFor` inputs, plus `type` (`article` for posts) and `image` inputs. It hardcodes `type: "website"` and `/og-image.png` today. The sitemap calls the same function per entry.
+  `getAlternateLanguages(href, { locales, hrefFor })` does the same for the sitemap. `createLocalizedMetadata` throws if `locales` omits the page's own locale, because an alternate set without the page itself breaks reciprocity. Call `notFound()` for a locale outside the set, before any Suspense boundary, so the missing translation returns 404. Tested 2026-09-30 `[local]` with a temporary page in `en` and `ja`: `/` and `/ja` emitted only `en-US`, `ja-JP`, and `x-default`, and `/ar` and `/es` returned 404.
 - `localeConfig` ties one currency to each route locale (`es` is EUR, `en` is USD). That suits one market per locale and cannot show two currencies to one language. See [commerce](commerce-and-products.md#markets-currency-and-languages).
 - Fixed 2026-09-30 `[local]`: `routing.ts` used to leave next-intl's `alternateLinks` on, so `curl -I /` returned a `Link` header with `hreflang` `en`, `ar`, `zh`, `es`, `ja` while the HTML said `en-US`, `ar-SA`, `zh-Hans-CN`, `es-ES`, `ja-JP`. It now sets `alternateLinks: false`, and the header carries no `hreflang`. Keep it that way in a fork, and check `curl -I` after any routing change.
 - `localeDetection: false` alone did not stop `NEXT_LOCALE` from being written on every page. `routing.ts` now also sets `localeCookie: false`. That removes a useless `Set-Cookie` from cacheable pages.

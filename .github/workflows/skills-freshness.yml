@@ -1,0 +1,45 @@
+name: Skill freshness
+
+# Once a month, list the skill references whose sources are older than 90 days
+# and any drift between the pinned next and next-intl versions and the latest
+# releases. Opens or updates one issue. Budget: a review of that issue, not a
+# rewrite of the skills.
+
+on:
+  schedule:
+    - cron: "17 6 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Build the report
+        id: report
+        run: |
+          node .github/scripts/skill-freshness.mjs > report.md
+          echo "attention=$(node .github/scripts/skill-freshness.mjs --count)" >> "$GITHUB_OUTPUT"
+
+      - name: Open or update the review issue
+        if: steps.report.outputs.attention != '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create skills-review --color BFD4F2 --description "Monthly skill freshness review" 2>/dev/null || true
+          existing=$(gh issue list --label skills-review --state open --json number --jq '.[0].number')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body-file report.md
+          else
+            gh issue create --title "Monthly skill review" --label skills-review --body-file report.md
+          fi

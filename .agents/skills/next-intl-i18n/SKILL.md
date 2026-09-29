@@ -62,7 +62,7 @@ Each rule carries its reason. A rule applied without its reason gets applied whe
 
 ## Done when
 
-1. `node .agents/skills/next-intl-i18n/scripts/check-messages.mjs` exits 0 after any message edit.
+1. `bun run i18n:check` exits 0 after any message or locale edit. It validates the locale registry (`check-locales.mjs`) and message parity (`check-messages.mjs`).
 2. `bun run lint` passes after TypeScript or TSX edits. `bun run build` passes after substantive changes, with `NEXT_PUBLIC_SITE_URL` set to the safe example from `.env.example`.
 3. The rendered check for the change type in [Verification](references/verification.md) ran against English and at least one prefixed locale. Arabic counts whenever layout or formatting changed. If no server may run, or nothing renders the change yet, run the static checks (message check, lint, build route table) and list every rendered check under Not verified.
 4. The report lists what was verified and what was not, using the shape in [Verification](references/verification.md#report-shape). "Not verified" is a valid entry. A guess presented as a result is not.

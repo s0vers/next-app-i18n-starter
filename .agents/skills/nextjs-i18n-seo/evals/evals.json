@@ -1,6 +1,6 @@
 {
   "skill": "nextjs-i18n-seo",
-  "note": "Run each prompt with the skill and with the previous version or no skill. Grade every assertion as pass or fail from the transcript and the resulting diff. A good assertion fails without the skill.",
+  "note": "Run each prompt with the skill and with the previous version or no skill. Grade every assertion as pass or fail from the transcript and the resulting diff. A good assertion fails without the skill. Entries marked source: user-report come from real issues or pull requests on the repository.",
   "evals": [
     {
       "id": "partial-blog-translation",
@@ -70,6 +70,31 @@
         "States that Google removed FAQ rich results in May 2026",
         "Offers Product and Offer markup as the eligible feature",
         "Does not add FAQPage for a rich result"
+      ]
+    },
+    {
+      "id": "multilingual-sitemap",
+      "source": "user-report: issue 2, sitemap generation",
+      "prompt": "How do I generate a sitemap for this multilingual site? Should I use next-sitemap?",
+      "assertions": [
+        "Recommends the built-in Next.js sitemap.ts, and does not require next-sitemap",
+        "Emits one entry per indexable URL per locale with reciprocal alternates.languages",
+        "Uses getLocaleUrl and getAlternateLanguages from src/lib/site.ts",
+        "Sets lastModified only from a real content date, never from new Date()",
+        "Lists only locales where the page exists, and states that a sitemap does not guarantee indexing",
+        "Mentions submitting the sitemap in Search Console and Bing Webmaster Tools"
+      ]
+    },
+    {
+      "id": "head-and-jsonld",
+      "source": "user-report: issue 4, manual head content despite generateMetadata",
+      "prompt": "Why do I need to write head tags by hand when I already use generateMetadata? How should hreflang and JSON-LD be done?",
+      "assertions": [
+        "Says canonical, alternates.languages, Open Graph, and robots belong in generateMetadata or createLocalizedMetadata",
+        "Says JSON-LD is a script in a Server Component, not part of the Metadata object",
+        "Says to escape < when serializing JSON-LD",
+        "Says JSON-LD must describe only content visible on the page",
+        "Says hreflang comes from one source and the proxy alternateLinks header stays off"
       ]
     }
   ]

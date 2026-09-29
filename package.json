@@ -10,7 +10,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "i18n:check": "node .agents/skills/next-intl-i18n/scripts/check-locales.mjs && node .agents/skills/next-intl-i18n/scripts/check-messages.mjs",
+    "seo:verify": "node .agents/skills/nextjs-i18n-seo/scripts/verify-seo.mjs",
+    "skills:check": "node .github/scripts/check-skills.mjs",
+    "check": "bun run lint && bun run i18n:check && bun run skills:check"
   },
   "dependencies": {
     "@radix-ui/react-dropdown-menu": "^2.1.24",

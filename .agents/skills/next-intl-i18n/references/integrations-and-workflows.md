@@ -21,7 +21,7 @@ Page metadata rule for this template: await `params`, validate with `hasLocale`,
 
 - `[locale]/not-found.tsx` fires only on `notFound()` inside that subtree. Unknown segments need `[locale]/[...rest]/page.tsx` that calls `notFound()`. This template has it.
 - A request outside the proxy matcher (a dotted path, `/api`) never reaches `[locale]`, so localizing it needs Next.js `global-not-found` with an explicit locale.
-- An `error.tsx` renders translated text only where a provider exists above it. This template's `src/app/error.tsx` sits outside `[locale]`, above the provider. Force a throw in a page and confirm the boundary renders text and not a missing-context error. If it fails, move the boundary under `[locale]` or give it a nested provider with the error messages.
+- An `error.tsx` renders translated text only where a provider exists above it. Keep it inside `[locale]/`. This template once kept it at `src/app/error.tsx`, above the locale layout. Visitors to a broken page then got Next.js's generic English "This page couldn't load", with no title and no locale, and the translated page never rendered. Confirm after any move: add a temporary route that throws, build, and open it in a prefixed locale. Expect the translated error page.
 
 ## Translation workflows
 

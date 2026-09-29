@@ -175,10 +175,10 @@ Locale routing, request config, messages, formatting, RTL and CJK layout, and lo
 | [Integrations and workflows](.agents/skills/next-intl-i18n/references/integrations-and-workflows.md) | Metadata, Open Graph, Server Actions, error pages, tests |
 | [Verification](.agents/skills/next-intl-i18n/references/verification.md) | Done-when checks, symptom table, report shape |
 
-Check that every dictionary mirrors `en.json` (keys, ICU arguments, rich-text tags, plural `other` branches):
+Validate the locale registry (route keys, language tags, currency, time zone, direction, dictionary files) and check that every dictionary mirrors `en.json` (keys, ICU arguments, rich-text tags, plural `other` branches):
 
 ```bash
-node .agents/skills/next-intl-i18n/scripts/check-messages.mjs
+bun run i18n:check
 ```
 
 ### nextjs-i18n-seo
@@ -414,15 +414,17 @@ Example: adding French (`fr`)
    ```ts
    fr: {
      label: "Français",
+     languageTag: "fr",
      ogLocale: "fr_FR",
      currency: "EUR",
      timeZone: "Europe/Paris",
+     dir: "ltr",
      font: "geist",
    },
    ```
 
    Routing, the language switcher, regional formatting, and Open Graph locale derive from this config. Choose `font: "system"` if the Geist Latin subset does not cover the language.
-3. Run `bun run lint` and `bun run build`, then check the new locale's page and metadata. TypeScript does not check that `fr.json` contains every English key; compare the dictionaries when translating.
+3. Run `bun run i18n:check`, `bun run lint`, and `bun run build`, then check the new locale's page and metadata. `i18n:check` validates the language tag, currency, time zone, and direction, and fails when `fr.json` is missing a key or changes an ICU argument. TypeScript only checks keys against `en.json`.
 
 ### Adding a new page
 
@@ -960,7 +962,10 @@ bun run dev    # Start the development server (Turbopack)
 bun run build  # Build for production and check types
 bun run start  # Start the production server
 bun run lint   # Run ESLint
+bun run check  # ESLint, locale registry and message parity, and skills structure
 ```
+
+GitHub Actions runs lint, `bun run i18n:check`, `bun run skills:check`, the build, and `node .agents/skills/nextjs-i18n-seo/scripts/verify-seo.mjs` against the production build on every push and pull request. A second workflow opens a monthly issue listing skill references whose sources are older than 90 days and any drift from the latest `next` and `next-intl`. In a fork, set `NEXT_PUBLIC_SITE_URL` in `.github/workflows/ci.yml` to your own HTTPS origin.
 
 ---
 

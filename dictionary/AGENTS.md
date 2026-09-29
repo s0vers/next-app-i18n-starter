@@ -7,4 +7,4 @@ The repository-level `AGENTS.md` applies here too.
 - Translate user-facing copy, page titles, descriptions, and SEO guide text. Keep interpolation placeholders and formatting tokens unchanged across locales.
 - Do not add a `keywords` metadata field. Keep metadata specific to its page and locale.
 - Treat regional tags as audience choices. Have fluent speakers review translations and confirm terms match the intended country or region before production use.
-- When changing translation keys, run `node .agents/skills/next-intl-i18n/scripts/check-messages.mjs`, then `bun run lint` and `bun run build`. The check fails on missing or extra keys, changed ICU arguments or rich-text tags, empty values, and plurals without an `other` branch.
+- When changing translation keys, run `bun run i18n:check`, then `bun run lint` and `bun run build`. The check fails on missing or extra keys, changed ICU arguments or rich-text tags, empty values, and plurals without an `other` branch.

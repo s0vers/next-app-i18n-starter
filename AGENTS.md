@@ -23,7 +23,7 @@ These instructions apply to coding assistants of any model or editor. Read this 
 
 ## Verification
 
-- Run `bun run lint` after changes to TypeScript, TSX, or lint configuration.
+- Run `bun run lint` after changes to TypeScript, TSX, or lint configuration. `bun run check` also runs the locale, message, and skills checks that CI runs.
 - Run `bun run build` after substantive application changes. Production builds require `NEXT_PUBLIC_SITE_URL` to be set to the deployment's HTTPS origin; use the safe example in `.env.example` for local verification.
 - `package.json` lists the available scripts. Do not claim a check passed unless it completed successfully.
 

@@ -5,7 +5,7 @@ Read this to prove a change works, to diagnose a symptom, or to write the final 
 Local commands in this repository:
 
 ```bash
-node .agents/skills/next-intl-i18n/scripts/check-messages.mjs
+bun run i18n:check   # locale registry (check-locales.mjs) and message parity (check-messages.mjs)
 bun run lint
 NEXT_PUBLIC_SITE_URL=https://next-app-i18n-starter.vercel.app bun run build   # the safe example from .env.example
 ```

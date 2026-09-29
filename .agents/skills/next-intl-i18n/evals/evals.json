@@ -1,6 +1,6 @@
 {
   "skill": "next-intl-i18n",
-  "note": "Run each prompt with the skill and with the previous version or no skill. Grade every assertion as pass or fail from the transcript and the resulting diff. A good assertion fails without the skill.",
+  "note": "Run each prompt with the skill and with the previous version or no skill. Grade every assertion as pass or fail from the transcript and the resulting diff. A good assertion fails without the skill. Entries marked source: user-report come from real issues or pull requests on the repository.",
   "evals": [
     {
       "id": "add-german",
@@ -56,6 +56,30 @@
         "Checks the current routing config before editing",
         "Verifies with curl using Accept-Language and a NEXT_LOCALE cookie that / returns 200",
         "Does not add a manual redirect in the proxy"
+      ]
+    },
+    {
+      "id": "rtl-flip",
+      "source": "user-report: issue 1, screen flips after switching languages",
+      "prompt": "After I switch the site to Arabic the whole layout flips horizontally. Is that a bug?",
+      "assertions": [
+        "Says it is expected: dir=\"rtl\" on the html element mirrors the layout",
+        "Says direction comes from the locale config and is not a bug in the switcher",
+        "Recommends logical CSS properties (ms-*, pe-*, text-start) over physical left and right",
+        "Explains that code, URLs, and other left-to-right content is wrapped with OmitRTL or bdi",
+        "Suggests checking one RTL route rendered, including a mixed-direction string"
+      ]
+    },
+    {
+      "id": "wrong-language-code",
+      "source": "user-report: pull request 6, Japanese code jp instead of ja",
+      "prompt": "Our Japanese pages live at /jp and the hreflang says jp. Is that correct?",
+      "assertions": [
+        "Says jp is not a language code and ja is the ISO 639-1 code for Japanese",
+        "Changes the route key and the language tag to ja, and renames dictionary/jp.json",
+        "Redirects the old /jp URLs to /ja with a permanent redirect",
+        "Updates the sitemap and alternates so every ja page lists itself and its siblings",
+        "Runs or cites bun run i18n:check, which fails on an unknown language code"
       ]
     }
   ]

@@ -302,6 +302,7 @@ bun run dev       # Dev server (Turbopack)
 bun run build     # Production build + typecheck
 bun run start     # Production server
 bun run lint      # ESLint
+bun run check     # ESLint, locale registry and message parity, skills structure
 ```
 
 ---

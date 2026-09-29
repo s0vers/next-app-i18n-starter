@@ -90,7 +90,7 @@ This template passes the full catalog from its locale layout. Change that only f
 
 ## Document attributes
 
-`<html lang>` comes from `localeConfig[locale].languageTag`. `dir` must come from data, not from a hardcoded check. This template's layout uses `locale === "ar"`. Add a `dir` field to `localeConfig` and read it in the layout, `LanguageSwitcher`, and `HomeIndex` before adding a second RTL locale.
+`<html lang>` comes from `localeConfig[locale].languageTag`. `dir` must come from data, not from a hardcoded check. This template stores `dir` in `localeConfig` and reads it in the layout, `LanguageSwitcher`, and `HomeIndex`. `check-locales.mjs` fails when a right-to-left language is marked `ltr`.
 
 Route keys (`zh`) are not language tags (`zh-Hans-CN`). Route keys select routes. Tags go in `lang`, `hreflang`, and Open Graph.
 
