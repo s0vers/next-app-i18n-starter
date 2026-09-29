@@ -19,7 +19,7 @@ export default async function SeoGuide({ locale }: { locale: AppLocale }) {
         <CardHeader className="gap-2 px-4 sm:px-6">
           <h2
             id="launch-checklist-title"
-            className="text-2xl font-bold leading-tight tracking-tight text-balance"
+            className="text-2xl font-bold leading-tight tracking-(--tracking-heading) text-balance"
           >
             {t("title")}
           </h2>

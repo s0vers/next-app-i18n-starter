@@ -8,7 +8,6 @@ import {
   useTimeZone,
   useTranslations,
 } from "next-intl";
-import OmitRTL from "./OmitRtl";
 
 const LICENSE_PRICE = 29.99;
 const SUBSCRIPTION_PRICE = 9.99;
@@ -20,11 +19,9 @@ function FormatExample({ label, value }: { label: string; value: string }) {
       <p className="text-sm text-muted-foreground">
         {label}
       </p>
-      <OmitRTL omitRTL>
-        <p className="break-words text-sm font-medium tabular-nums text-foreground">
-          {value}
-        </p>
-      </OmitRTL>
+      <p dir="auto" className="break-words text-sm font-medium tabular-nums text-foreground">
+        {value}
+      </p>
     </div>
   );
 }
@@ -54,12 +51,10 @@ export default function LocalizationTab() {
 
       <section className="space-y-3">
         <div className="space-y-1">
-          <h3 className="text-sm font-semibold">{t("currencySection")}</h3>
-          <OmitRTL omitRTL>
-            <p className="text-lg font-semibold tabular-nums">
-              {format.number(LICENSE_PRICE, "price")}
-            </p>
-          </OmitRTL>
+          <h4 className="text-sm font-semibold">{t("currencySection")}</h4>
+          <p dir="auto" className="text-lg font-semibold tabular-nums">
+            {format.number(LICENSE_PRICE, "price")}
+          </p>
         </div>
         <div className="divide-y border-y">
           <FormatExample
@@ -79,12 +74,10 @@ export default function LocalizationTab() {
 
       <section className="space-y-3">
         <div className="space-y-1">
-          <h3 className="text-sm font-semibold">{t("timeSection")}</h3>
-          <OmitRTL omitRTL>
-            <p className="text-sm font-medium tabular-nums">
-              {format.dateTime(now, "long")}
-            </p>
-          </OmitRTL>
+          <h4 className="text-sm font-semibold">{t("timeSection")}</h4>
+          <p dir="auto" className="text-sm font-medium tabular-nums">
+            {format.dateTime(now, "long")}
+          </p>
         </div>
         <div className="divide-y border-y">
           <FormatExample

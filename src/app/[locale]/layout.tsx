@@ -1,3 +1,4 @@
+import { DirectionProvider } from "@radix-ui/react-direction";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
@@ -19,11 +20,15 @@ import "../globals.css";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
+  // Only code blocks use it, so do not preload it on every page.
+  preload: false,
 });
 
 export default async function RootLayout({
@@ -50,11 +55,14 @@ export default async function RootLayout({
       className={initialTheme}
     >
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${useGeist ? "font-sans" : ""} antialiased [font-synthesis:none]`}
+        className={`${geistSans.variable} ${geistMono.variable} ${useGeist ? "font-sans [font-synthesis:none]" : ""} antialiased`}
       >
         <ThemeProvider initialTheme={initialTheme}>
-          {/* Inherits the locale, messages, time zone, and formats from src/i18n/request.ts */}
-          <NextIntlClientProvider>{children}</NextIntlClientProvider>
+          {/* Radix menus and tabs read direction from here, not from the DOM. */}
+          <DirectionProvider dir={localeConfig[locale].dir}>
+            {/* Inherits the locale, messages, time zone, and formats from src/i18n/request.ts */}
+            <NextIntlClientProvider>{children}</NextIntlClientProvider>
+          </DirectionProvider>
         </ThemeProvider>
         <Analytics />
         <SpeedInsights />

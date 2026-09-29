@@ -1,8 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { useLocale } from "next-intl";
-import { Check } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { localeConfig } from "@/i18n/locales";
 import { routing } from "@/i18n/routing";
@@ -10,7 +8,8 @@ import { Button } from "./ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 
@@ -18,37 +17,41 @@ const LanguageSwitcher = () => {
   const router = useRouter();
   const pathname = usePathname();
   const currentLanguage = useLocale();
-  const [keyboardMenu, setKeyboardMenu] = useState(false);
+  const t = useTranslations("Index");
 
   return (
-    <DropdownMenu dir={localeConfig[currentLanguage].dir}>
+    <DropdownMenu>
       <DropdownMenuTrigger asChild>
+        {/* The name says what the button does. Without it a screen reader only hears the current language. */}
         <Button
           variant="outline"
           size="sm"
           className="min-h-11 px-3"
-          onKeyDown={() => setKeyboardMenu(true)}
-          onPointerDown={() => setKeyboardMenu(false)}
+          aria-label={`${t("language")}: ${localeConfig[currentLanguage].label}`}
         >
           {localeConfig[currentLanguage].label}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent
-        align="end"
-        onKeyDown={() => setKeyboardMenu(true)}
-        style={keyboardMenu ? { animation: "none" } : undefined}
-      >
-        {routing.locales.map((locale) => (
-          <DropdownMenuItem
-            key={locale}
-            className="min-h-11 justify-between"
-            onClick={() => router.replace(pathname, { locale })}
-            aria-current={locale === currentLanguage ? "true" : undefined}
-          >
-            {localeConfig[locale].label}
-            {locale === currentLanguage && <Check className="size-4" aria-hidden />}
-          </DropdownMenuItem>
-        ))}
+      <DropdownMenuContent align="end">
+        {/* Radio items expose the current language to assistive tech (aria-checked). */}
+        <DropdownMenuRadioGroup
+          value={currentLanguage}
+          onValueChange={(locale) =>
+            router.replace(pathname, { locale: locale as typeof routing.locales[number] })
+          }
+        >
+          {routing.locales.map((locale) => (
+            <DropdownMenuRadioItem
+              key={locale}
+              value={locale}
+              className="min-h-11"
+              // Each name is written in its own language, so mark it for screen readers.
+              lang={localeConfig[locale].languageTag}
+            >
+              {localeConfig[locale].label}
+            </DropdownMenuRadioItem>
+          ))}
+        </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   );

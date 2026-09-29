@@ -57,14 +57,14 @@ export default function CopyableCode({ children }: { children: string }) {
           size="icon"
           className="m-1 size-11 shrink-0"
           onClick={(event) => copy(event.detail > 0)}
-          aria-label={isCopied ? t("copied") : t("copyCode")}
+          aria-label={t("copyCode")}
         >
           <span className="relative size-4" aria-hidden>
             <Copy
-              className={`absolute inset-0 size-4 ${animateIcon ? "transition-[opacity,transform] duration-200 ease-[cubic-bezier(0.25,0.1,0,1)] motion-reduce:transition-none" : ""} ${isCopied ? "scale-50 opacity-0" : "scale-100 opacity-100"}`}
+              className={`absolute inset-0 size-4 ${animateIcon ? "transition-[opacity,scale] duration-200 ease-[cubic-bezier(0.25,0.1,0,1)] motion-reduce:transition-none" : ""} ${isCopied ? "scale-50 opacity-0" : "scale-100 opacity-100"}`}
             />
             <Check
-              className={`absolute inset-0 size-4 ${animateIcon ? "transition-[opacity,transform] duration-200 ease-[cubic-bezier(0.25,0.1,0,1)] motion-reduce:transition-none" : ""} ${isCopied ? "scale-100 opacity-100" : "scale-50 opacity-0"}`}
+              className={`absolute inset-0 size-4 ${animateIcon ? "transition-[opacity,scale] duration-200 ease-[cubic-bezier(0.25,0.1,0,1)] motion-reduce:transition-none" : ""} ${isCopied ? "scale-100 opacity-100" : "scale-50 opacity-0"}`}
             />
           </span>
         </Button>
