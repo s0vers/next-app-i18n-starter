@@ -979,6 +979,10 @@ GitHub Actions runs lint, the typecheck, `bun run i18n:check`, `bun run skills:c
 
 Add the key to `en.json` and every other dictionary. TypeScript checks message keys used in code against `en.json`, but does not compare the other locale files automatically. Restart the dev server if an edited JSON file is not picked up.
 
+### `Failed to load native binding` or an SWC cache error on Windows
+
+`next-intl` loads `@swc/core` from `next.config.ts`. From 1.16, SWC extracts its native addon into `%LOCALAPPDATA%swc` and refuses a cache folder whose ancestors grant write rights to an AppContainer account, which some Windows setups do. The `overrides` entry in `package.json` pins `@swc/core` to 1.15.33, which loads its addon directly. Keep the override until you have checked that `bun run build` works on your machine without it.
+
 ### Wrong locale in URL
 
 Check `src/i18n/routing.ts`. With `localePrefix: "as-needed"`, only non-default locales have a prefix. English always uses `/`.

@@ -1,9 +1,8 @@
 import type { ReactNode } from "react";
 import { Globe, Star } from "lucide-react";
-import { useFormatter, useLocale, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
 
 import { Link } from "@/i18n/navigation";
-import { localeConfig } from "@/i18n/locales";
 import { siteConfig } from "@/lib/site";
 import CopyableCode from "../CopyableCode";
 import LanguageSwitcher from "../LanguageSwitcher";
@@ -73,21 +72,18 @@ export default function HomeIndex({
   const t = useTranslations("Index");
   const l = useTranslations("Localization");
   const f = useTranslations("Footer");
-  const locale = useLocale();
   const format = useFormatter();
-  const isRTL = localeConfig[locale].dir === "rtl";
 
   const stars =
     starCount !== null ? format.number(starCount, "compact") : null;
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-dvh flex-col">
       <header className="w-full shrink-0 border-b bg-background">
         <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
           <Link
             href="/"
             className="flex min-h-11 min-w-0 items-center gap-2 text-base font-bold transition-colors duration-150 ease-out motion-reduce:transition-none hover:text-primary focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring sm:text-lg"
-            aria-label={t("boilerplateName")}
             title={t("boilerplateName")}
           >
             <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-foreground text-background">
@@ -95,10 +91,10 @@ export default function HomeIndex({
             </span>
             <span className="truncate">{t("boilerplateName")}</span>
           </Link>
-          <nav className="flex shrink-0 gap-1 sm:gap-2" aria-label={t("settings")}>
+          <div className="flex shrink-0 gap-1 sm:gap-2" role="group" aria-label={t("settings")}>
             <LanguageSwitcher />
             <ModeToggle />
-          </nav>
+          </div>
         </div>
       </header>
 
@@ -107,7 +103,7 @@ export default function HomeIndex({
           <div className="grid gap-10 lg:grid-cols-2 xl:grid-cols-5 xl:gap-14">
             <section className="min-w-0 space-y-6 xl:col-span-2">
               <div className="space-y-4">
-                <h1 className="max-w-xl text-3xl font-bold leading-[1.15] tracking-tight text-balance sm:text-4xl xl:text-5xl">
+                <h1 className="max-w-xl text-3xl font-bold leading-(--leading-heading) tracking-(--tracking-heading) text-balance sm:text-4xl xl:text-5xl">
                   {t("title")}
                 </h1>
                 <p className="max-w-prose leading-relaxed text-pretty text-muted-foreground">
@@ -115,7 +111,7 @@ export default function HomeIndex({
                 </p>
               </div>
               <div className="flex flex-wrap gap-3">
-                <Button className="min-h-11 motion-safe:active:scale-[0.96] motion-safe:focus-visible:active:scale-100" asChild>
+                <Button className="min-h-11 motion-safe:active:scale-96 motion-safe:focus-visible:active:scale-100" asChild>
                   <a
                     href={GITHUB_URL}
                     target="_blank"
@@ -125,7 +121,7 @@ export default function HomeIndex({
                     {t("cloneRepository")}
                   </a>
                 </Button>
-                <Button variant="outline" className="min-h-11 motion-safe:active:scale-[0.96] motion-safe:focus-visible:active:scale-100" asChild>
+                <Button variant="outline" className="min-h-11 motion-safe:active:scale-96 motion-safe:focus-visible:active:scale-100" asChild>
                   <a
                     href={GITHUB_URL}
                     target="_blank"
@@ -140,16 +136,12 @@ export default function HomeIndex({
             </section>
 
             <section className="min-w-0 space-y-4 xl:col-span-3">
-              <h2 className="text-2xl font-bold leading-tight tracking-tight text-balance">
+              <h2 className="text-2xl font-bold leading-(--leading-heading) tracking-(--tracking-heading) text-balance">
                 {t("howToUse")}
               </h2>
 
-              <Tabs
-                defaultValue="install"
-                className="w-full"
-                dir={isRTL ? "rtl" : "ltr"}
-              >
-                <TabsList className="grid h-auto w-full grid-cols-2 gap-1 p-1 sm:grid-cols-4">
+              <Tabs defaultValue="install" className="w-full">
+                <TabsList aria-label={t("howToUse")} className="grid h-auto w-full grid-cols-2 gap-1 p-1 sm:grid-cols-4">
                   <TabsTrigger className="min-h-11 whitespace-normal text-center leading-tight hover:text-foreground" value="install">{t("installation")}</TabsTrigger>
                   <TabsTrigger className="min-h-11 whitespace-normal text-center leading-tight hover:text-foreground" value="omitrtl">{t("omitrtlUsage")}</TabsTrigger>
                   <TabsTrigger className="min-h-11 whitespace-normal text-center leading-tight hover:text-foreground" value="contribute">{t("contribute")}</TabsTrigger>
@@ -254,7 +246,7 @@ export default function HomeIndex({
             href={GITHUB_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex min-h-11 min-w-11 items-center justify-center decoration-from-font [text-underline-position:from-font] [text-decoration-skip-ink:auto] hover:text-primary hover:underline"
+            className="inline-flex min-h-11 min-w-11 items-center justify-center decoration-from-font [text-underline-position:from-font] hover:text-primary hover:underline"
           >
             {f("githubLink")}
           </a>
