@@ -1,13 +1,10 @@
 import type { ReactNode } from "react";
-import { Globe, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 
-import { Link } from "@/i18n/navigation";
 import { siteConfig } from "@/lib/site";
 import CopyableCode from "../CopyableCode";
-import LanguageSwitcher from "../LanguageSwitcher";
 import LocalizationTab from "../LocalizationTab";
-import { ModeToggle } from "../ModeToggle";
 import OmitRTL from "../OmitRtl";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
@@ -71,187 +68,151 @@ export default function HomeIndex({
 }) {
   const t = useTranslations("Index");
   const l = useTranslations("Localization");
-  const f = useTranslations("Footer");
   const format = useFormatter();
 
   const stars =
     starCount !== null ? format.number(starCount, "compact") : null;
 
   return (
-    <div className="flex min-h-dvh flex-col">
-      <header className="w-full shrink-0 border-b bg-background">
-        <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
-          <Link
-            href="/"
-            className="flex min-h-11 min-w-0 items-center gap-2 text-base font-bold transition-colors duration-150 ease-out motion-reduce:transition-none hover:text-primary focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring sm:text-lg"
-            title={t("boilerplateName")}
-          >
-            <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-foreground text-background">
-              <Globe className="size-4" aria-hidden />
-            </span>
-            <span className="truncate">{t("boilerplateName")}</span>
-          </Link>
-          <div className="flex shrink-0 gap-1 sm:gap-2" role="group" aria-label={t("settings")}>
-            <LanguageSwitcher />
-            <ModeToggle />
-          </div>
+    <>
+      <div className="container mx-auto max-w-7xl space-y-10 px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
+        <div className="grid gap-10 lg:grid-cols-2 xl:grid-cols-5 xl:gap-14">
+          <section className="min-w-0 space-y-6 xl:col-span-2">
+            <div className="space-y-4">
+              <h1 className="max-w-xl text-3xl font-bold leading-(--leading-heading) tracking-(--tracking-heading) text-balance sm:text-4xl xl:text-5xl">
+                {t("title")}
+              </h1>
+              <p className="max-w-prose leading-relaxed text-pretty text-muted-foreground">
+                {t("description")}
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <Button className="min-h-11 motion-safe:active:scale-96 motion-safe:focus-visible:active:scale-100" asChild>
+                <a
+                  href={GITHUB_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <GithubIcon className="size-4" />
+                  {t("cloneRepository")}
+                </a>
+              </Button>
+              <Button variant="outline" className="min-h-11 motion-safe:active:scale-96 motion-safe:focus-visible:active:scale-100" asChild>
+                <a
+                  href={GITHUB_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Star className="size-4" />
+                  <span>{t("leaveStar")}</span>
+                  {stars && <span className="tabular-nums opacity-70">· {stars}</span>}
+                </a>
+              </Button>
+            </div>
+          </section>
+
+          <section className="min-w-0 space-y-4 xl:col-span-3">
+            <h2 className="text-2xl font-bold leading-(--leading-heading) tracking-(--tracking-heading) text-balance">
+              {t("howToUse")}
+            </h2>
+
+            <Tabs defaultValue="install" className="w-full">
+              <TabsList aria-label={t("howToUse")} className="grid h-auto w-full grid-cols-2 gap-1 p-1 sm:grid-cols-4">
+                <TabsTrigger className="min-h-11 whitespace-normal text-center leading-tight hover:text-foreground" value="install">{t("installation")}</TabsTrigger>
+                <TabsTrigger className="min-h-11 whitespace-normal text-center leading-tight hover:text-foreground" value="omitrtl">{t("omitrtlUsage")}</TabsTrigger>
+                <TabsTrigger className="min-h-11 whitespace-normal text-center leading-tight hover:text-foreground" value="contribute">{t("contribute")}</TabsTrigger>
+                <TabsTrigger className="min-h-11 whitespace-normal text-center leading-tight hover:text-foreground" value="localization">
+                  {t("localization")}
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="install" className="mt-4">
+                <Card className="gap-5 border-border/80 py-5 shadow-none sm:gap-6 sm:py-6">
+                  <CardHeader className="px-4 sm:px-6">
+                    <CardTitle>{t("gettingStarted")}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-5 px-4 sm:px-6">
+                    <InstallationStep
+                      description={t("installationSteps.cloneRepository")}
+                      code={CODE_EXAMPLES.clone}
+                      omitRTL
+                    />
+                    <InstallationStep
+                      description={t("installationSteps.installDependencies")}
+                      code={CODE_EXAMPLES.install}
+                      omitRTL
+                    />
+                    <InstallationStep
+                      description={t("installationSteps.startDevServer")}
+                      code={CODE_EXAMPLES.dev}
+                      omitRTL
+                    />
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="omitrtl" className="mt-4">
+                <Card className="gap-5 border-border/80 py-5 shadow-none sm:gap-6 sm:py-6">
+                  <CardHeader className="px-4 sm:px-6">
+                    <CardTitle>{t("omitrtlUsage")}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4 px-4 sm:px-6">
+                    <p className="max-w-prose leading-relaxed text-pretty text-muted-foreground">
+                      {t("OmitRTLInstruction")}
+                    </p>
+                    <OmitRTL>
+                      <CopyableCode>{CODE_EXAMPLES.omitRTLExample}</CopyableCode>
+                    </OmitRTL>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="contribute" className="mt-4">
+                <Card className="gap-5 border-border/80 py-5 shadow-none sm:gap-6 sm:py-6">
+                  <CardHeader className="px-4 sm:px-6">
+                    <CardTitle>{t("howToContribute")}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4 px-4 sm:px-6">
+                    <p className="leading-relaxed text-muted-foreground">
+                      {t("contributeSteps.fork")}
+                    </p>
+                    <InstallationStep
+                      description={t("contributeSteps.createBranch")}
+                      code={CODE_EXAMPLES.branch}
+                      omitRTL
+                    />
+                    <InstallationStep
+                      description={t("contributeSteps.commit")}
+                      code={CODE_EXAMPLES.commit}
+                      omitRTL
+                    />
+                    <InstallationStep
+                      description={t("contributeSteps.push")}
+                      code={CODE_EXAMPLES.push}
+                      omitRTL
+                    />
+                    <p className="leading-relaxed text-muted-foreground">
+                      {t("contributeSteps.pullRequest")}
+                    </p>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="localization" className="mt-4">
+                <Card className="gap-5 border-border/80 py-5 shadow-none sm:gap-6 sm:py-6">
+                  <CardHeader className="px-4 sm:px-6">
+                    <CardTitle>{l("title")}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="px-4 sm:px-6">
+                    <LocalizationTab />
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
+          </section>
         </div>
-      </header>
-
-      <main className="flex-1 bg-muted/25">
-        <div className="container mx-auto max-w-7xl space-y-10 px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
-          <div className="grid gap-10 lg:grid-cols-2 xl:grid-cols-5 xl:gap-14">
-            <section className="min-w-0 space-y-6 xl:col-span-2">
-              <div className="space-y-4">
-                <h1 className="max-w-xl text-3xl font-bold leading-(--leading-heading) tracking-(--tracking-heading) text-balance sm:text-4xl xl:text-5xl">
-                  {t("title")}
-                </h1>
-                <p className="max-w-prose leading-relaxed text-pretty text-muted-foreground">
-                  {t("description")}
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-3">
-                <Button className="min-h-11 motion-safe:active:scale-96 motion-safe:focus-visible:active:scale-100" asChild>
-                  <a
-                    href={GITHUB_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <GithubIcon className="size-4" />
-                    {t("cloneRepository")}
-                  </a>
-                </Button>
-                <Button variant="outline" className="min-h-11 motion-safe:active:scale-96 motion-safe:focus-visible:active:scale-100" asChild>
-                  <a
-                    href={GITHUB_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Star className="size-4" />
-                    <span>{t("leaveStar")}</span>
-                    {stars && <span className="tabular-nums opacity-70">· {stars}</span>}
-                  </a>
-                </Button>
-              </div>
-            </section>
-
-            <section className="min-w-0 space-y-4 xl:col-span-3">
-              <h2 className="text-2xl font-bold leading-(--leading-heading) tracking-(--tracking-heading) text-balance">
-                {t("howToUse")}
-              </h2>
-
-              <Tabs defaultValue="install" className="w-full">
-                <TabsList aria-label={t("howToUse")} className="grid h-auto w-full grid-cols-2 gap-1 p-1 sm:grid-cols-4">
-                  <TabsTrigger className="min-h-11 whitespace-normal text-center leading-tight hover:text-foreground" value="install">{t("installation")}</TabsTrigger>
-                  <TabsTrigger className="min-h-11 whitespace-normal text-center leading-tight hover:text-foreground" value="omitrtl">{t("omitrtlUsage")}</TabsTrigger>
-                  <TabsTrigger className="min-h-11 whitespace-normal text-center leading-tight hover:text-foreground" value="contribute">{t("contribute")}</TabsTrigger>
-                  <TabsTrigger className="min-h-11 whitespace-normal text-center leading-tight hover:text-foreground" value="localization">
-                    {t("localization")}
-                  </TabsTrigger>
-                </TabsList>
-
-                <TabsContent value="install" className="mt-4">
-                  <Card className="gap-5 border-border/80 py-5 shadow-none sm:gap-6 sm:py-6">
-                    <CardHeader className="px-4 sm:px-6">
-                      <CardTitle>{t("gettingStarted")}</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-5 px-4 sm:px-6">
-                      <InstallationStep
-                        description={t("installationSteps.cloneRepository")}
-                        code={CODE_EXAMPLES.clone}
-                        omitRTL
-                      />
-                      <InstallationStep
-                        description={t("installationSteps.installDependencies")}
-                        code={CODE_EXAMPLES.install}
-                        omitRTL
-                      />
-                      <InstallationStep
-                        description={t("installationSteps.startDevServer")}
-                        code={CODE_EXAMPLES.dev}
-                        omitRTL
-                      />
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-
-                <TabsContent value="omitrtl" className="mt-4">
-                  <Card className="gap-5 border-border/80 py-5 shadow-none sm:gap-6 sm:py-6">
-                    <CardHeader className="px-4 sm:px-6">
-                      <CardTitle>{t("omitrtlUsage")}</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4 px-4 sm:px-6">
-                      <p className="max-w-prose leading-relaxed text-pretty text-muted-foreground">
-                        {t("OmitRTLInstruction")}
-                      </p>
-                      <OmitRTL>
-                        <CopyableCode>{CODE_EXAMPLES.omitRTLExample}</CopyableCode>
-                      </OmitRTL>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-
-                <TabsContent value="contribute" className="mt-4">
-                  <Card className="gap-5 border-border/80 py-5 shadow-none sm:gap-6 sm:py-6">
-                    <CardHeader className="px-4 sm:px-6">
-                      <CardTitle>{t("howToContribute")}</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4 px-4 sm:px-6">
-                      <p className="leading-relaxed text-muted-foreground">
-                        {t("contributeSteps.fork")}
-                      </p>
-                      <InstallationStep
-                        description={t("contributeSteps.createBranch")}
-                        code={CODE_EXAMPLES.branch}
-                        omitRTL
-                      />
-                      <InstallationStep
-                        description={t("contributeSteps.commit")}
-                        code={CODE_EXAMPLES.commit}
-                        omitRTL
-                      />
-                      <InstallationStep
-                        description={t("contributeSteps.push")}
-                        code={CODE_EXAMPLES.push}
-                        omitRTL
-                      />
-                      <p className="leading-relaxed text-muted-foreground">
-                        {t("contributeSteps.pullRequest")}
-                      </p>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-
-                <TabsContent value="localization" className="mt-4">
-                  <Card className="gap-5 border-border/80 py-5 shadow-none sm:gap-6 sm:py-6">
-                    <CardHeader className="px-4 sm:px-6">
-                      <CardTitle>{l("title")}</CardTitle>
-                    </CardHeader>
-                    <CardContent className="px-4 sm:px-6">
-                      <LocalizationTab />
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-              </Tabs>
-            </section>
-          </div>
-        </div>
-        {guide}
-      </main>
-
-      <footer className="w-full shrink-0 border-t bg-background">
-        <div className="container mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-2 text-sm text-muted-foreground sm:flex-row sm:px-6 lg:px-8">
-          <p>{f("copyright")}</p>
-          <a
-            href={GITHUB_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex min-h-11 min-w-11 items-center justify-center decoration-from-font [text-underline-position:from-font] hover:text-primary hover:underline"
-          >
-            {f("githubLink")}
-          </a>
-        </div>
-      </footer>
-    </div>
+      </div>
+      {guide}
+    </>
   );
 }

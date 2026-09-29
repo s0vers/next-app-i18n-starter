@@ -104,7 +104,7 @@ next-app-i18n-starter/
 ├── src/
 │   ├── app/
 │   │   ├── [locale]/               # All pages are locale-scoped
-│   │   │   ├── layout.tsx          # Metadata, theme SSR, providers
+│   │   │   ├── layout.tsx          # Metadata, theme SSR, providers, page shell
 │   │   │   ├── page.tsx            # Home + JSON-LD structured data
 │   │   │   ├── not-found.tsx       # Localized 404
 │   │   │   ├── error.tsx           # Localized error boundary
@@ -117,6 +117,8 @@ next-app-i18n-starter/
 │   ├── components/
 │   │   ├── pages/HomeIndex.tsx     # Landing page (hero + tabs), a Server Component
 │   │   ├── CopyableCode.tsx        # Copy button, the page's client island
+│   │   ├── SiteHeader.tsx          # Logo, language switcher, theme toggle (every page)
+│   │   ├── SiteFooter.tsx          # Footer (every page)
 │   │   ├── LocalizationTab.tsx     # Locale formatting demo
 │   │   ├── LanguageSwitcher.tsx    # Locale dropdown
 │   │   ├── ModeToggle.tsx          # Light/dark toggle
