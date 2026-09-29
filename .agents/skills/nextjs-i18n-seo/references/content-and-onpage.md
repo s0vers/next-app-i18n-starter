@@ -2,7 +2,7 @@
 
 Use when the work concerns what a page says, who it serves, how pages link to each other, or how a result describes the page. Markup cannot make up for a page that does not meet a real need.
 
-Evidence tags: `[doc]` platform documentation, `[practice]` practitioner evidence. See [evidence and reporting](evidence-and-reporting.md).
+Evidence tags: see [evidence and reporting](evidence-and-reporting.md).
 
 ## Build the page around one search task
 

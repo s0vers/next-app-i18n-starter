@@ -2,7 +2,7 @@
 
 Use when a task involves a blog, article template, publication workflow, archive, author page, feed, syndication, news, or a content refresh. A blog is not automatically a news site. Choose the reader task first and the search feature second.
 
-Evidence tags: `[doc]` platform documentation, `[practice]` practitioner evidence, `[unverified]`. See [evidence and reporting](evidence-and-reporting.md). Structured-data types are in [structured data](structured-data.md).
+Evidence tags: see [evidence and reporting](evidence-and-reporting.md).
 
 ## Gate: should this article exist
 

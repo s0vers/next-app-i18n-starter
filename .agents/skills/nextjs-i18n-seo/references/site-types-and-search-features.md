@@ -2,7 +2,7 @@
 
 Use when the site is not a plain store or blog: SaaS, documentation, marketplace, local business, jobs, recipes, events, video, podcasts, apps, courses, forums, portfolio, real estate, travel, or nonprofit. For stores use [commerce](commerce-and-products.md). For articles and news use [editorial](editorial-and-publishing.md). Types and eligibility change, so open the [search gallery](https://developers.google.com/search/docs/appearance/structured-data/search-gallery) before promising a feature.
 
-Evidence tags: `[doc]` platform documentation, `[practice]` practitioner evidence, `[vendor]` vendor blog, low trust. See [evidence and reporting](evidence-and-reporting.md). Rows marked `[thin]` rest on few sources.
+Evidence tags: see [evidence and reporting](evidence-and-reporting.md).
 
 ## Pick the row
 
@@ -10,9 +10,9 @@ Find the closest row. If none fits, name the reader's task, use [content and on-
 
 | Site | Page jobs | Schema | Top pitfalls | Extra structure |
 | --- | --- | --- | --- | --- |
-| SaaS or B2B [vendor] | Category, feature, use case, integration, pricing, comparison, case study, docs, changelog | Organization, `SoftwareApplication` only with real rating and price | Template "vs" pages without testing. Ranking yourself first in "best tools". Logo-swap integration pages. | Content types for feature, integration, and comparison with evidence and a last-verified date |
-| Docs and knowledge base [vendor] | Task guides, reference, troubleshooting, migration | Breadcrumb. Article or `TechArticle` optional. | Every version indexed with no pointer to the current one. Client-only rendering. Titles like "Introduction". | Version docs and canonical to the latest |
-| Changelog [vendor] | One permalink per release, linked to docs | Article, low value | One endless page. No dates. | Optional |
+| SaaS or B2B [unverified] | Category, feature, use case, integration, pricing, comparison, case study, docs, changelog | Organization, `SoftwareApplication` only with real rating and price | Template "vs" pages without testing. Ranking yourself first in "best tools". Logo-swap integration pages. | Content types for feature, integration, and comparison with evidence and a last-verified date |
+| Docs and knowledge base [unverified] | Task guides, reference, troubleshooting, migration | Breadcrumb. Article or `TechArticle` optional. | Every version indexed with no pointer to the current one. Client-only rendering. Titles like "Introduction". | Version docs and canonical to the latest |
+| Changelog [unverified] | One permalink per release, linked to docs | Article, low value | One endless page. No dates. | Optional |
 | Marketplace or classifieds | Category, listing, seller, search | `Product` by whether purchase happens on the page, `ProfilePage` for sellers | Facet and search URL explosion. Expired listings left indexed. User content without `rel="ugc"`. | Listing lifecycle: 410 on removal, facet rules |
 | Local or multi-location | One page per real location with address, hours, services, third-party reviews | `LocalBusiness` subtype, Breadcrumb | City doorway pages. Self-serving review stars. Inconsistent name, address, phone. | Location model with a real-presence flag |
 | Job board | Job detail, category and city lists, employer pages | `JobPosting` on detail pages only | Expired jobs. Login walls before apply. Scraping without employer permission. | Lifecycle and the Indexing API. Remove expired jobs with `validThrough` or 404 or 410. |

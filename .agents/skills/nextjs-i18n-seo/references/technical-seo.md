@@ -2,7 +2,7 @@
 
 Use when a search engine cannot discover, fetch, render, understand, or choose the intended URL, or when changing metadata, robots, sitemap, redirects, canonicals, or rendering. Diagnose the failing layer before touching metadata or markup.
 
-Evidence tags: `[doc]` platform documentation, `[practice]` practitioner evidence. See [evidence and reporting](evidence-and-reporting.md).
+Evidence tags: see [evidence and reporting](evidence-and-reporting.md).
 
 ## Gate: is there production evidence
 

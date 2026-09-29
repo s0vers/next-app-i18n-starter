@@ -2,7 +2,7 @@
 
 Use for a site-wide review, a production launch gate, a URL or domain change, adding or removing a locale, or a traffic decline. Every finding needs evidence and a next action.
 
-Evidence tags: `[doc]` platform documentation, `[practice]` practitioner evidence. See [evidence and reporting](evidence-and-reporting.md).
+Evidence tags: see [evidence and reporting](evidence-and-reporting.md).
 
 ## Scope first
 

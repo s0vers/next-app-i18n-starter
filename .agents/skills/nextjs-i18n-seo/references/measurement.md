@@ -2,7 +2,7 @@
 
 Use when installing analytics, evaluating an SEO change, diagnosing a traffic drop or a silent locale, or reporting visibility. State the question first, then pick the report. Search Console, GA4, Bing, and AI citation reports count different events. Never add their numbers together.
 
-Evidence tags: `[doc]` platform documentation, `[unverified]` third-party report of a platform fact, `[unverified]`. See [evidence and reporting](evidence-and-reporting.md).
+Evidence tags: see [evidence and reporting](evidence-and-reporting.md).
 
 This starter uses Vercel Analytics and Speed Insights. It has no GA4. The setup below applies to a fork that adds it.
 
@@ -52,27 +52,8 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 )}
 ```
 
-A `beforeInteractive` script runs once per document load. A client-side language switch does not run it again, so `site_locale` goes stale, and the history-change `page_view` can fire before it updates. Check both in GA4 DebugView. For exact per-page values, turn off the automatic `page_view` (`send_page_view: false`, and disable history-change measurement, or every view is duplicated) and send your own:
+A `beforeInteractive` script runs once per document load. A client-side language switch does not run it again, so `site_locale` goes stale, and the history-change `page_view` can fire before it updates. Check both in GA4 DebugView. For exact per-page values, set `send_page_view: false`, disable history-change measurement (or every view is duplicated), and send your own `page_view` event with `site_locale` from `useLocale()` in an effect keyed on the pathname and locale.
 
-```tsx
-"use client"; // SKETCH: manual page_view with the locale
-import { usePathname } from "@/i18n/navigation";
-import { useLocale } from "next-intl";
-import { useEffect } from "react";
-
-export function GaPageView() {
-  const pathname = usePathname();
-  const locale = useLocale();
-  useEffect(() => {
-    window.gtag?.("event", "page_view", {
-      page_location: location.href,
-      page_title: document.title,
-      site_locale: locale,
-    });
-  }, [pathname, locale]);
-  return null;
-}
-```
 
 Update consent from the banner with `gtag('consent','update',{ analytics_storage: 'granted' })`. Basic and advanced consent mode differ in when tags load, and the choice is a legal decision. [unverified]
 
