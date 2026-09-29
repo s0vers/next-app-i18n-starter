@@ -120,7 +120,7 @@ export default function HomeIndex({
             </h2>
 
             <Tabs defaultValue="install" className="w-full">
-              <TabsList aria-label={t("howToUse")} className="grid h-auto w-full grid-cols-2 gap-1 p-1 sm:grid-cols-4">
+              <TabsList aria-label={t("howToUse")} className="grid w-full group-data-horizontal/tabs:h-auto grid-cols-2 gap-1 p-1 sm:grid-cols-4">
                 <TabsTrigger className="min-h-11 whitespace-normal text-center leading-tight hover:text-foreground" value="install">{t("installation")}</TabsTrigger>
                 <TabsTrigger className="min-h-11 whitespace-normal text-center leading-tight hover:text-foreground" value="omitrtl">{t("omitrtlUsage")}</TabsTrigger>
                 <TabsTrigger className="min-h-11 whitespace-normal text-center leading-tight hover:text-foreground" value="contribute">{t("contribute")}</TabsTrigger>

@@ -47,7 +47,7 @@ A multilingual Next.js starter built with **Next.js 16**, **React 19**, **next-i
 | **i18n**       | next-intl 4: ICU messages, `useFormatter`, and locale-driven formatting   |
 | **Languages**  | English, Arabic (RTL), Chinese, Spanish, Japanese                           |
 | **Formatting** | Locale-based currency, dates, compact numbers, and relative time          |
-| **UI**         | shadcn/ui components on Base UI, Tailwind CSS 4, light/dark theme           |
+| **UI**         | shadcn/ui (base-nova style) on Base UI, Tailwind CSS 4, light/dark theme           |
 | **RTL**        | Automatic `dir="rtl"` for Arabic + `OmitRTL` utility for LTR islands        |
 | **SEO**        | `metadataBase`, hreflang, JSON-LD, sitemap/robots, OG image                 |
 | **DX**         | TypeScript, typed translation keys via `global.d.ts`, ESLint flat config    |

@@ -33,7 +33,7 @@ The i18n architecture in this starter (locale-scoped App Router, `localePrefix: 
 | [Tailwind CSS](https://tailwindcss.com) | Utility-first styling (v4) | [GitHub](https://github.com/tailwindlabs/tailwindcss) |
 | [tailwindcss-animate](https://github.com/jamiebuilds/tailwindcss-animate) | Animation utilities for UI components | [GitHub](https://github.com/jamiebuilds/tailwindcss-animate) |
 | [class-variance-authority](https://cva.style) | Variant APIs for buttons and similar components | [GitHub](https://github.com/joe-bell/cva) |
-| [clsx](https://github.com/lukeed/clsx) + [tailwind-merge](https://github.com/dcastil/tailwind-merge) | `cn()` class merging in `src/lib/utils.ts` | — |
+| [cn](https://github.com/shadcn-ui/cn) | `cn()` class merging, re-exported from `src/lib/utils.ts` | — |
 | [Lucide](https://lucide.dev) | Icons (`lucide-react`) | [GitHub](https://github.com/lucide-icons/lucide) |
 | [Geist](https://vercel.com/font) | Sans and mono fonts via `next/font/google` | — |
 
