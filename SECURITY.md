@@ -12,4 +12,4 @@ The code in this repository: the app, its configuration, and the scripts and wor
 
 ## Hardening a fork
 
-The template sends basic security headers from `next.config.ts` and turns off `X-Powered-By`. It does not send a `Content-Security-Policy`, because the right one depends on the scripts and hosts your site uses. Add one before you ship anything that handles user data.
+The template sends basic security headers from `next.config.ts`, turns off `X-Powered-By`, and sets a nonce-based `Content-Security-Policy` in `src/proxy.ts`. The policy allows only your own origin. When you add a script, font, image, or API host, add it to `buildCsp` in `src/proxy.ts`. Set `REPORT_ONLY = true` while you test, so violations are logged in the browser console instead of blocked.
