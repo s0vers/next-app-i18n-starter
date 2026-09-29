@@ -2,8 +2,6 @@
 
 Use when a task adds, changes, or audits locale routes, `hreflang`, language or country targeting, translated metadata, a locale switcher, or a market launch. A language switcher is a product feature. International SEO also needs the right audience, URL, content, and search intent per market.
 
-Evidence tags: see evidence and reporting (`nextjs-seo-technical`).
-
 ## Gate: market or translation demo
 
 Record these for every locale before touching code. Unknown answers mean the locale is a translated demo, not a market launch. Say so, and do not invent demand or keywords.
@@ -118,7 +116,7 @@ A Vercel-hosted `/zh` mostly serves Simplified readers outside mainland China on
 
 ## Failure checks
 
-`node .agents/skills/nextjs-seo-technical/scripts/verify-seo.mjs` covers invalid codes, missing self or return links, non-200 alternates, relative URLs, disagreeing sources, non-self canonicals, and redirects by language. For partial translation pass `--urls` with a full, a partial, and an untranslated page. It cannot judge these, so check them by hand:
+The `verify-seo.mjs` script in the `nextjs-seo-technical` skill (in this starter: `bun run seo:verify`) covers invalid codes, missing self or return links, non-200 alternates, relative URLs, disagreeing sources, non-self canonicals, and redirects by language. For partial translation pass `--urls` with a full, a partial, and an untranslated page. It cannot judge these, so check them by hand:
 
 | Failure | Check |
 | --- | --- |

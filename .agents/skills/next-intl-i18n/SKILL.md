@@ -1,6 +1,6 @@
 ---
 name: next-intl-i18n
-description: Implement, migrate, or debug next-intl in a Next.js App Router project. Use when a change touches a locale URL, proxy, request config, message file, ICU message, formatted number, date, or list, RTL or CJK layout, localized CMS content, a locale switcher, or a translated error page. Not for canonicals, hreflang, sitemaps, or indexing; use nextjs-seo-technical or nextjs-seo-international for those, and load next-intl-i18n with nextjs-seo-international when a locale is added.
+description: Implement, migrate, or debug next-intl in a Next.js App Router project. Use when a change touches a locale URL, proxy, request config, message file, ICU message, formatted number, date, or list, RTL or CJK layout, localized CMS content, a locale switcher, or a translated error page. For canonicals, hreflang, sitemaps, or indexing use nextjs-seo-technical or nextjs-seo-international, and load next-intl-i18n with nextjs-seo-international when a locale is added.
 ---
 
 # next-intl in a Next.js App Router project
@@ -11,7 +11,7 @@ Both libraries move fast, and each reference dates its sources. Read the install
 
 ## Recon
 
-Always read `package.json` (`next` and `next-intl` versions) and the nearest `AGENTS.md`. Then read by task, and stop when the task is unambiguous.
+Always read `package.json` (`next` and `next-intl` versions) and the nearest `AGENTS.md`. Then read by task.
 
 | Task | Also read |
 | --- | --- |
@@ -20,7 +20,7 @@ Always read `package.json` (`next` and `next-intl` versions) and the nearest `AG
 | Rendering, static output, or a new page | `request.ts`, `[locale]/layout.tsx`, the affected page |
 | A new locale | `src/i18n/locales.ts`, every file in `dictionary/`, the layout, `LanguageSwitcher.tsx`, `HomeIndex.tsx` |
 
-Then answer in one line each: which API path (below), which locale source, which rendering mode (static, dynamic, cached). A message-only task can answer the last two with "unchanged".
+Recon is done when you can answer, one line each: which API path (below), which locale source, which rendering mode (static, dynamic, cached). A message-only task answers the last two with "unchanged".
 
 If the config already does what the user asks, the fault is the deployment or a stale cache, not the source. Check the deployed response before editing.
 
@@ -29,7 +29,7 @@ If the config already does what the user asks, the fault is the deployment or a 
 | Root params | Next >= 16.3 and `[locale]` hosts `<html>` | `next/root-params`, automatic inside `getTranslations` |
 | Legacy | `requestLocale` in `request.ts`, `setRequestLocale` in pages | Explicit `setRequestLocale(locale)` before any next-intl call |
 
-`requestLocale` and `setRequestLocale` are deprecated since next-intl 4.13.6 and 4.13.5. They still work. On an installed version older than 4.13.5 the deprecation does not apply yet, and the legacy path is simply current. This template moved to root params on 2026-09-30 (`src/i18n/request.ts`), so do not reintroduce `setRequestLocale` here. A fork or older project may still use the legacy path. Migrate one only when the task says so, and follow the migration steps in [architecture](references/architecture-and-rendering.md#migrate-to-root-params).
+`requestLocale` and `setRequestLocale` are deprecated since next-intl 4.13.6 and 4.13.5. They still work. On an installed version older than 4.13.5 the deprecation does not apply yet, and the legacy path is simply current. Migrate one only when the task says so, and follow the migration steps in [architecture](references/architecture-and-rendering.md#migrate-to-root-params).
 
 ## Read next
 
@@ -58,12 +58,12 @@ Each rule carries its reason. A rule applied without its reason gets applied whe
 7. Language is not market. Currency, time zone, tax, and availability come from explicit config or data, not from the locale key.
 8. Use logical CSS (`ms-*`, `pe-*`, `text-start`, `border-s`). Physical `ml-*` and `text-left` break in RTL. Exempt: directional icons, which use `rtl:-scale-x-100`.
 9. Translate on the server. The catalog and the formatter stay off the client bundle, and the ICU parser stays out of it too.
-10. Dictionary parity is not localization, and draft copy is not reviewed copy. A locale is done when its rendered page has the right text, `lang`, `dir`, and formatting, and a fluent reviewer signed off. Until then label the copy as draft in the report.
+10. Dictionary parity is not localization, and draft copy is not reviewed copy. A locale is done when its rendered page has the right text, `lang`, `dir`, and formatting, and a fluent reviewer signed off. Parity checks compare keys, not meaning. Until then label the copy as draft in the report.
 
 ## Done when
 
-1. `bun run i18n:check` exits 0 after any message or locale edit. It validates the locale registry (`check-locales.mjs`) and message parity (`check-messages.mjs`).
-2. `bun run lint` passes after TypeScript or TSX edits. `bun run build` passes after substantive changes, with `NEXT_PUBLIC_SITE_URL` set to the safe example from `.env.example`.
+1. This skill's `scripts/check-locales.mjs` (locale registry) and `scripts/check-messages.mjs` (message parity) exit 0 after any message or locale edit. In this starter: `bun run i18n:check`.
+2. The project's lint passes after TypeScript or TSX edits, and its build passes after substantive changes. In this starter: `bun run lint` and `bun run build`, with `NEXT_PUBLIC_SITE_URL` set to the safe example from `.env.example`.
 3. The rendered check for the change type in [Verification](references/verification.md) ran against English and at least one prefixed locale. Arabic counts whenever layout or formatting changed. If no server may run, or nothing renders the change yet, run the static checks (message check, lint, build route table) and list every rendered check under Not verified.
 4. The report lists what was verified and what was not, using the shape in [Verification](references/verification.md#report-shape). "Not verified" is a valid entry. A guess presented as a result is not.
 
@@ -71,4 +71,4 @@ When nobody can answer a question (an unattended run), take the conservative def
 
 ## Documentation boundary
 
-The [official next-intl docs](https://next-intl.dev/docs/getting-started) own API signatures. The installed package and repository conventions settle version differences. `next-intl.dev` publishes no `llms.txt`, so read the pages.
+The [official next-intl docs](https://next-intl.dev/docs/getting-started) own API signatures. The installed package and repository conventions settle version differences.

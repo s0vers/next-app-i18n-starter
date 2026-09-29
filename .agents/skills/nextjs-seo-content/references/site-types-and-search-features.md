@@ -2,8 +2,6 @@
 
 Use when the site is not a plain store or blog: SaaS, documentation, marketplace, local business, jobs, recipes, events, video, podcasts, apps, courses, forums, portfolio, real estate, travel, or nonprofit. For stores use commerce (`nextjs-seo-commerce`). For articles and news use [editorial](editorial-and-publishing.md). Types and eligibility change, so open the [search gallery](https://developers.google.com/search/docs/appearance/structured-data/search-gallery) before promising a feature.
 
-Evidence tags: see evidence and reporting (`nextjs-seo-technical`).
-
 ## Pick the row
 
 Find the closest row. If none fits, name the reader's task, use [content and on-page](content-and-onpage.md), and do not improvise eligibility rules.

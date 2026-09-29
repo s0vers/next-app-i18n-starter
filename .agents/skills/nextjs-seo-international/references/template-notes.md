@@ -21,7 +21,7 @@ Repository facts, not SEO rules. Read this when the task edits this starter or a
 
 ```bash
 bun run dev
-node .agents/skills/nextjs-seo-technical/scripts/verify-seo.mjs --base http://localhost:3000
+bun run seo:verify -- --base http://localhost:3000
 ```
 
 Expect 0 failures. The script proves local implementation only.

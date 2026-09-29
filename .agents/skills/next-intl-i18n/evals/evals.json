@@ -1,6 +1,6 @@
 {
   "skill": "next-intl-i18n",
-  "note": "Run each prompt with the skill and with the previous version or no skill. Grade every assertion as pass or fail from the transcript and the resulting diff. A good assertion fails without the skill. Entries marked source: user-report come from real issues or pull requests on the repository.",
+  "note": "Run each prompt with the skill and with the previous version or no skill. Grade every assertion as pass or fail from the transcript and the resulting diff. A good assertion fails without the skill. Entries marked source: user-report come from real issues or pull requests on the repository. should_trigger prompts must load this skill. should_not_trigger prompts are near misses that belong to another skill and must not load this one.",
   "evals": [
     {
       "id": "add-german",
@@ -82,5 +82,25 @@
         "Runs or cites bun run i18n:check, which fails on an unknown language code"
       ]
     }
+  ],
+  "should_trigger": [
+    "Add German (de) as a new locale to this template.",
+    "Add a message that says how many items are in the cart, in all five languages.",
+    "The language switcher keeps me on the English page when I pick Spanish. What is wrong?",
+    "Migrate this project from setRequestLocale to the root params approach.",
+    "Format a price and a date for the Arabic locale, and the digits should follow the locale.",
+    "Our Arabic layout is broken: the icons point the wrong way and padding is on the wrong side.",
+    "How do I localize blog posts from a CMS with a different slug per language?",
+    "The error page shows English text under /ja. How do I translate it?"
+  ],
+  "should_not_trigger": [
+    "Which hreflang tags should the German page emit?",
+    "Our sitemap is missing the Spanish URLs.",
+    "Google shows the wrong language version in results.",
+    "Why is /pricing not indexed?",
+    "Add Product JSON-LD to the item page.",
+    "Organic traffic from Japan dropped.",
+    "Block GPTBot in robots.txt.",
+    "Rewrite the homepage title for search intent."
   ]
 }

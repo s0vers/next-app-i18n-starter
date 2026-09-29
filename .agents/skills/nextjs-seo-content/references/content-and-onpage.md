@@ -2,8 +2,6 @@
 
 Use when the work concerns what a page says, who it serves, how pages link to each other, or how a result describes the page. Markup cannot make up for a page that does not meet a real need.
 
-Evidence tags: see evidence and reporting (`nextjs-seo-technical`).
-
 ## Build the page around one search task
 
 1. Name the audience and the decision the page helps with. Ask what the visitor needs to know or do next.

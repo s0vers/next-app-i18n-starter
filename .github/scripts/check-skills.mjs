@@ -9,7 +9,9 @@
 //   - SKILL.md stays under 500 lines
 //   - every relative markdown link resolves to a file, and every #anchor to a heading
 //   - no link leaves the skill folder, because an installed skill is copied alone
-//   - evals/evals.json parses, and a skill with trigger lists has both lists non-empty
+//   - evals/evals.json parses and has at least MIN_TRIGGERS should_trigger and
+//     should_not_trigger prompts, so a description change can be tested
+//   - every file in references/ and scripts/ is named in SKILL.md, so none is orphaned
 
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
@@ -17,6 +19,8 @@ import { dirname, join, relative, resolve } from "node:path";
 const args = process.argv.slice(2);
 const dirArg = args.indexOf("--dir");
 const root = resolve(dirArg >= 0 && args[dirArg + 1] ? args[dirArg + 1] : ".agents/skills");
+
+const MIN_TRIGGERS = 8;
 
 const problems = [];
 const fail = (file, message) => problems.push(`${relative(process.cwd(), file)}: ${message}`);
@@ -99,13 +103,23 @@ for (const dirName of skillDirs) {
     }
   }
 
+  for (const file of walk(join(root, dirName))) {
+    const rel = relative(join(root, dirName), file).replace(/\\/g, "/");
+    if (/^(references|scripts)\//.test(rel) && !text.includes(rel.split("/").pop())) {
+      fail(file, "is not named in SKILL.md, so nothing points an agent at it");
+    }
+  }
+
   const evalsFile = join(root, dirName, "evals", "evals.json");
-  if (existsSync(evalsFile)) {
+  if (!existsSync(evalsFile)) {
+    fail(evalsFile, "missing. Add evals with trigger and near-miss prompts");
+  } else {
     try {
       const evals = JSON.parse(readFileSync(evalsFile, "utf8"));
       if (evals.skill !== dirName) fail(evalsFile, `skill "${evals.skill}" must equal "${dirName}"`);
       for (const key of ["should_trigger", "should_not_trigger"]) {
-        if (key in evals && !evals[key].length) fail(evalsFile, `${key} is empty`);
+        const count = Array.isArray(evals[key]) ? evals[key].length : 0;
+        if (count < MIN_TRIGGERS) fail(evalsFile, `${key} has ${count} prompts, the minimum is ${MIN_TRIGGERS}`);
       }
     } catch (error) {
       fail(evalsFile, `invalid JSON: ${error.message}`);
