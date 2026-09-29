@@ -1,40 +1,32 @@
 ---
 name: next-intl-i18n
-description: Implement, review, or troubleshoot internationalization with next-intl in a Next.js app. Use the relevant routing, rendering, messages, formatting, or integration playbook; verify APIs against the installed next-intl and Next.js versions.
+description: Implement or debug next-intl localization in Next.js: locale routing, request configuration, translated UI, formatting, and framework integration. Use for concrete i18n work; use the SEO skill for search strategy and indexing policy.
 ---
 
-# next-intl implementation
+# next-intl in this repository
 
-Use this skill for changes to locale routing, translated messages, locale-aware formatting, or next-intl integration. Apply the library's documented model, then fit it to the repository's route architecture and product requirements. Internationalization includes language, regional conventions, URLs, direction, and content—not only translated strings.
+Keep each locale's URL, rendered language, messages, navigation, and regional formatting in agreement. Read the repository and nearest `AGENTS.md` first. Check `package.json` and installed types before applying live documentation examples: this template declares Next.js `^16.3.7`, pins next-intl `4.13.0`, and uses the supported `requestLocale` / `setRequestLocale` path. `src/i18n/AGENTS.md` requires that path until migration is explicitly in scope.
 
-## Choose a playbook
+## Route to the relevant reference
 
-| Work | Read |
+| Task | Read |
 | --- | --- |
-| Initial setup, request config, rendering, or static generation | [Architecture and rendering](references/architecture-and-rendering.md) |
-| Locales, prefixes, localized paths, domains, proxy, or navigation | [Routing and navigation](references/routing-and-navigation.md) |
-| Message catalogs, ICU, translation keys, dates, numbers, lists, or RTL | [Messages and formatting](references/messages-and-formatting.md) |
-| Metadata, actions, errors, tests, TypeScript, extraction, translation operations, or Storybook | [Integrations and workflows](references/integrations-and-workflows.md) |
-| Pages Router or non-Next React consumers | [Integrations and workflows](references/integrations-and-workflows.md#legacy-and-adjacent-environments) |
+| Request config, Server/Client Components, static rendering, or provider payload | [Architecture and rendering](references/architecture-and-rendering.md) |
+| Prefixes, proxy, pathnames, domains, navigation, or locale switching | [Routing and navigation](references/routing-and-navigation.md) |
+| Message catalogs, ICU, translations, regional formats, or RTL | [Messages and formatting](references/messages-and-formatting.md) |
+| Metadata and other server entry points, errors, typing, tooling, or tests | [Integrations and workflows](references/integrations-and-workflows.md) |
+| Pages Router or non-Next consumers | [Legacy and adjacent environments](references/integrations-and-workflows.md#legacy-and-adjacent-environments) |
 
-Load multiple playbooks only when the change crosses those areas. For broader search strategy, use the repository's SEO guidance when available; this skill covers next-intl's locale-aware integration points.
+Read a second reference only when the task crosses that boundary. For canonical URLs, `hreflang`, sitemap, indexing, content strategy, or search measurement, also read the [SEO skill](../nextjs-i18n-seo/SKILL.md).
 
-## Implementation loop
+## Work from the actual locale contract
 
-1. Read the repository instructions and inspect its installed `next-intl` and Next.js versions, routing config, request config, locale source, navigation exports, dictionaries, and affected route. Current online docs can describe APIs unavailable in the installed package.
-2. Establish the intended locale set, locale fallback, URL strategy, regional formatting, translation workflow, and whether the request means language choice or region choice. Derive answers from the user and tracked configuration; do not silently infer product policy from the library defaults.
-3. Select the matching playbook and implement the smallest complete change using the repository's established architecture. Keep routing config shared across proxy and navigation, and keep locale-dependent content and formatting request-scoped.
-4. Complete every affected locale path: routes, messages, formats, metadata, switcher behavior, and direction. Use the project's translation workflow; do not invent unsupported locale strings or pretend an untranslated fallback is reviewed copy.
-5. Verify the visible behavior and route behavior for the changed locale(s), then run the repository's relevant checks. Report which locales and execution paths were verified and which remain unverified.
+1. Inspect `src/i18n/locales.ts`, `routing.ts`, `request.ts`, `navigation.ts`, `src/proxy.ts`, the affected route and dictionaries. Identify the route locale, HTML language tag, region, currency, time zone, direction, and content locale separately. Do not infer a market policy from a language code.
+2. Define the public URL and content availability for each affected locale. For a CMS item, identify the same logical item across translations before building a locale switcher or alternate URLs. A configured locale does not prove that a translated page exists.
+3. Make the smallest complete change in the established architecture. Keep `defineRouting` shared between proxy and navigation, validate route params with `hasLocale`, and use `@/i18n/navigation` for locale-aware navigation. Use awaitable `next-intl/server` APIs in async Server Components and framework entry points.
+4. Update all required dictionaries when keys change. Preserve ICU arguments and rich-text slots; do not mark machine or draft copy as reviewed production translation.
+5. Verify the behavior affected by the change: direct load and navigation in English and at least one prefixed locale, missing or invalid locale handling, rendered `lang`/`dir`, correct messages and formatting, and any affected static or metadata output. Run repository checks required by `AGENTS.md`; report exact checks and locale paths exercised.
 
-## Working principles
+## Documentation boundary
 
-- Prefer Server Components for translated static content. Add client-side message delivery only for components that actually need client-side translation or formatting; pass translated labels from a Server Component to an interactive leaf when that fits.
-- Use next-intl's formatting APIs and the locale's real regional settings for dates, numbers, currencies, lists, and display names. Avoid hardcoded separators, currency symbols, plural logic, and locale names.
-- Use `createNavigation` wrappers for localized links and navigation. Keep routing settings in one shared source so links, proxy behavior, and generated URLs agree.
-- Treat examples and defaults in the docs as choices, not universal product decisions. In particular, determine whether locale detection, cookies, prefixes, domains, and static generation match the actual app.
-- For version-sensitive or experimental features, inspect the installed package types and current official docs before using them. Prefer stable APIs unless the task explicitly accepts an experimental dependency.
-
-## Source of truth
-
-This skill distills the official [next-intl documentation](https://next-intl.dev/docs/getting-started), checked 2026-09-30. The linked playbooks describe the decision points and caveats; consult the live docs for full API signatures and current version details. A dated source inventory and summary is in [docs/next-intl-docs-research.md](../../../docs/next-intl-docs-research.md).
+The [official next-intl docs](https://next-intl.dev/docs/getting-started) are the API source. Use the installed package and repository conventions to settle version differences. The [dated research inventory](../../../docs/next-intl-docs-research.md) records why the playbooks make their main recommendations; it is not a substitute for current API signatures.

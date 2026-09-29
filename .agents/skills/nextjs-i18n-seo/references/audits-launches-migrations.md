@@ -20,11 +20,11 @@ If production access is unavailable, audit the repository and local output, then
 2. **Technical sample:** select representative URLs and inspect status, redirects, crawl access, rendered HTML, `noindex`, canonical, title, language, and structured data. Expand the sample when templates or locales differ.
 3. **Content sample:** inspect whether each page has a distinct purpose, accurate metadata, useful main content, and sensible internal links. Use the content playbook for editorial work.
 4. **International sample:** verify body language, `<html lang>`, `dir`, canonicals, reciprocal alternates, locale switching, and sitemap output for every locale.
-5. **Platform data:** use Search Console or the relevant webmaster tool for indexing state, selected canonical, queries, pages, countries, and search appearance. Compare equivalent time periods and segments.
+5. **Platform data:** use Search Console or the relevant webmaster tool for indexing state, selected canonical, queries, pages, countries, and search appearance. Use [Measurement](measurement.md) for report definitions and attribution. Compare equivalent time periods and segments; identify analytics instrumentation changes before attributing a decline to search.
 6. **Performance and experience:** inspect field data and device behavior. Use local lab traces to diagnose problems; do not present a Lighthouse score alone as a ranking report.
 7. **Prioritize:** group duplicate symptoms by root cause and affected templates. Rate impact, number of URLs/users affected, confidence in evidence, and implementation cost. Separate blocking issues from enhancements and owner-only tasks.
 
-For every finding, record: evidence and affected URLs, observed problem, likely cause, recommended action, priority with rationale, verification method, and any dependency on the deployment owner.
+For every finding, record: evidence and affected URLs, observed problem, likely cause with confidence, recommended action, priority with rationale, verification method, and any dependency on the deployment owner. Call a finding inconclusive when the evidence cannot distinguish plausible causes.
 
 ## Production launch checklist
 
@@ -33,7 +33,7 @@ For every finding, record: evidence and affected URLs, observed problem, likely 
 - Check representative route responses and rendered HTML in every locale. Confirm no accidental redirect changes the intended locale URL.
 - Validate canonicals, reciprocal `hreflang`, sitemap entries, robots behavior, structured data, and social previews.
 - Verify the site in the relevant webmaster tools, submit the sitemap, and record any warnings or exclusions.
-- Test internal links, 404 behavior, mobile layout, analytics, and conversion paths.
+- Test internal links, 404 behavior, mobile layout, analytics collection, and the actual conversion or key-event path. For commerce, sample product variants, offers, and feeds; for publishing, sample article dates and archive pagination.
 - Save a baseline for indexed pages, impressions, clicks, conversions, and performance before launch when the existing site has data.
 
 ## URL or domain migration

@@ -6,10 +6,10 @@ Use this playbook when the work concerns what a page says, which audience it ser
 
 1. Identify the audience, task, and decision the page helps with. Ask what the visitor needs to know or do after arriving.
 2. Research the target market and current results when the request requires keyword selection, competitive analysis, or claims about search demand. Use primary audience or product data where available. Keep tool estimates labeled as estimates.
-3. Choose one clear page purpose. If two intents need different answers, use separate pages only when each can provide distinct value and has a useful path between them.
+3. Choose one clear page purpose. Compare existing pages before proposing a new URL. If two intents need different answers, use separate pages only when each can provide distinct value and has a useful path between them. For article libraries read [Editorial and publishing](editorial-and-publishing.md); for categories and products read [Commerce and products](commerce-and-products.md).
 4. Put the direct answer and essential information in crawlable page content. Organize it with descriptive titles, headings, paragraphs, lists, and ordinary links.
 5. Add first-hand detail, evidence, examples, or product specifics that make the page useful beyond a generic summary. Verify factual claims and identify their sources where readers need them.
-6. Review the page as a reader: does it resolve the task, explain limits, and give the next useful action? Revise or consolidate content that leaves the reader searching again.
+6. Review the page as a reader: does it resolve the task, explain limits, and give the next useful action? Revise or consolidate content that leaves the reader searching again. Check the rendered HTML and its links, not just a draft or CMS field.
 
 ## Page elements
 
@@ -27,7 +27,7 @@ Translate and review the content for the audience, not just the metadata. Resear
 
 ## Avoid low-value expansion
 
-Do not generate near-identical pages for every keyword variation, location, question, or locale. Do not add a word-count target, forced FAQ block, keyword list, or repeated summary unless it helps the visitor. Consolidate overlapping pages when they serve the same task and do not add distinct value.
+Do not generate near-identical pages for every keyword variation, location, question, or locale. Do not add a word-count target, forced FAQ block, keyword list, or repeated summary unless it helps the visitor. Check the current supported-feature gallery before proposing markup for any search appearance. Consolidate overlapping pages when they serve the same task and do not add distinct value.
 
 When generative AI helps draft copy, verify facts and add human expertise, first-hand detail, and editorial review. Review the current search engine spam policies before automating large-scale publication.
 
@@ -39,3 +39,4 @@ When generative AI helps draft copy, verify facts and add human expertise, first
 - [Google snippets and meta descriptions](https://developers.google.com/search/docs/appearance/snippet)
 - [Google image SEO](https://developers.google.com/search/docs/appearance/google-images)
 - [Google Search spam policies](https://developers.google.com/search/docs/essentials/spam-policies)
+- [Google supported structured-data features](https://developers.google.com/search/docs/appearance/structured-data/search-gallery)

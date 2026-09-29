@@ -14,6 +14,7 @@ A multilingual Next.js starter built with **Next.js 16**, **React 19**, **next-i
 - [Prerequisites](#prerequisites)
 - [Getting started](#getting-started)
 - [Project structure](#project-structure)
+- [Skills for coding assistants](#skills-for-coding-assistants)
 - [Internationalization](#internationalization)
   - [How routing works](#how-routing-works)
   - [Locale-driven formatting](#locale-driven-formatting)
@@ -151,6 +152,17 @@ next-app-i18n-starter/
 ├── package.json
 └── tsconfig.json
 ```
+
+---
+
+## Skills for coding assistants
+
+This repository includes two reusable skills. They guide work on this starter or a fork. The playbooks cover product, blog, and GA4 workflows; the starter itself has no product or blog routes and does not configure GA4.
+
+- **[next-intl i18n](.agents/skills/next-intl-i18n/SKILL.md):** locale routing, server and client rendering, translated messages, regional formatting, RTL, and framework integrations. Playbooks: [architecture](.agents/skills/next-intl-i18n/references/architecture-and-rendering.md), [routing](.agents/skills/next-intl-i18n/references/routing-and-navigation.md), [messages and formatting](.agents/skills/next-intl-i18n/references/messages-and-formatting.md), [integrations](.agents/skills/next-intl-i18n/references/integrations-and-workflows.md).
+- **[Next.js i18n SEO](.agents/skills/nextjs-i18n-seo/SKILL.md):** search audits and implementation for multilingual pages and different site types. Playbooks: [technical](.agents/skills/nextjs-i18n-seo/references/technical-seo.md), [international](.agents/skills/nextjs-i18n-seo/references/international-seo.md), [content](.agents/skills/nextjs-i18n-seo/references/content-and-onpage.md), [commerce](.agents/skills/nextjs-i18n-seo/references/commerce-and-products.md), [publishing](.agents/skills/nextjs-i18n-seo/references/editorial-and-publishing.md), [local and media](.agents/skills/nextjs-i18n-seo/references/site-types-and-search-features.md), [AI discovery](.agents/skills/nextjs-i18n-seo/references/ai-and-agentic-discovery.md), [measurement](.agents/skills/nextjs-i18n-seo/references/measurement.md), [audits and migrations](.agents/skills/nextjs-i18n-seo/references/audits-launches-migrations.md).
+
+Invoke `next-intl-i18n` or `nextjs-i18n-seo` in an agent that supports repository skills. Otherwise, read the relevant `SKILL.md` and only the playbooks needed for the task. Start with [AGENTS.md](AGENTS.md) for repository conventions. The source inventories in [next-intl docs research](docs/next-intl-docs-research.md) and [SEO research](docs/seo-research.md) record dated checks; recheck current platform documentation for version-sensitive changes.
 
 ---
 
@@ -966,6 +978,6 @@ Open source libraries and community projects that made this starter possible: [A
 
 The repository uses standard `AGENTS.md` files so coding assistants can follow the same project conventions across models and editors. Start with [AGENTS.md](AGENTS.md), then read the nearest scoped guide for the files you are changing. The `.cursor/rules/` files are optional Cursor adapters that point to those shared instructions.
 
-For SEO audits or implementation, use the reusable [Next.js i18n SEO skill](.agents/skills/nextjs-i18n-seo/SKILL.md). In agents that support repository skills, invoke `nextjs-i18n-seo`; otherwise, read the `SKILL.md` directly. It covers this template and its forks without assuming that template defaults are correct for every site's audience or deployment.
+Use the [skills guide](#skills-for-coding-assistants) to choose the next-intl or SEO skill and its relevant playbook.
 
 The public [llms.txt](https://next-app-i18n-starter.vercel.app/llms.txt) is a project overview for tools that read it. Repository instructions live in `AGENTS.md`; `llms.txt` is not a Google Search ranking signal.

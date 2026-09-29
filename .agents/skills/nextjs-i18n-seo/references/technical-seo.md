@@ -9,14 +9,14 @@ For a report that a page is missing from Google, first capture its URL Inspectio
 Then check these layers in sequence. A failure early in the path makes later refinements irrelevant.
 
 1. **Reachability:** request the URL without a browser session. Record DNS/TLS, status code, redirects, and whether authentication or a CDN challenge intervenes. A robots allow rule cannot make an unreachable page crawlable.
-2. **Crawl permission:** inspect app `robots.ts`, static robots files, hosting rules, CDN rules, and headers that affect the relevant crawler. `robots.txt` controls fetching; it does not reliably remove an already known URL from search. Use an allowed crawl plus `noindex` when the goal is exclusion from search results.
+2. **Crawl permission:** inspect app `robots.ts`, static robots files, hosting rules, CDN rules, and headers that affect the relevant crawler. `robots.txt` controls fetching; it does not reliably remove an already known URL from search. If `noindex` is the intended exclusion control, the crawler must be able to fetch the page to see it. Use authentication or another access control for private content.
 3. **Rendered content:** inspect the initial HTML and the rendered page. Confirm the primary content, links, title, description, canonical, and structured data are present in the response or reliably rendered. If client JavaScript supplies essential content, inspect the rendered output and fix blocked assets or hydration failures.
 4. **Index directives:** inspect `noindex`, `X-Robots-Tag`, canonical, redirects, and duplicate URL variants. Align redirects, canonical tags, internal links, and sitemap entries on one preferred URL. A canonical is a hint; crawlers can select another URL.
 5. **Discovery:** check for ordinary crawlable links from relevant pages and an accurate sitemap entry. A sitemap is a discovery hint, not an indexing request or guarantee.
-6. **Presentation:** verify unique page titles and descriptions, visible headings, language, social metadata, and any eligible structured data. Add markup only after confirming that the page and content qualify.
+6. **Presentation:** verify unique page titles and descriptions, visible headings, language, social metadata, and any eligible structured data. Select the feature by real page type (for example, article versus directly purchasable product), then check its current requirements before adding markup.
 7. **Experience:** test mobile layout and field performance. Separate field data from local lab tests; use lab tools to diagnose, and field data to understand real-user outcomes.
 
-Report the first failing layer, affected URL set, evidence, likely cause, and the smallest fix. Do not treat a successful build, valid markup, or a sitemap submission as proof of indexing.
+Report the first failing layer, affected URL set, evidence, likely cause, and the smallest fix. For a complaint about a live URL, do not attribute the cause from repository code alone. A successful build, valid markup, or sitemap submission does not prove indexing.
 
 ## Next.js checks
 

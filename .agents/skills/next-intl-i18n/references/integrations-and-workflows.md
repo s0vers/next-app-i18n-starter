@@ -4,9 +4,9 @@ Use this reference for next-intl outside ordinary page rendering, translation op
 
 ## Metadata and other server entry points
 
-In `generateMetadata`, Server Actions, Open Graph image generation, manifests, sitemaps, and Route Handlers, use the awaitable APIs from `next-intl/server`. Pass an explicit locale when that execution path cannot infer one from the request/route. For returned action messages, account for the user changing locale while a result remains visible. Keep localized URL generation consistent with routing config. See [Server Actions, Metadata, and Route Handlers](https://next-intl.dev/docs/environments/actions-metadata-route-handlers).
+In `generateMetadata`, Server Actions, Open Graph image generation, manifests, sitemaps, and Route Handlers, use the awaitable APIs from `next-intl/server`. Pass an explicit locale when that execution path cannot infer one from the request/route. In this template, await `params`, validate with `hasLocale`, call `getTranslations({locale, namespace})`, then pass the page's real internal pathname to `createLocalizedMetadata`; it calls `getPathname` to produce the public URL. A child page must not inherit the homepage canonical. For returned action messages, account for the user changing locale while a result remains visible. See [Server Actions, Metadata, and Route Handlers](https://next-intl.dev/docs/environments/actions-metadata-route-handlers).
 
-Treat framework metadata and search policy as separate layers: next-intl can provide translations/locale-aware routes, but it does not decide the correct title, canonical strategy, valid alternate set, or whether a page should be indexed. Follow the project's SEO guidance for those decisions.
+next-intl supplies translations and locale-aware route helpers; the page's real translation inventory determines its canonical, valid alternate set, and sitemap entries. The current `createLocalizedMetadata` helper emits alternates for every configured locale, which is suitable only when every variant exists; adjust that contract when adding partially translated product or blog pages. Follow the project's [SEO skill](../../nextjs-i18n-seo/SKILL.md) for indexing and content policy.
 
 ## Error routes
 
@@ -24,7 +24,17 @@ For larger translation teams, next-intl works with platforms supporting the proj
 
 ## Testing and component development
 
-Render components that use client-context APIs under `NextIntlClientProvider` with representative locale/messages. Prefer sync/shared components when they can serve both server rendering and isolated tests. Test locale-sensitive plural forms, formatting, missing keys, route switches, and direction at boundaries that matter to the feature. For current Vitest/Jest ESM constraints, follow the [testing guide](https://next-intl.dev/docs/environments/testing) and verify the installed test runner version.
+Render components that use client-context APIs under `NextIntlClientProvider` with representative locale/messages. Prefer sync/shared components when they can serve both server rendering and isolated tests. Choose verification from the changed behavior rather than asserting every locale on every task:
+
+| Change | Observable check |
+| --- | --- |
+| Routing/proxy | Direct load and refresh of `/` and a prefixed route, superfluous `/en` redirect, unsupported prefix, locale switch in both directions |
+| Dynamic localized content | Internal route resolves public slug for each available translation; switcher and alternates identify the same content item; missing translation follows policy |
+| Messages/formatting | Key/ICU parity and a rendered plural, date, or currency in a target locale with different rules |
+| RTL | `lang`, `dir`, mixed-direction identifiers, icon/layout direction, and keyboard interaction on an Arabic route |
+| Static/metadata | Build output for intended locale paths and page-specific translated metadata using the actual route |
+
+For Vitest/Jest ESM constraints, follow the [testing guide](https://next-intl.dev/docs/environments/testing) and verify the installed test runner version. This template has no test runner script, so do not claim an automated test passed unless one was actually run.
 
 For Storybook, provide a global decorator with `NextIntlClientProvider` and test important components across more than the source locale. Async Server Component support depends on current Storybook support/config. See [Storybook integration](https://next-intl.dev/docs/workflows/storybook).
 

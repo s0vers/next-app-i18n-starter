@@ -19,16 +19,16 @@ If these are unknown, distinguish a translated demo from a production market lau
 1. Give each language or region version a stable, directly reachable URL. Google recommends distinct URLs instead of changing page language based on cookies or browser settings.
 2. Serve the intended language in the main rendered content. A translated title around an untranslated body does not create a useful localized page.
 3. Set a self-referencing canonical on each equivalent locale route. Do not canonicalize all translations to the default language.
-4. Emit reciprocal `hreflang` links that identify the same content in every route in the set. Each alternate should point to a real URL with matching content and self-canonical. Exclude variants that do not exist.
+4. Build an equivalence set per page, not a site-wide list of locales. Emit reciprocal `hreflang` links among real translated equivalents; each points to matching content with its own canonical. A partially translated blog or product catalog can have a smaller set than the homepage. Exclude missing, redirected, or substantially different pages.
 5. Use valid BCP 47 language or language-region tags. Choose a region only when the content and intended audience support it; do not use route slugs as `hreflang` values.
-6. Add one sitemap entry per indexable URL and keep its alternate map consistent with page metadata. Use `x-default` for a real language-selection or default fallback page when that behavior fits the site.
+6. Add one sitemap entry per indexable URL and keep its alternate map consistent with page metadata. Use `x-default` for an actual language-neutral selector or deliberate default fallback; inspect where it resolves. It need not exist on every multilingual site.
 7. Keep navigation links between language versions visible and usable. A language switcher should preserve the current page only when the equivalent page exists in the destination locale; otherwise send the visitor to a deliberate fallback.
 
 ## This template's conventions
 
 - `src/i18n/locales.ts` owns locale labels, language tags, Open Graph tags, regional defaults, and fonts. `src/i18n/routing.ts` owns route policy.
 - English is `/`; other locales use a prefix. Automatic locale detection is disabled. Preserve direct URLs unless the user asks to change routing.
-- Build canonical and alternate URLs with `getLocaleUrl`, `getAlternateLanguages`, and `createLocalizedMetadata` in `src/lib/site.ts`.
+- Build canonical and alternate URLs with `getLocaleUrl`, `getAlternateLanguages`, and `createLocalizedMetadata` in `src/lib/site.ts`. The current helpers emit all configured locales, which fits the fully translated homepage. Extend or call them selectively for routes whose locale coverage differs; never publish nonexistent alternates.
 - Add translated keys to every `dictionary/*.json` file. English defines the message shape; it does not guarantee translation completeness or quality.
 - Use `localeConfig[locale].languageTag` for HTML `lang` and `hreflang`, and its Open Graph tag for social metadata.
 
@@ -41,7 +41,7 @@ For each locale, compare the rendered page, not only the dictionary:
 - Canonical points to that exact locale URL. Alternates are reciprocal and all resolve to the intended page.
 - Locale switcher behavior is correct for both equivalent and unavailable routes.
 - Sitemap URLs and alternate annotations match the page output.
-- A fluent reviewer checks meaning, terminology, natural phrasing, and regional assumptions before production.
+- A fluent reviewer checks meaning, terminology, natural phrasing, and regional assumptions before production. For a locale-specific product or article, also verify offer availability, currency, author/date claims, and local examples.
 
 Google uses visible page content to determine language and may not index all variants of locale-adaptive pages. `hreflang` helps describe alternate pages; it does not translate or localize content for you.
 

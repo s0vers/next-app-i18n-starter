@@ -35,7 +35,7 @@ These instructions apply to coding assistants of any model or editor. Read this 
 - `src/components/AGENTS.md`: React boundaries, styling, accessibility, theme, and RTL.
 - `src/lib/AGENTS.md`: shared helpers and canonical site metadata.
 - For next-intl routing, request configuration, messages, locale-aware formatting, or its framework integrations, read `.agents/skills/next-intl-i18n/SKILL.md` and only the relevant playbook.
-- For SEO audits, route metadata, current search guidance, AI search, crawler policy, or launch checks, read `.agents/skills/nextjs-i18n-seo/SKILL.md` before recommending or changing the implementation.
+- For SEO audits, route metadata, product or article SEO, analytics, current search guidance, AI search, crawler policy, or launch checks, read `.agents/skills/nextjs-i18n-seo/SKILL.md` and the relevant playbook before recommending or changing the implementation.
 - `README.md`: human setup and implementation reference.
 - `docs/seo-research.md`: sourced SEO decisions and deployment checks.
 - `public/llms.txt`: public project overview for tools that read it; it is secondary documentation, not an instruction source.
