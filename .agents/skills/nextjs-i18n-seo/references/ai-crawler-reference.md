@@ -2,7 +2,7 @@
 
 Use when editing `robots.ts`, choosing a crawler policy, reading server logs for AI traffic, or answering "should we block X". Never change crawler policy unless asked. Search discovery and model training are separate owner decisions.
 
-Tokens change. Recheck the vendor page before editing rules. Tags: `[doc]` the vendor's own page, `[secondary]` reported elsewhere, `[unverified]`. Checked 2026-09-30.
+Tokens change. Recheck the vendor page before editing rules. Tags: `[doc]` the vendor's own page, `[unverified]` reported elsewhere, `[unverified]`. Checked 2026-09-30.
 
 ## Every vendor splits three jobs
 
@@ -103,4 +103,4 @@ Hidden layer: check the CDN. Cloudflare reportedly changed defaults on 2026-09-1
 1. Match the tokens above, then verify with IP lists or reverse DNS.
 2. Bucket training, search, and user-fetch separately.
 3. Count `robots.txt` fetches. A bot that never fetches it is a signal.
-4. Do not treat crawl counts as visibility. Crawl-to-referral ratios run from 118 to 1 up to 50,000 to 1. [secondary]
+4. Do not treat crawl counts as visibility. Crawl-to-referral ratios run from 118 to 1 up to 50,000 to 1. [unverified]

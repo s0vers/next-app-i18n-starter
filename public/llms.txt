@@ -122,7 +122,7 @@ Request
 | es | `/es` | ltr |
 | ja | `/ja` | ltr |
 
-`localeDetection: false` keeps the default URL from redirecting based on cookies or browser language. Visitors choose a locale with the language switcher.
+`localeDetection: false` keeps the default URL from redirecting based on cookies or browser language, `localeCookie: false` skips the unused locale cookie, and `alternateLinks: false` leaves hreflang to page metadata and the sitemap. Visitors choose a locale with the language switcher.
 
 ---
 

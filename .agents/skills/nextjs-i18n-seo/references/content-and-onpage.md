@@ -55,7 +55,7 @@ Avoid these patterns. Google's spam updates in August and September 2026 targete
 
 Programmatic pages are acceptable only when each page carries substantive, proprietary, or useful data that a reader wants. Ask of any generated page: would this page be worth visiting if it were the only one? If not, do not publish it. A forced FAQ block, a word-count target, a keyword list, and a repeated summary all fail the same test.
 
-Google removed FAQ rich results in May 2026, so an FAQ block earns nothing in search. Add one only when readers ask those questions.
+An FAQ block earns no rich result (see [structured data](structured-data.md)). Add one only when readers ask those questions.
 
 ## AI-assisted drafting
 

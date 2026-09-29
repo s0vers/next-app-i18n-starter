@@ -198,7 +198,8 @@ Search discovery for multilingual sites: international, technical, commerce, edi
 | [AI and agentic discovery](.agents/skills/nextjs-i18n-seo/references/ai-and-agentic-discovery.md) | AI Overviews, ChatGPT, Claude, Perplexity, Copilot, agents, what has evidence |
 | [AI crawler reference](.agents/skills/nextjs-i18n-seo/references/ai-crawler-reference.md) | Crawler tokens, policy options, `robots.ts` sketch |
 | [Audits, launches, migrations](.agents/skills/nextjs-i18n-seo/references/audits-launches-migrations.md) | Audit layers, launch gate, migration, adding or removing a locale |
-| [Evidence and reporting](.agents/skills/nextjs-i18n-seo/references/evidence-and-reporting.md) | Evidence tags, certainty ladder, verdicts, report shapes |
+| [Evidence and reporting](.agents/skills/nextjs-i18n-seo/references/evidence-and-reporting.md) | Evidence tags, how far a claim got, verdicts, report shape, unattended runs |
+| [This template](.agents/skills/nextjs-i18n-seo/references/template-notes.md) | Helpers, routing flags, and defaults in this starter |
 
 Check hreflang reciprocity, canonicals, `lang`, JSON-LD, sitemap agreement, and language redirects on a running site:
 
@@ -237,8 +238,12 @@ export const routing = defineRouting({
   defaultLocale: "en",
   localeDetection: false,
   localePrefix: "as-needed",
+  localeCookie: false,
+  alternateLinks: false,
 });
 ```
+
+`localeCookie: false` skips the `NEXT_LOCALE` cookie, which nothing reads while detection is off, and keeps `Set-Cookie` off cacheable pages. `alternateLinks: false` stops the proxy from adding its own `hreflang` `Link` header, so page metadata and the sitemap are the only source of alternates.
 
 With `localePrefix: "as-needed"`:
 

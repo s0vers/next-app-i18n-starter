@@ -94,7 +94,6 @@ Pick the type with [structured data](structured-data.md#choose-the-type). Rules 
 - Put shipping and return policy on `Organization` unless products differ. Search Console and Merchant Center settings override site markup. [doc]
 - Review markup only for visible, genuine reviews. Fake or undisclosed incentivized reviews break policy. A store rating on its own `Organization` is ineligible. [doc]
 - A feed and markup together maximize eligibility. Merchant Center is required for the Shopping tab and not for organic Search. The Content API for Shopping ended 2026-08-18, so use the Merchant API. Merchant Center will enforce images of at least 500 by 500 pixels from 2027-01-31. [doc]
-- FAQ rich results ended in May 2026. Do not add FAQ markup to product pages for a rich result. [doc]
 
 ### AI shopping surfaces
 

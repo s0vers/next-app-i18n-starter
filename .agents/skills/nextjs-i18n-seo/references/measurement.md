@@ -2,7 +2,7 @@
 
 Use when installing analytics, evaluating an SEO change, diagnosing a traffic drop or a silent locale, or reporting visibility. State the question first, then pick the report. Search Console, GA4, Bing, and AI citation reports count different events. Never add their numbers together.
 
-Evidence tags: `[doc]` platform documentation, `[secondary]` third-party report of a platform fact, `[unverified]`. See [evidence and reporting](evidence-and-reporting.md).
+Evidence tags: `[doc]` platform documentation, `[unverified]` third-party report of a platform fact, `[unverified]`. See [evidence and reporting](evidence-and-reporting.md).
 
 This starter uses Vercel Analytics and Speed Insights. It has no GA4. The setup below applies to a fork that adds it.
 
@@ -26,7 +26,7 @@ This starter uses Vercel Analytics and Speed Insights. It has no GA4. The setup 
 5. Send ecommerce events with `item_id`, `currency`, and `value`. Send the display currency, and key items by `item_id`, never by translated name, so locales aggregate.
 6. Add `NEXT_PUBLIC_GA_ID` to `.env.example` with a blank or placeholder value, and render nothing when it is unset.
 7. Search Console: create a Domain property (DNS verification), submit the sitemap, and link GA4. The link joins one stream to one property, keeps 16 months, and offers only landing page, device, and country dimensions.
-8. Bing: import from Search Console or verify the site. Add the sitemap and optionally an IndexNow key file. IndexNow reaches Bing, Yandex, Naver, and Seznam. Google does not support it. [secondary]
+8. Bing: import from Search Console or verify the site. Add the sitemap and optionally an IndexNow key file. IndexNow reaches Bing, Yandex, Naver, and Seznam. Google does not support it. [unverified]
 9. Add a custom GA4 channel group for AI referrers not in the default "AI Assistant" channel (see below). Custom channel groups are retroactive, limited to 2 per property, and the first match wins.
 
 ### Sketches, not tested
@@ -96,7 +96,7 @@ For Core Web Vitals, rely on CrUX and Search Console for ranking-relevant field 
 | | Direct or Unassigned | Inflated when the referrer is stripped (in-app browsers, some AI apps). |
 | Bing | AI Performance | Public preview, sampled, no clicks. Grounding queries are grouped phrases, not prompts. |
 
-GA4's default channel group has an "AI Assistant" channel (medium `ai-assistant`, covering ChatGPT, Gemini, DeepSeek, Copilot, Grok). It excludes Google's AI Overviews and AI Mode. [doc] Check it before building a custom group for Claude and Perplexity. A `utm_source=chatgpt.com` tag appears in secondary reports only, so treat it as observed behavior and not a contract. [secondary]
+GA4's default channel group has an "AI Assistant" channel (medium `ai-assistant`, covering ChatGPT, Gemini, DeepSeek, Copilot, Grok). It excludes Google's AI Overviews and AI Mode. [doc] Check it before building a custom group for Claude and Perplexity. A `utm_source=chatgpt.com` tag appears in secondary reports only, so treat it as observed behavior and not a contract. [unverified]
 
 Before diagnosing any drop, read Search Console's [data anomalies page](https://support.google.com/webmasters/answer/6211453). It lists logging errors (impressions May 2025 to April 2026, a February to March 2026 export gap) and the FAQ rich result removal on 7 May 2026. Search Console has had no International Targeting report since 2022, so there is no site-wide hreflang report. Use a crawler and URL Inspection.
 

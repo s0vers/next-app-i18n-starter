@@ -2,7 +2,7 @@
 
 Use when a task adds, changes, or audits locale routes, `hreflang`, language or country targeting, translated metadata, a locale switcher, or a market launch. A language switcher is a product feature. International SEO also needs the right audience, URL, content, and search intent per market.
 
-Evidence tags: `[doc]` platform documentation, `[spec]` standard, `[practice]` practitioner evidence, `[unverified]`. See [evidence and reporting](evidence-and-reporting.md).
+Evidence tags: `[doc]` platform documentation, `[doc]` standard, `[practice]` practitioner evidence, `[unverified]`. See [evidence and reporting](evidence-and-reporting.md).
 
 ## Gate: market or translation demo
 
@@ -28,7 +28,7 @@ Do pages differ by country in currency, price, availability, shipping, legal tex
 
 Google accepts only an ISO 639-1 language, an optional ISO 15924 script, an optional ISO 3166-1 alpha-2 region, and `x-default`. `es-419`, `en-UK`, `EU`, and region-only values are invalid. [doc]
 
-Why language-only by default: a region tag claims a country audience the content may not serve. `hreflang` swaps the right sibling URL into a result. It does not promote a page in more countries. [practice] W3C advises the shortest tag that distinguishes anything. [spec]
+Why language-only by default: a region tag claims a country audience the content may not serve. `hreflang` swaps the right sibling URL into a result. It does not promote a page in more countries. [practice] W3C advises the shortest tag that distinguishes anything. [doc]
 
 This template's tags come from `localeConfig[locale].languageTag`: `en-US`, `ar-SA`, `zh-Hans-CN`, `es-ES`, `ja-JP`. Each claims a country. Unless the content is written for that country, `en`, `ar`, `zh-Hans`, `es`, `ja` fit better. Changing tags changes every alternate and `<html lang>`, so treat it as a product decision, do it once, and update the sitemap and metadata together.
 
@@ -129,8 +129,8 @@ export function getAlternateLanguages(
 
   `createLocalizedMetadata` then needs the same `locales` and `hrefFor` inputs, plus `type` (`article` for posts) and `image` inputs. It hardcodes `type: "website"` and `/og-image.png` today. The sitemap calls the same function per entry.
 - `localeConfig` ties one currency to each route locale (`es` is EUR, `en` is USD). That suits one market per locale and cannot show two currencies to one language. See [commerce](commerce-and-products.md#markets-currency-and-languages).
-- Known gap, observed locally 2026-09-30 `[local]`: `routing.ts` leaves next-intl's `alternateLinks` on. `curl -I /` returns a `Link` header with `hreflang` `en`, `ar`, `zh`, `es`, `ja`, while the HTML says `en-US`, `ar-SA`, `zh-Hans-CN`, `es-ES`, `ja-JP`. Two vocabularies for one URL set, and the header advertises alternates even for routes that lack them. Set `alternateLinks: false`, then confirm the header has no `hreflang`.
-- `localeDetection: false` does not stop `NEXT_LOCALE` from being written. It stops the redirect.
+- Fixed 2026-09-30 `[local]`: `routing.ts` used to leave next-intl's `alternateLinks` on, so `curl -I /` returned a `Link` header with `hreflang` `en`, `ar`, `zh`, `es`, `ja` while the HTML said `en-US`, `ar-SA`, `zh-Hans-CN`, `es-ES`, `ja-JP`. It now sets `alternateLinks: false`, and the header carries no `hreflang`. Keep it that way in a fork, and check `curl -I` after any routing change.
+- `localeDetection: false` alone did not stop `NEXT_LOCALE` from being written on every page. `routing.ts` now also sets `localeCookie: false`. That removes a useless `Set-Cookie` from cacheable pages.
 
 ## Failure checks
 

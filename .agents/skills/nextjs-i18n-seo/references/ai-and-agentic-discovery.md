@@ -2,13 +2,13 @@
 
 Use when a request mentions AI Overviews, AI Mode, ChatGPT search, Claude, Perplexity, Copilot, answer engines, model crawlers, `llms.txt`, "GEO" or "AEO", or agents that browse and buy. These are separate systems. Name the product and the outcome before changing anything.
 
-Evidence tags: `[doc]` vendor documentation fetched, `[secondary]` third-party report, `[study]` published measurement with method, `[unverified]`. The evidence for AI-specific tactics is thin, and tags matter more here than anywhere else. See [evidence and reporting](evidence-and-reporting.md).
+Evidence tags: `[doc]` vendor documentation fetched, `[unverified]` third-party report, `[study]` published measurement with method, `[unverified]`. The evidence for AI-specific tactics is thin, and tags matter more here than anywhere else. See [evidence and reporting](evidence-and-reporting.md).
 
 Crawler tokens, policies, and `robots.ts` sketches are in [AI crawler reference](ai-crawler-reference.md).
 
 ## Fundamentals first
 
-Google states that GEO and AEO are still SEO, and that AI Overviews and AI Mode need no additional technical requirements. [doc, 2026-05-15] Microsoft says Bing and Copilot share Bing's crawl, index, and ranking foundation. [secondary] Do these in order. Stop when a step reveals the fault.
+Google states that GEO and AEO are still SEO, and that AI Overviews and AI Mode need no additional technical requirements. [doc, 2026-05-15] Microsoft says Bing and Copilot share Bing's crawl, index, and ranking foundation. [unverified] Do these in order. Stop when a step reveals the fault.
 
 1. The page is public, crawlable, indexable, and snippet-eligible. Check the app's `robots.ts` and the host, CDN, firewall, and authentication layer. A permissive `robots.ts` proves nothing about the CDN.
 2. The search bots of each product you want are not blocked: `OAI-SearchBot`, `Claude-SearchBot`, `PerplexityBot`, Bingbot, Googlebot. Confirm the CDN allows their published IPs.
@@ -32,7 +32,7 @@ Google states that GEO and AEO are still SEO, and that AI Overviews and AI Mode 
 Ranked by how much backing each has. Do the top first. Label anything below the line as correlation.
 
 1. Be crawlable, indexed, and current. Vendor-stated. [doc]
-2. Write one topic per URL. State facts directly, keep entity names consistent, put key information near the top, and use clear headings and tables. This is Bing's grounding advice. Google separately says artificial chunking is unnecessary. The two agree: focused pages, not fragmented ones. [doc, secondary]
+2. Write one topic per URL. State facts directly, keep entity names consistent, put key information near the top, and use clear headings and tables. This is Bing's grounding advice. Google separately says artificial chunking is unnecessary. The two agree: focused pages, not fragmented ones. [doc]
 3. Use IndexNow for Bing freshness, and keep `lastModified` true. [doc]
 4. Keep pages maintained. AI bot hits skew to content from the last year, and cited content is fresher than ordinary results. Correlation from vendor-run log studies. [study]
 5. Add quotations, statistics, and cited sources. The Princeton GEO paper reports position-adjusted gains of about 41 percent for quotations, 33 percent for statistics, and 28 percent for citing sources, and a 9 percent loss for keyword stuffing. It ran on a synthetic engine with 2023 models. The one finding that holds up is that keyword stuffing does not help. [study, weak]
@@ -81,11 +81,11 @@ Agents read the DOM and the accessibility tree, or a screenshot. Apply in order.
 8. Price and stock in server-rendered HTML, consistent with any feed.
 9. Test the real flow with a browser agent and a keyboard-only pass. No vendor certifies compatibility.
 
-Comet and Claude in Chrome look like ordinary Chrome sessions, so there is no identity to allowlist. [secondary]
+Comet and Claude in Chrome look like ordinary Chrome sessions, so there is no identity to allowlist. [unverified]
 
 ## Multilingual AI search
 
-One practitioner test found ChatGPT and Perplexity often linked English URLs for non-English queries, Copilot returned the right localized URL most often, and Gemini was inconsistent. No vendor documents `hreflang` for AI. [secondary, weak] The low-regret work is the international SEO work: fully translated body content, one URL per language, self-canonicals, reciprocal alternates, and translated titles. Sample per language and per engine.
+One practitioner test found ChatGPT and Perplexity often linked English URLs for non-English queries, Copilot returned the right localized URL most often, and Gemini was inconsistent. No vendor documents `hreflang` for AI. [unverified] The low-regret work is the international SEO work: fully translated body content, one URL per language, self-canonicals, reciprocal alternates, and translated titles. Sample per language and per engine.
 
 ## Measure
 

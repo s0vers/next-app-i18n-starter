@@ -21,15 +21,15 @@ The mode changes redirect and cookie behavior as well as the URL. Never choose o
 
 With detection on, the order is: URL prefix, saved cookie, `Accept-Language`, `defaultLocale`. An explicit prefix wins and updates the cookie.
 
-`localeDetection: false` stops the cookie and `Accept-Language` from redirecting `/`. It does not stop the proxy from writing `NEXT_LOCALE`. This template's `/` still sets `NEXT_LOCALE=en` on the response. Since next-intl 4.0 only `localeCookie: false` disables the cookie. The cookie is a session cookie by default. Set `localeCookie: { maxAge }` when the preference must survive restarts.
+`localeDetection: false` stops the cookie and `Accept-Language` from redirecting `/`. It does not stop the proxy from writing `NEXT_LOCALE`. Since next-intl 4.0 only `localeCookie: false` disables the cookie. Left on, it is a session cookie, and it adds a `Set-Cookie` to every page response, which blocks shared caching. With detection off nothing reads it, so this template sets `localeCookie: false`. Turn it back on with `localeCookie: { maxAge }` only if detection returns and the preference must survive restarts.
 
 A stale `NEXT_LOCALE` cookie does not redirect `/` while detection is off. A visitor who is still redirected meets a host redirect rule, a CDN, or a deployment built before the setting changed. After any change to detection or the cookie, test `/`, `/en`, and each prefix with and without `Cookie: NEXT_LOCALE=ja` and `Accept-Language: ja`. English at `/` must answer 200 in every case.
 
 ## Alternate links
 
-The proxy adds an HTTP `Link` header with `hreflang` alternates for every route unless `alternateLinks: false`. Page metadata emits a second set in HTML. Two sources with two tag vocabularies contradict each other. In this template the header says `en`, `ar`, `zh`, `es`, `ja`, and the HTML says `en-US`, `ar-SA`, `zh-Hans-CN`, `es-ES`, `ja-JP`. The proxy also announces alternates for pages that have no translation.
+The proxy adds an HTTP `Link` header with `hreflang` alternates for every route unless `alternateLinks: false`. It builds them from route keys (`en`, `ar`, `zh`), and page metadata builds a second set in HTML from language tags (`en-US`, `ar-SA`, `zh-Hans-CN`). Two sources with two vocabularies contradict each other, and the header announces alternates for pages that have no translation. Before 2026-09-30 this template shipped exactly that.
 
-Decide once who owns alternates. In this template the page metadata owns them, so set `alternateLinks: false`, then confirm with `curl -I` that no `hreflang` remains in `Link`. Read [international SEO](../../nextjs-i18n-seo/references/international-seo.md) for the tag vocabulary.
+Decide once who owns alternates. In this template page metadata and the sitemap own them, so `routing.ts` sets `alternateLinks: false`. Confirm with `curl -I` that no `hreflang` remains in `Link`. Read [international SEO](../../nextjs-i18n-seo/references/international-seo.md) for the tag vocabulary.
 
 ## The proxy
 
