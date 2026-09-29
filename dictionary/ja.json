@@ -2,7 +2,7 @@
   "Index": {
     "boilerplateName": "Next.js i18n テンプレート",
     "title": "i18nとShadcn UIを備えたNext 16 テンプレート",
-    "description": "次世代の多言語対応でアクセシブルなウェブアプリケーションのための強力な出発点。",
+    "description": "多言語ルーティング、アクセシブルな UI、ロケールに応じた表示を備えた Next.js スターターです。",
     "cloneRepository": "リポジトリをクローン",
     "leaveStar": "スターを付ける",
     "copyCode": "コードをコピー",
@@ -15,7 +15,7 @@
     "installation": "インストール",
     "howToContribute": "貢献方法",
     "omitrtlUsage": "OmitRTLの使用",
-    "OmitRTLInstruction": "OmitRTLを使用するには、RTLサポートを省略したいコンポーネントをOmitRTLコンポーネントでラップするだけです。",
+    "OmitRTLInstruction": "RTL ページでコードや数字などを左から右に表示するには、OmitRTL で囲みます。",
     "contribute": "貢献",
     "localization": "ローカライズ",
     "installationSteps": {
@@ -33,7 +33,7 @@
     "error": {
       "server": "内部サーバーエラー",
       "sorry": "申し訳ありません。サーバーで予期しない問題が発生しました。",
-      "tryAgain": "後でもう一度お試しください。",
+      "tryAgain": "再試行",
       "returnHome": "ホームに戻る"
     }
   },
@@ -57,8 +57,8 @@
   },
   "Localization": {
     "title": "ロケール連動フォーマット",
-    "description": "next-intl で価格と日時をフォーマット。各ロケールは getRequestConfig で通貨とタイムゾーンを設定します。",
-    "switchLanguageHint": "ヘッダーで言語を切り替えると、通貨・日時・相対時間が自動的に更新されます。",
+    "description": "このデモでは next-intl を使い、ロケールごとの通貨とタイムゾーンで価格や日時を表示します。",
+    "switchLanguageHint": "ヘッダーで言語を切り替えると、通貨、日時、相対時間の表示が変わります。",
     "currencySection": "通貨フォーマット",
     "timeSection": "日時フォーマット",
     "currentDateTime": "短い形式",
@@ -71,7 +71,7 @@
   },
   "NotFound": {
     "title": "ページが見つかりません",
-    "description": "お探しのページは存在しないか、移動した可能性があります。",
+    "description": "このページは存在しないか、移動しました。",
     "homeLink": "ホームに戻る"
   }
 }

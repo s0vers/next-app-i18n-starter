@@ -1,21 +1,21 @@
 {
   "Index": {
     "boilerplateName": "Next.js 16 i18n Starter",
-    "title": "Next.js 16 Template with i18n and Shadcn UI",
-    "description": "A powerful starting point for your next multilingual, accessible web application.",
-    "cloneRepository": "Clone Repository",
+    "title": "Next.js 16 template with i18n and shadcn/ui",
+    "description": "A Next.js starter with multilingual routing, accessible UI, and localized formatting.",
+    "cloneRepository": "Clone repository",
     "leaveStar": "Leave a Star",
     "copyCode": "Copy code",
     "copied": "Copied",
     "copyFailed": "Couldn't copy. Select the text and copy it manually.",
     "settings": "Language and appearance",
     "toggleTheme": "Toggle theme",
-    "howToUse": "How to Use",
-    "gettingStarted": "Getting Started",
+    "howToUse": "How to use",
+    "gettingStarted": "Get started",
     "installation": "Installation",
-    "howToContribute": "How to Contribute",
-    "omitrtlUsage": "OmitRTL Usage",
-    "OmitRTLInstruction": "To use OmitRTL, simply wrap the component you want to omit RTL support for with the OmitRTL component.",
+    "howToContribute": "How to contribute",
+    "omitrtlUsage": "Using OmitRTL",
+    "OmitRTLInstruction": "Wrap code, numbers, or other left-to-right content in OmitRTL to keep it left-to-right on RTL pages.",
     "contribute": "Contribute",
     "localization": "Localization",
     "installationSteps": {
@@ -28,12 +28,12 @@
       "createBranch": "Create a new branch:",
       "commit": "Commit your changes:",
       "push": "Push to the branch:",
-      "pullRequest": "Create a new Pull Request"
+      "pullRequest": "Open a pull request"
     },
     "error": {
       "server": "Internal Server Error",
-      "sorry": "Sorry, we encountered an unexpected issue on our server.",
-      "tryAgain": " Try again later.",
+      "sorry": "An unexpected server error occurred.",
+      "tryAgain": "Try again",
       "returnHome": "Return home"
     }
   },
@@ -57,9 +57,9 @@
     "step3Description": "Inspect each language version, sitemap.xml, robots.txt, and structured data after deployment. Submit the sitemap in search webmaster tools."
   },
   "Localization": {
-    "title": "Locale-Driven Formatting",
-    "description": "Format prices and dates with next-intl. Each locale sets currency and time zone via getRequestConfig in src/i18n/request.ts.",
-    "switchLanguageHint": "Switch language in the header to see currency, dates, and relative time update automatically.",
+    "title": "Locale-based formatting",
+    "description": "This demo formats prices and dates with next-intl using each locale's currency and time zone.",
+    "switchLanguageHint": "Change the language in the header to see the currency, dates, and relative time update.",
     "currencySection": "Currency formatting",
     "timeSection": "Date & time formatting",
     "currentDateTime": "Short format",
@@ -72,7 +72,7 @@
   },
   "NotFound": {
     "title": "Page not found",
-    "description": "The page you are looking for does not exist or may have been moved.",
+    "description": "This page does not exist or has moved.",
     "homeLink": "Go back home"
   }
 }

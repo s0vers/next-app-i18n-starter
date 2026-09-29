@@ -2,7 +2,7 @@
   "Index": {
     "boilerplateName": "Next.js 多语言模板",
     "title": "Next 16 模板 (集成i18n与Shadcn UI)",
-    "description": "一个强大的起点，助您开发多语言、无障碍的Web应用程序。",
+    "description": "一个 Next.js 起始模板，提供多语言路由、无障碍界面和本地化格式。",
     "cloneRepository": "克隆仓库",
     "leaveStar": "点亮星标",
     "copyCode": "复制代码",
@@ -15,7 +15,7 @@
     "installation": "安装步骤",
     "howToContribute": "参与贡献",
     "omitrtlUsage": "OmitRTL 使用方法",
-    "OmitRTLInstruction": "如需禁用RTL支持，只需用OmitRTL组件包裹目标组件即可。",
+    "OmitRTLInstruction": "在 RTL 页面中，使用 OmitRTL 包裹代码、数字或其他从左向右显示的内容。",
     "contribute": "贡献指南",
     "localization": "本地化",
     "installationSteps": {
@@ -33,7 +33,7 @@
     "error": {
       "server": "服务器错误",
       "sorry": "抱歉，服务器遇到意外错误。",
-      "tryAgain": "请稍后重试。",
+      "tryAgain": "重试",
       "returnHome": "返回首页"
     }
   },
@@ -58,8 +58,8 @@
   },
   "Localization": {
     "title": "按语言格式化",
-    "description": "使用 next-intl 格式化价格和日期。每种语言通过 getRequestConfig 设置货币和时区。",
-    "switchLanguageHint": "在顶部切换语言，即可看到货币、日期和相对时间的自动更新。",
+    "description": "此示例使用 next-intl，根据当前语言的货币和时区格式化价格与日期。",
+    "switchLanguageHint": "在页眉切换语言，查看货币、日期和相对时间的格式变化。",
     "currencySection": "货币格式",
     "timeSection": "日期与时间格式",
     "currentDateTime": "短格式",
@@ -72,7 +72,7 @@
   },
   "NotFound": {
     "title": "页面未找到",
-    "description": "您访问的页面不存在或可能已被移动。",
+    "description": "此页面不存在或已移至其他位置。",
     "homeLink": "返回首页"
   }
 }

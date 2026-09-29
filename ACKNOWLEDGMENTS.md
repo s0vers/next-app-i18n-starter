@@ -1,6 +1,6 @@
 # Acknowledgments
 
-This project builds on open source libraries, community patterns, and ideas from other maintainers. Thank you to everyone below.
+Thanks to the maintainers and contributors behind the projects listed here.
 
 ---
 
@@ -52,25 +52,19 @@ The i18n architecture in this starter (locale-scoped App Router, `localePrefix: 
 
 | Project | Role in this repo | Links |
 | ------- | ----------------- | ----- |
-| [Bun](https://bun.sh) | Recommended package manager and script runner | [GitHub](https://github.com/oven-sh/bun) |
+| [Bun](https://bun.sh) | Package manager and script runner | [GitHub](https://github.com/oven-sh/bun) |
 | [ESLint](https://eslint.org) + [eslint-config-next](https://nextjs.org/docs/app/api-reference/config/eslint) | Linting | — |
 
 ---
 
-## Development philosophy
-
-| Project | Role in this repo | Links |
-| ------- | ----------------- | ----- |
-| [ponytail](https://github.com/DietrichGebert/ponytail) | “Lazy senior dev” guidance — YAGNI, reuse before rewrite, smallest working diff. Adapted as `.cursor/rules/ponytail.mdc` for AI-assisted development in this repo | [GitHub](https://github.com/DietrichGebert/ponytail) |
-
----
-
-## AI / editor context
+## Assistant instructions
 
 | Resource | Role in this repo | Links |
 | -------- | ----------------- | ----- |
-| [llms.txt](https://llmstxt.org) | Machine-readable project reference (`public/llms.txt`) | [Spec](https://llmstxt.org) |
-| [Cursor](https://cursor.com) | Agent rules under `.cursor/rules/` and `AGENTS.md` | — |
+| [`AGENTS.md`](AGENTS.md) | Shared instructions for coding assistants across models and editors | — |
+| [Next.js i18n SEO skill](.agents/skills/nextjs-i18n-seo/SKILL.md) | Reusable SEO workflow for this template and its forks | — |
+| [llms.txt](https://llmstxt.org) | Public project reference for tools that read it (`public/llms.txt`) | [Spec](https://llmstxt.org) |
+| [Cursor](https://cursor.com) | Optional adapters under `.cursor/rules/` | — |
 
 ---
 

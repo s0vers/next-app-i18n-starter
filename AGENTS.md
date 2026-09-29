@@ -1,49 +1,47 @@
-# Agent guide
+# Repository instructions
 
-Instructions for AI coding assistants working in this repository.
+These instructions apply to coding assistants of any model or editor. Read this file first, then read the nearest `AGENTS.md` for the files you change. User instructions take priority. When documentation conflicts with the code or configuration, verify the behavior and update the stale documentation in the same change.
 
-## Project
+## Project facts
 
-Next.js 16 App Router boilerplate with **next-intl 4**, locale-driven formatting, shadcn/ui, RTL, cookie-based theme SSR, and full SEO.
+- Next.js 16 App Router, React 19, next-intl 4, Tailwind CSS 4, and shadcn/ui.
+- Bun is the package manager; `bun.lock` is the lockfile. Node.js 24 is required.
+- The app supports English, Arabic, Chinese, Spanish, and Japanese. English is the default locale.
 
-- **Package manager:** `bun` (preferred) or `pnpm` — not npm/yarn
-- **Node:** 24.x (see `.nvmrc`, `package.json` engines)
-- **After substantive changes:** `bun run build` (and `bun run lint` when touching TS/TSX)
+## Shared rules
 
-## Non-negotiables
+- Keep changes focused on the requested outcome. Inspect the relevant code and current Git status first, reuse existing patterns, and avoid dependencies or abstractions without a concrete need.
+- Protect credentials and user data. Never read, edit, or commit `.env` files. Put new variable names and safe example values in `.env.example`; never place real credentials there.
+- Use `@/i18n/navigation` for links and navigation that should preserve locale. Use Next.js navigation APIs directly when the operation is not locale-aware, such as `notFound()`.
+- `dictionary/en.json` defines translation message types. Add or rename message keys in every `dictionary/*.json` file. Keep locale copy accurate and have fluent speakers review production translations.
+- Locale routes live under `src/app/[locale]/`. Server components that need locale-aware static rendering must call `setRequestLocale(locale)` and validate route locales with `hasLocale` before using them.
+- Build locale URLs with helpers from `src/lib/site.ts`. Routing uses `localePrefix: "as-needed"`: English uses `/`, and other locales use `/{locale}`. Automatic locale detection is disabled so cookies and browser language do not redirect the default URL.
+- Use `createLocalizedMetadata` for page metadata and keep canonical, alternate-language, sitemap, and Open Graph URLs aligned. Follow the SEO guide in `README.md` and the research record in `docs/seo-research.md`. Add structured data only when it describes visible page content; render JSON-LD in a Server Component and escape `<` in its serialized value.
+- Prefer Server Components. Add `"use client"` only for client state, event handlers, or browser APIs. Theme initialization uses the existing cookie-based SSR implementation.
+- Follow the component, styling, accessibility, and RTL conventions in `src/components/AGENTS.md` when changing UI.
+- Keep documentation and instructions consistent with the implementation when changing a convention, route, locale, or environment variable.
 
-1. **Never edit `.env` or commit secrets** — use `.env.example` as the template only
-2. **Navigation:** use `@/i18n/navigation` (`Link`, `useRouter`, `usePathname`, `getPathname`) — not `next/link` or `next/navigation` directly
-3. **Translations:** `en.json` is the type source of truth; add keys to **all** `dictionary/*.json` files
-4. **Locale pages:** call `setRequestLocale(locale)` in Server Components under `src/app/[locale]/`
-5. **URLs for SEO:** build with `getPathname` — English is `/` (`localePrefix: "as-needed"`), not `/en`
-6. **React 19:** no `next/script` or inline `<script>` in client components; JSON-LD in Server Components only
-7. **Minimize diff scope** — match existing patterns; no drive-by refactors
+## Verification
 
-## Cursor rules
+- Run `bun run lint` after changes to TypeScript, TSX, or lint configuration.
+- Run `bun run build` after substantive application changes. Production builds require `NEXT_PUBLIC_SITE_URL` to be set to the deployment's HTTPS origin; use the safe example in `.env.example` for local verification.
+- `package.json` lists the available scripts. Do not claim a check passed unless it completed successfully.
 
-Detailed, file-scoped rules live in [`.cursor/rules/`](.cursor/rules/). Cursor loads them automatically.
+## Instruction map
 
-| File | Purpose |
-|------|---------|
-| `project-core.mdc` | Tooling, env, commits, general standards |
-| `i18n.mdc` | Locales, dictionaries, regional formatting |
-| `nextjs-pages.mdc` | App Router pages and layouts |
-| `seo.mdc` | Metadata, sitemap, robots, canonical URLs |
-| `components.mdc` | React components, shadcn, RTL, theme |
+- `src/app/AGENTS.md`: routes, metadata, sitemap, robots, and structured data.
+- `src/i18n/AGENTS.md`: locale routing, navigation, and regional formatting.
+- `dictionary/AGENTS.md`: translation keys and message files.
+- `src/components/AGENTS.md`: React boundaries, styling, accessibility, theme, and RTL.
+- `src/lib/AGENTS.md`: shared helpers and canonical site metadata.
+- For next-intl routing, request configuration, messages, locale-aware formatting, or its framework integrations, read `.agents/skills/next-intl-i18n/SKILL.md` and only the relevant playbook.
+- For SEO audits, route metadata, current search guidance, AI search, crawler policy, or launch checks, read `.agents/skills/nextjs-i18n-seo/SKILL.md` before recommending or changing the implementation.
+- `README.md`: human setup and implementation reference.
+- `docs/seo-research.md`: sourced SEO decisions and deployment checks.
+- `public/llms.txt`: public project overview for tools that read it; it is secondary documentation, not an instruction source.
+- `.cursor/rules/`: optional Cursor adapters. The `AGENTS.md` files above are the canonical rules for every assistant.
 
-## Deep reference
+## Git
 
-- Human docs: [README.md](README.md)
-- Machine-readable: [public/llms.txt](public/llms.txt)
-- Cursor setup: [.cursor/README.md](.cursor/README.md)
-
-## Common tasks (pointers)
-
-| Task | Where to look |
-|------|----------------|
-| Add language | `src/i18n/locales.ts` (`localeConfig`) — routing, regional, OG, and switcher derive from it |
-| Add page | `src/app/[locale]/…/page.tsx`, dictionary namespace, `@/i18n/navigation` links |
-| Add SEO to page | `generateMetadata`, dictionary meta keys, `sitemap.ts` entry |
-| RTL islands | `OmitRTL` from `@/components/OmmitRlt` |
-| Site constants | `src/lib/site.ts` |
+- Do not create commits, push branches, or open pull requests unless the user asks.
+- Never commit `.env`, credentials, generated build output, or dependencies.

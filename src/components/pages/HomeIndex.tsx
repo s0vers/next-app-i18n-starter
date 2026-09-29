@@ -28,7 +28,7 @@ function GithubIcon({ className }: { className?: string }) {
 const CODE_EXAMPLES = {
   clone: `git clone ${GITHUB_URL}.git`,
   install: "bun install",
-  dev: "bun dev",
+  dev: "bun run dev",
   branch: "git checkout -b feature/your-feature",
   commit: "git commit -am 'Add some feature'",
   push: "git push origin feature/your-feature",
@@ -37,7 +37,7 @@ const CODE_EXAMPLES = {
 function MyComponent() {
   return (
     <OmitRTL omitRTL>
-      <pre>Always LTR content</pre>
+      <pre>Left-to-right content</pre>
     </OmitRTL>
   );
 }`,

@@ -1,9 +1,13 @@
-# Next.js i18n Starter — LLM Context File
-# https://llmstxt.org/ — machine-readable project reference for AI assistants
+# Next.js i18n Starter
+# https://llmstxt.org/ project reference for AI assistants
 # Repository: https://github.com/s0vers/next-app-i18n-starter
 # Live demo: https://next-app-i18n-starter.vercel.app
 
-> Next.js 16 App Router boilerplate with next-intl 4, locale-driven currency/date/time formatting, shadcn UI, RTL support, cookie-based theme SSR, and full SEO (hreflang, JSON-LD, sitemap).
+For repository changes, read the root `AGENTS.md` and the nearest scoped `AGENTS.md`; those files hold the shared instructions for coding assistants. This file is a public project overview.
+
+For SEO tasks, the repository workflow is in `.agents/skills/nextjs-i18n-seo/SKILL.md`.
+
+> Next.js 16 App Router starter with next-intl 4, locale-driven currency and date formatting, shadcn/ui, RTL support, cookie-based theme rendering, and SEO metadata, structured data, and sitemap generation.
 
 ---
 
@@ -12,15 +16,15 @@
 ### How do I add a new language?
 1. Copy `dictionary/en.json` → `dictionary/xx.json` and translate all namespaces.
 2. Add the locale to `localeConfig` in `src/i18n/locales.ts` with its label, currency, time zone, font, and Open Graph locale tag.
-3. Run `bun run build` — routing, the switcher, and regional defaults derive from `localeConfig`.
+3. Run `bun run build`. Routing, the switcher, and regional defaults derive from `localeConfig`.
 
 ### How does currency/timezone formatting work?
-Locale drives everything. No user override dropdowns or cookies.
+Regional defaults come from the active locale. The demo formats values with that locale's currency and time zone.
 - `src/i18n/request.ts` → `getRequestConfig` sets `timeZone`, `now`, `formats` per locale.
 - `src/i18n/locales.ts` → `localeConfig` maps locale → currency + IANA time zone.
 - `src/i18n/regional.ts` → `createRegionalFormats` defines named number and date formats.
 - Client: `useFormatter()`, `useTimeZone()`, `useNow()` from `next-intl`.
-- Demo UI: `src/components/LocalizationTab.tsx` — switch language in header to see changes.
+- Demo UI: `src/components/LocalizationTab.tsx`. Change the language in the header to see the formats update.
 
 ### How do I add a new page?
 1. Create `src/app/[locale]/your-page/page.tsx` (Server Component).
@@ -31,14 +35,14 @@ Locale drives everything. No user override dropdowns or cookies.
 6. Link with `Link` from `@/i18n/navigation` (not `next/link` directly).
 
 ### How do I navigate between locales?
-Always use `@/i18n/navigation` wrappers — they respect `localePrefix: as-needed`:
+Use the `@/i18n/navigation` wrappers. They respect `localePrefix: as-needed`:
 ```tsx
 import { Link, useRouter, usePathname } from "@/i18n/navigation";
 router.replace(pathname, { locale: "ar" });
 ```
 
 ### How do I update SEO metadata?
-Edit `dictionary/{locale}/Metadata` in all 5 JSON files (`title`, `description`). The locale layout reads these translations and builds shared metadata through `createLocalizedMetadata` in `src/lib/site.ts`. Do not add `keywords`; search engines do not use the meta-keywords tag for ranking.
+Edit the `Metadata` namespace in all five files: `dictionary/en.json`, `ar.json`, `zh.json`, `es.json`, and `ja.json` (`title`, `description`). The locale layout reads these translations and builds shared metadata through `createLocalizedMetadata` in `src/lib/site.ts`. Do not add `keywords`; search engines do not use the meta-keywords tag for ranking.
 
 ### How do I add SEO to a new page?
 1. Add `metaTitle` / `metaDescription` keys to a new namespace in all dictionary files.
@@ -59,14 +63,14 @@ Next.js 16 renamed middleware to proxy. This project uses `src/proxy.ts` with `c
 | Package | Version | Role |
 |---------|---------|------|
 | next | 16.3.x | App Router, Turbopack (default in dev), Metadata API |
-| react / react-dom | 19.3.x | Server Components, no `<script>` in client trees |
+| react / react-dom | 19.3.x | Server and Client Components |
 | next-intl | 4.13.x | i18n routing, ICU messages, formatters |
 | tailwindcss | 4.3.x | Styling via `@tailwindcss/postcss` |
 | lucide-react | 1.48.x | Icons |
 | @vercel/analytics | 2.0.x | Analytics in root layout |
 | @vercel/speed-insights | 2.0.x | Performance insights |
 
-Package manager: **bun** (preferred). pnpm also works.
+Package manager: **Bun**.
 
 ---
 
@@ -120,55 +124,55 @@ Request
 | es | `/es` | ltr |
 | ja | `/ja` | ltr |
 
-`localeDetection: false` — the default URL does not redirect based on cookies or browser language; users choose a locale with the language switcher.
+`localeDetection: false` keeps the default URL from redirecting based on cookies or browser language. Visitors choose a locale with the language switcher.
 
 ---
 
 ## File reference
 
 ### i18n core
-- `src/proxy.ts` — next-intl middleware export + matcher config
-- `src/i18n/routing.ts` — `defineRouting({ locales, defaultLocale, localePrefix })`
-- `src/i18n/request.ts` — `getRequestConfig` plugin entry (wired in `next.config.ts`)
-- `src/i18n/locales.ts` — locale labels, currencies, time zones, fonts, and Open Graph locale tags
-- `src/i18n/regional.ts` — `createRegionalFormats` named number and date formats
-- `src/i18n/navigation.ts` — `createNavigation(routing)` → `Link`, `redirect`, `useRouter`, `usePathname`, `getPathname`
-- `next.config.ts` — `createNextIntlPlugin("./src/i18n/request.ts")`
+- `src/proxy.ts`: next-intl proxy export and matcher config
+- `src/i18n/routing.ts`: `defineRouting({ locales, defaultLocale, localePrefix })`
+- `src/i18n/request.ts`: `getRequestConfig` plugin entry (wired in `next.config.ts`)
+- `src/i18n/locales.ts`: locale labels, currencies, time zones, fonts, and Open Graph locale tags
+- `src/i18n/regional.ts`: named number and date formats from `createRegionalFormats`
+- `src/i18n/navigation.ts`: `createNavigation(routing)` returns `Link`, `redirect`, `useRouter`, `usePathname`, and `getPathname`
+- `next.config.ts`: `createNextIntlPlugin("./src/i18n/request.ts")`
 
 ### App routes
-- `src/app/[locale]/layout.tsx` — root layout, `generateMetadata`, `generateStaticParams`, theme SSR
-- `src/app/[locale]/page.tsx` — home page, root-only `WebSite` JSON-LD and launch guide
-- `src/app/[locale]/[...rest]/page.tsx` — catch-all 404
-- `src/app/[locale]/not-found.tsx` — localized not-found
-- `src/app/sitemap.ts` — sitemap with `alternates.languages` via `getPathname`
-- `src/app/robots.ts` — dynamic robots.txt
-- `src/app/error.tsx` — global error boundary
+- `src/app/[locale]/layout.tsx`: root layout, `generateMetadata`, `generateStaticParams`, and theme rendering
+- `src/app/[locale]/page.tsx`: home page, root-only `WebSite` JSON-LD, and launch guide
+- `src/app/[locale]/[...rest]/page.tsx`: catch-all 404
+- `src/app/[locale]/not-found.tsx`: localized not-found page
+- `src/app/sitemap.ts`: sitemap with `alternates.languages` from `getPathname`
+- `src/app/robots.ts`: dynamic robots.txt
+- `src/app/error.tsx`: global error boundary
 
 ### Components
-- `src/components/pages/HomeIndex.tsx` — main landing page (tabs: install, OmitRTL, contribute, localization)
-- `src/components/LocalizationTab.tsx` — locale formatting demo (read-only, no copy buttons)
-- `src/components/LanguageSwitcher.tsx` — `router.replace(pathname, { locale })`
-- `src/components/ModeToggle.tsx` — light/dark toggle via `useTheme()`
-- `src/components/theme-provider.tsx` — client theme context and cookie updates
-- `src/components/OmmitRlt.tsx` — force LTR in RTL locales (note: filename typo is intentional/historical)
-- `src/components/ui/*` — shadcn/ui primitives (button, card, tabs, dropdown-menu)
+- `src/components/pages/HomeIndex.tsx`: landing page with installation, OmitRTL, contribution, and localization tabs
+- `src/components/LocalizationTab.tsx`: locale formatting demo
+- `src/components/LanguageSwitcher.tsx`: locale changes through `router.replace(pathname, { locale })`
+- `src/components/ModeToggle.tsx`: light/dark toggle via `useTheme()`
+- `src/components/theme-provider.tsx`: client theme context and cookie updates
+- `src/components/OmmitRlt.tsx`: forces left-to-right text in RTL locales; the filename is retained for compatibility
+- `src/components/ui/*`: shadcn/ui primitives (button, card, tabs, dropdown-menu)
 
 ### Lib
-- `src/lib/site.ts` — `siteConfig`, canonical and hreflang URL helpers
-- `src/lib/theme.ts` — `THEME_COOKIE_NAME`, `resolveSSRTheme`, `setThemeCookie`
-- `src/lib/utils.ts` — `cn()` helper (tailwind-merge + clsx)
-- `global.d.ts` — next-intl `AppConfig` typed from `dictionary/en.json` and `localeConfig`
+- `src/lib/site.ts`: `siteConfig`, canonical and hreflang URL helpers
+- `src/lib/theme.ts`: `THEME_COOKIE_NAME`, `resolveSSRTheme`, and `setThemeCookie`
+- `src/lib/utils.ts`: `cn()` helper (tailwind-merge + clsx)
+- `global.d.ts`: next-intl `AppConfig` types from `dictionary/en.json` and `localeConfig`
 
 ### Translations
-- `dictionary/en.json` — source of truth for TypeScript message keys
-- `dictionary/ar.json`, `zh.json`, `es.json`, `ja.json` — must mirror en.json structure
+- `dictionary/en.json`: source of truth for TypeScript message keys
+- `dictionary/ar.json`, `zh.json`, `es.json`, and `ja.json`: mirror the structure of `en.json`
 
 ### Translation namespaces (en.json)
-- `Index` — landing page UI (hero, tabs, installation steps, contribute steps, errors)
-- `Footer` — copyright, links
-- `Metadata` — SEO title and description (used in `generateMetadata`)
-- `SeoGuide` — localized, server-rendered launch checklist
-- `Localization` — localization tab labels and ICU format examples
+- `Index`: landing page UI, installation steps, contribution steps, and errors
+- `Footer`: copyright and links
+- `Metadata`: SEO title and description used by `generateMetadata`
+- `SeoGuide`: localized, server-rendered launch checklist
+- `Localization`: tab labels and ICU format examples
 
 ### ICU message examples in Localization namespace
 ```json
@@ -190,15 +194,15 @@ Requires matching `formats` in `createRegionalFormats()`.
 | ja | Japanese | JPY | Asia/Tokyo | No |
 
 Format names available via `useFormatter()`:
-- `format.number(value, "price")` — currency with 2 decimal places
-- `format.number(value, "compact")` — compact notation (e.g. 12.8K)
-- `format.dateTime(date, "long")` — full date + time in locale time zone
-- `format.dateTime(date, "short")` — medium date + short time
-- `format.relativeTime(from, to)` — relative time (e.g. "2 hours ago")
+- `format.number(value, "price")`: currency with two decimal places
+- `format.number(value, "compact")`: compact notation (for example, 12.8K)
+- `format.dateTime(date, "long")`: full date and time in the locale's time zone
+- `format.dateTime(date, "short")`: medium date and short time
+- `format.relativeTime(from, to)`: relative time (for example, "2 hours ago")
 
 ---
 
-## SEO — implementation reference
+## SEO implementation reference
 
 Search eligibility starts with crawlable, useful pages, accurate localized HTML, stable URLs, and correct indexing controls. AI-search visibility follows these foundations; there is no special schema that guarantees inclusion. See the official [Google AI features guide](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide). This `llms.txt` is project documentation, not a Google ranking signal.
 
@@ -235,14 +239,14 @@ Only the default-locale domain homepage (`/`) emits a `WebSite` node. Its `url` 
 
 Keep important page copy in rendered HTML with descriptive headings and ordinary links. `llms.txt` is supplementary and cannot replace crawlable pages. Check live indexing and sitemaps in Google Search Console and Bing Webmaster Tools. Bing provides an AI Performance report. ChatGPT referral links may carry `utm_source=chatgpt.com`.
 
-### Add metadata for a localized page
+### Add metadata to a localized page
 
 1. Add translated `metaTitle` and `metaDescription` keys to every dictionary.
 2. In the page `generateMetadata`, validate the locale, load its translation namespace, then return `createLocalizedMetadata({ locale, title, description, pathname: "/about" })`.
 3. Add one sitemap row per locale using `getLocaleUrl(locale, "/about")` and `getAlternateLanguages("/about")`.
 4. Keep JSON-LD server-rendered and consistent with visible page content.
 
-### Verification
+### Verify the output
 
 ```bash
 bun run lint
@@ -263,11 +267,13 @@ Check that `/` emits exactly one `WebSite` node and `/ar` emits none; both shoul
 - OpenAI crawlers: https://developers.openai.com/api/docs/bots
 - Anthropic crawlers: https://support.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler
 - Perplexity crawlers: https://docs.perplexity.ai/docs/resources/perplexity-crawlers
-- Next.js Metadata API: https://nextjs.org/docs/app/api-reference/functions/generate-metadata---
+- Next.js Metadata API: https://nextjs.org/docs/app/api-reference/functions/generate-metadata
+
+---
 
 ## Theme system
 
-React 19 blocks `<script>` tags in component trees. Theme uses cookie SSR instead:
+Theme initialization uses cookie-based server rendering instead of a flash-prevention script:
 
 1. Server (`layout.tsx`): read `theme` cookie → `resolveSSRTheme()` → `className` on `<html>`
 2. Client (`theme-provider.tsx`): updates the theme class and cookie on change
@@ -286,40 +292,38 @@ import OmitRTL from "@/components/OmmitRlt";
 <OmitRTL omitRTL>{children}</OmitRTL>
 ```
 
-NPM package also available: `react-omit-rtl`.
+The utility is also published as the `react-omit-rtl` package.
 
 ---
 
 ## Scripts
 
 ```bash
-bun install    # Install dependencies
-bun dev        # Dev server (Turbopack)
-bun build      # Production build + typecheck
-bun start      # Production server
-bun lint       # ESLint (eslint-config-next flat config)
+bun install       # Install dependencies
+bun run dev       # Dev server (Turbopack)
+bun run build     # Production build + typecheck
+bun run start     # Production server
+bun run lint      # ESLint
 ```
 
 ---
 
-## Conventions and pitfalls
+## Conventions
 
-DO:
 - Use `Link`, `useRouter`, `usePathname` from `@/i18n/navigation`
 - Use `setRequestLocale(locale)` in every `[locale]` page/layout for static rendering
-- Add translation keys to ALL dictionary files when adding features
+- Add translation keys to every dictionary file
 - Use `getPathname` for SEO URLs (respects `as-needed` prefix)
 - Prefer Server Components; add `"use client"` only when needed
 
-DON'T:
-- Use `next/link` or `next/navigation` directly for locale-aware routing
-- Add `<Script>` or inline `<script>` in client components (React 19 error)
-- Hardcode site URL — use `siteConfig.url` or `NEXT_PUBLIC_SITE_URL`
-- Duplicate locale arrays — import `routing.locales` from `src/i18n/routing.ts`
-- Hardcode hreflang URLs like `/en` — English canonical is `/` with as-needed routing
-- Omit localized URL entries from sitemap.ts when alternates.languages is used
-- Put JSON-LD in client components — only Server Components (see page.tsx)
-- Touch `.env` in automation — use `.env.example` as reference only
+Keep these constraints:
+
+- Use `@/i18n/navigation` for locale-aware links and navigation.
+- Render JSON-LD in a Server Component.
+- Read site URLs and locales from the shared configuration.
+- Build locale URLs with the helpers; English uses `/`.
+- Add every indexable localized URL to the sitemap.
+- Use `.env.example` as a safe reference. Do not read or change `.env` files.
 
 ---
 
@@ -333,7 +337,7 @@ DON'T:
 
 - next-intl: https://next-intl.dev
 - Next.js App Router: https://nextjs.org/docs/app
-- Next.js Metadata API: https://nextjs.org/docs/app/building-your-application/optimizing/metadata
+- Next.js Metadata API: https://nextjs.org/docs/app/api-reference/functions/generate-metadata
 - Next.js JSON-LD: https://nextjs.org/docs/app/guides/json-ld
 - shadcn/ui: https://ui.shadcn.com
 

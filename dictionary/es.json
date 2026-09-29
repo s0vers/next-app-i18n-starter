@@ -2,7 +2,7 @@
   "Index": {
     "boilerplateName": "Plantilla i18n de Next.js",
     "title": "Plantilla Next 16 con i18n y Shadcn UI",
-    "description": "Un potente punto de partida para tu próxima aplicación web multilingüe y accesible.",
+    "description": "Una plantilla de Next.js con rutas multilingües, una interfaz accesible y formatos localizados.",
     "cloneRepository": "Clonar repositorio",
     "leaveStar": "Dejar una estrella",
     "copyCode": "Copiar código",
@@ -15,7 +15,7 @@
     "installation": "Instalación",
     "howToContribute": "Cómo contribuir",
     "omitrtlUsage": "Omitir uso de RTL",
-    "OmitRTLInstruction": "Para usar OmitRTL, simplemente envuelve el componente para el que deseas omitir la compatibilidad con RTL con el componente OmitRTL.",
+    "OmitRTLInstruction": "Usa OmitRTL para mantener el código, los números y otros contenidos de izquierda a derecha en páginas RTL.",
     "contribute": "Contribuir",
     "localization": "Localización",
     "installationSteps": {
@@ -32,8 +32,8 @@
     },
     "error": {
       "server": "Error interno del servidor",
-      "sorry": "Lo sentimos, encontramos un problema inesperado en nuestro servidor.",
-      "tryAgain": "Inténtalo de nuevo más tarde.",
+      "sorry": "Se produjo un error inesperado en el servidor.",
+      "tryAgain": "Reintentar",
       "returnHome": "Volver a la página principal"
     }
   },
@@ -57,8 +57,8 @@
   },
   "Localization": {
     "title": "Formato según idioma",
-    "description": "Formatea precios y fechas con next-intl. Cada idioma define moneda y zona horaria en getRequestConfig.",
-    "switchLanguageHint": "Cambia el idioma en la cabecera para ver cómo se actualizan moneda, fechas y tiempo relativo.",
+    "description": "Este ejemplo formatea precios y fechas con next-intl según la moneda y la zona horaria de cada idioma.",
+    "switchLanguageHint": "Cambia el idioma en la cabecera para ver los formatos de moneda, fechas y tiempo relativo.",
     "currencySection": "Formato de moneda",
     "timeSection": "Formato de fecha y hora",
     "currentDateTime": "Formato corto",
@@ -71,7 +71,7 @@
   },
   "NotFound": {
     "title": "Página no encontrada",
-    "description": "La página que buscas no existe o puede haber sido movida.",
+    "description": "Esta página no existe o se ha movido.",
     "homeLink": "Volver al inicio"
   }
 }

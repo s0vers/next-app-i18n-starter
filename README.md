@@ -58,9 +58,9 @@ A multilingual Next.js starter built with **Next.js 16**, **React 19**, **next-i
 | Area           | What's included                                                             |
 | -------------- | --------------------------------------------------------------------------- |
 | **Framework**  | Next.js 16 App Router, Server Components, Turbopack dev server              |
-| **i18n**       | next-intl 4 — ICU messages, `useFormatter`, locale-driven currency/timezone |
+| **i18n**       | next-intl 4: ICU messages, `useFormatter`, and locale-driven formatting   |
 | **Languages**  | English, Arabic (RTL), Chinese, Spanish, Japanese                           |
-| **Formatting** | Currency, dates, compact numbers, relative time — all driven by locale      |
+| **Formatting** | Locale-based currency, dates, compact numbers, and relative time          |
 | **UI**         | shadcn/ui components, Tailwind CSS 4, light/dark theme                      |
 | **RTL**        | Automatic `dir="rtl"` for Arabic + `OmitRTL` utility for LTR islands        |
 | **SEO**        | `metadataBase`, hreflang, JSON-LD, sitemap/robots, OG image                 |
@@ -72,7 +72,7 @@ A multilingual Next.js starter built with **Next.js 16**, **React 19**, **next-i
 ## Prerequisites
 
 - Node.js 24.x (see `.nvmrc`)
-- [Bun](https://bun.sh) 1.x (preferred package manager); pnpm also works
+- [Bun](https://bun.sh) 1.x
 - Basic familiarity with Next.js App Router and React Server Components
 
 ---
@@ -82,7 +82,7 @@ A multilingual Next.js starter built with **Next.js 16**, **React 19**, **next-i
 ```bash
 # Clone
 git clone https://github.com/s0vers/next-app-i18n-starter.git
-cd i18n-Nextjs-BoilerPlate
+cd next-app-i18n-starter
 
 # Install
 bun install
@@ -92,7 +92,7 @@ cp .env.example .env.local
 # NEXT_PUBLIC_SITE_URL=https://next-app-i18n-starter.vercel.app
 
 # Run
-bun dev
+bun run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000). Use the language switcher in the header to see translations and regional formatting update.
@@ -104,7 +104,7 @@ Before deploying a fork, set `NEXT_PUBLIC_SITE_URL`, update the site and author 
 ## Project structure
 
 ```
-i18n-Nextjs-BoilerPlate/
+next-app-i18n-starter/
 ├── dictionary/                     # Translation JSON files
 │   ├── en.json                     # English (TypeScript source of truth)
 │   ├── ar.json                     # Arabic
@@ -158,10 +158,10 @@ i18n-Nextjs-BoilerPlate/
 
 This template uses [next-intl](https://next-intl.dev) with the App Router pattern. The i18n setup uses these files:
 
-1. `src/i18n/locales.ts` — locale labels, currency, time zone, font, and Open Graph locale
-2. `src/i18n/routing.ts` — URL prefix strategy
-3. `src/i18n/request.ts` — per-request messages, time zone, and formats
-4. `src/i18n/navigation.ts` — locale-aware navigation wrappers
+1. `src/i18n/locales.ts`: locale labels, currency, time zone, font, and Open Graph locale
+2. `src/i18n/routing.ts`: URL prefix strategy
+3. `src/i18n/request.ts`: per-request messages, time zone, and formats
+4. `src/i18n/navigation.ts`: locale-aware navigation wrappers
 
 ### How routing works
 
@@ -206,7 +206,7 @@ router.replace(pathname, { locale: "ar" });
 
 ### Locale-driven formatting
 
-Currency, dates, and time zones are **not** user-configurable dropdowns — they follow the active locale. This is the recommended next-intl pattern for regional formatting.
+Currency, dates, and time zones follow the active locale. The demo does not provide separate controls for them.
 
 `src/i18n/locales.ts` defines each locale's defaults:
 
@@ -270,7 +270,7 @@ export function RegionalExamples() {
 }
 ```
 
-The **Localization tab** on the home page demonstrates all of this. Switch language in the header — prices and dates update instantly.
+The **Localization** tab on the home page demonstrates these formats. Change the language in the header to see the prices and dates update.
 
 ### Translation files
 
@@ -414,9 +414,9 @@ The file is named `OmmitRlt.tsx` for compatibility with existing imports; import
 
 ## Theme system
 
-Light/dark mode without flash-of-unstyled-content and without `<script>` tags (React 19 compatible).
+The server reads the saved theme and renders the matching class before paint, avoiding a theme flash during hydration.
 
-**How it works:**
+### How it works
 
 1. **Server** (`layout.tsx`) reads the `theme` cookie and sets `className="light"` or `"dark"` on `<html>` before paint.
 2. **Client** (`theme-provider.tsx`) updates the theme class and cookie when toggled.
@@ -453,24 +453,24 @@ The SEO setup uses the Next.js Metadata API, next-intl URL helpers, JSON-LD stru
   (head tags)         (structured data)
          │
          ▼
-  dictionary/{locale}/Metadata  ←  translated title and description
+  dictionary/{locale}.json → Metadata namespace (translated title and description)
          │
          ▼
   getPathname({ locale, href })  ←  correct URLs per locale (as-needed)
 ```
 
-**Files involved:**
+### Files involved
 
 
 | File                          | SEO responsibility                                                      |
 | ----------------------------- | ----------------------------------------------------------------------- |
 | `src/lib/site.ts`             | Site name, canonical base URL, author info, URL helpers                 |
 | `src/i18n/locales.ts`         | Locale settings, including fonts and Open Graph locale tags            |
-| `src/app/[locale]/layout.tsx` | `generateMetadata` — all `<head>` meta tags per locale                  |
+| `src/app/[locale]/layout.tsx` | `generateMetadata` builds `<head>` metadata for each locale              |
 | `src/app/[locale]/page.tsx`   | Root homepage `WebSite` JSON-LD and localized launch guide               |
 | `src/app/sitemap.ts`          | `/sitemap.xml` with hreflang language alternates                        |
 | `src/app/robots.ts`           | `/robots.txt` with sitemap reference                                    |
-| `dictionary/*/Metadata`       | Locale-specific `title` and `description`                                 |
+| `dictionary/{locale}.json`    | Locale-specific `Metadata.title` and `Metadata.description`               |
 | `public/og-image.png`         | Social sharing preview image (1200×630)                                 |
 | `public/llms.txt`             | Machine-readable project reference                                      |
 
@@ -516,7 +516,7 @@ export async function generateMetadata({ params }): Promise<Metadata> {
 }
 ```
 
-**What each field produces in HTML:**
+### Metadata fields in HTML
 
 
 | Metadata field         | Rendered output                         | Purpose                                            |
@@ -558,7 +558,7 @@ Because routing uses `localePrefix: "as-needed"`, paths differ per locale:
 | `ja`         | `ja-JP`             | `/ja`                | `https://your-domain.com/ja` |
 
 
-**Why `getPathname` matters:** Hardcoding `/en`, `/ar` breaks with `as-needed` (English has no prefix). Always use `getPathname` for canonical, hreflang, and sitemap URLs.
+`getPathname` keeps URLs aligned with the routing policy. English has no prefix with `as-needed`. Use it for canonical, hreflang, and sitemap URLs.
 
 `alternates.languages` produces hreflang tags like:
 
@@ -584,9 +584,9 @@ Page titles and descriptions come from the `Metadata` namespace in each dictiona
 }
 ```
 
-Every locale (`ar.json`, `zh.json`, `es.json`, `ja.json`) has its own translated `Metadata` and `SeoGuide` blocks. When a user visits `/ar`, Arabic title, description, and crawlable setup guidance are served — not English with an Arabic URL.
+Every locale (`ar.json`, `zh.json`, `es.json`, `ja.json`) has translated `Metadata` and `SeoGuide` blocks. The `/ar` route serves Arabic metadata and setup guidance in crawlable HTML.
 
-To update SEO copy: edit `dictionary/{locale}/Metadata` in all 5 files, then rebuild.
+To update SEO copy: edit the `Metadata` namespace in each of the five `dictionary/{locale}.json` files, then rebuild.
 
 ### HTML semantics (`lang` and `dir`)
 
@@ -694,8 +694,8 @@ The sitemap URL uses `siteConfig.url` so it stays correct across environments wh
 
 | Property          | Value source                                  |
 | ----------------- | --------------------------------------------- |
-| `og:title`        | `dictionary/{locale}/Metadata.title`          |
-| `og:description`  | `dictionary/{locale}/Metadata.description`    |
+| `og:title`        | `dictionary/{locale}.json` → `Metadata.title`       |
+| `og:description`  | `dictionary/{locale}.json` → `Metadata.description` |
 | `og:url`          | Locale-specific canonical URL                 |
 | `og:site_name`    | `siteConfig.name`                             |
 | `og:locale`       | Locale tag from `localeConfig` (e.g. `ar_SA`) |
@@ -706,7 +706,7 @@ The sitemap URL uses `siteConfig.url` so it stays correct across environments wh
 | `og:image:alt`    | Localized title                               |
 
 
-**Twitter Card:**
+### Twitter Card
 
 
 | Property              | Value                 |
@@ -744,7 +744,7 @@ The legacy static verification file `public/google52d37058772b10e6.html` remains
 
 ### AI search and crawler access
 
-AI search services rely on pages they can crawl and index. Keep useful page content in server-rendered HTML, use clear headings and internal links, and ensure the applicable crawlers are not blocked by `robots.txt`, hosting rules, or a CDN. These are the same foundations as conventional search; no special AI schema is required. Google's current guidance says `llms.txt` is not a Google Search ranking signal. This repository's `public/llms.txt` is a supplementary project reference for tools that choose to use it.
+AI search services need access to pages they can crawl and index. Put useful content in server-rendered HTML, use descriptive headings and internal links, and check crawler access in `robots.txt`, hosting rules, and any CDN configuration. These practices also support conventional search. Google does not require special AI schema and says `llms.txt` is not a Google Search ranking signal. This repository keeps `public/llms.txt` as an optional project reference for tools that read it.
 
 The current `robots.ts` allows all user agents. Search discovery and model-training crawlers have different purposes, and site owners should choose those policies explicitly. For example, OpenAI distinguishes `OAI-SearchBot` from `GPTBot`; Anthropic distinguishes `Claude-SearchBot` from `ClaudeBot`; Perplexity distinguishes `PerplexityBot` from its user-request fetcher. Review each provider's current documentation before setting rules: [OpenAI](https://developers.openai.com/api/docs/bots), [Anthropic](https://support.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler), and [Perplexity](https://docs.perplexity.ai/docs/resources/perplexity-crawlers). This starter does not impose a model-training policy for a fork.
 
@@ -760,7 +760,7 @@ The research and implementation record is in [docs/seo-research.md](docs/seo-res
 
 For a page at `src/app/[locale]/about/page.tsx`:
 
-**Page-level metadata:**
+### Page-level metadata
 
 ```tsx
 import { hasLocale } from "next-intl";
@@ -788,7 +788,7 @@ export async function generateMetadata({
 }
 ```
 
-**Sitemap entries:**
+### Sitemap entries
 
 ```ts
 const languages = getAlternateLanguages("/about");
@@ -818,16 +818,16 @@ Add `metaTitle` and `metaDescription` keys to the `About` namespace in all dicti
 
 ### Verifying SEO output
 
-**Local dev:**
+### Local development
 
 ```bash
-bun dev
+bun run dev
 # Visit http://localhost:3000 and View Page Source
 # Or inspect the HTML response:
 curl -s http://localhost:3000 | grep -E '<title>|<meta|<link rel="canonical"|<link rel="alternate"'
 ```
 
-**Per locale:**
+### Check each locale
 
 ```bash
 curl -s http://localhost:3000/ar | grep '<html'
@@ -837,14 +837,14 @@ curl -s http://localhost:3000/ja | grep '<title>'
 # Should show Japanese title from dictionary/ja.json Metadata
 ```
 
-**Sitemap and robots:**
+### Check the sitemap and robots file
 
 ```bash
 curl http://localhost:3000/sitemap.xml
 curl http://localhost:3000/robots.txt
 ```
 
-**JSON-LD:** View page source on `/` and search for `application/ld+json` — `/` emits one `WebSite` node whose URL is the site root; localized homepages such as `/ar` do not emit it.
+View the page source for `/` and search for `application/ld+json`. The default homepage emits one `WebSite` node with the site root as its URL. Localized homepages such as `/ar` do not emit this node.
 
 ---
 
@@ -879,10 +879,10 @@ Works on [Vercel](https://vercel.com) out of the box.
 
 The proxy (`src/proxy.ts`) runs automatically on Vercel's edge. No extra configuration needed for i18n routing.
 
-For other hosts, ensure:
+For other hosts, configure:
 
 - Node.js 24+
-- `bun run build` then `bun start` (or equivalent)
+- Run `bun run build`, then start the server with `bun run start` or the host's equivalent command.
 - All locale paths (`/`, `/ar`, `/zh`, etc.) route to the Next.js server
 
 ---
@@ -890,10 +890,10 @@ For other hosts, ensure:
 ## Scripts
 
 ```bash
-bun dev       # Start dev server (Turbopack)
-bun build     # Production build + TypeScript check
-bun start     # Start production server
-bun lint      # Run ESLint
+bun run dev    # Start the development server (Turbopack)
+bun run build  # Build for production and check types
+bun run start  # Start the production server
+bun run lint   # Run ESLint
 ```
 
 ---
@@ -906,31 +906,27 @@ Add the key to `en.json` and every other dictionary. TypeScript checks message k
 
 ### Wrong locale in URL
 
-Check `src/i18n/routing.ts` — `localePrefix: "as-needed"` means only non-default locales get a prefix. English is always `/`.
+Check `src/i18n/routing.ts`. With `localePrefix: "as-needed"`, only non-default locales have a prefix. English always uses `/`.
 
 ### `useTranslations` returns wrong namespace
 
-Ensure the component is inside `NextIntlClientProvider` (set in root layout) and the namespace exists in the active locale's JSON file.
+Check that the component is inside `NextIntlClientProvider`, which is set in the root layout, and that the namespace exists in the active locale's JSON file.
 
 ### Theme flash on load
 
 The server reads the `theme` cookie in `layout.tsx` and applies the class on `<html>` before rendering. Check that the cookie is `light` or `dark` and has path `/` if the initial theme is wrong.
 
-### React 19 script tag error
-
-Do not use `<Script>` from `next/script` or inline `<script>` in client components. Use server-component JSON-LD (see `page.tsx`) or cookie-based theme init (see `layout.tsx`).
-
 ### hreflang URLs incorrect
 
-Always build alternate URLs with `getPathname` from `@/i18n/navigation` — it respects `localePrefix: "as-needed"`. English is `/`, not `/en`. See [SEO](#seo) section for the full URL table.
+Build alternate URLs with the helpers in `@/lib/site`, which use `getPathname` and respect `localePrefix: "as-needed"`. English is `/`; it does not use `/en`. See [SEO](#seo) for the URL table.
 
 ### JSON-LD not appearing
 
-JSON-LD is only on the home page (`src/app/[locale]/page.tsx`). It must be in a Server Component. View page source and search for `application/ld+json`. Do not use `next/script`.
+JSON-LD currently appears only on the default-locale home page (`src/app/[locale]/page.tsx`) and is rendered by a Server Component. View the page source and search for `application/ld+json`.
 
 ### Wrong Open Graph image URL
 
-Ensure `metadataBase` is set in `generateMetadata` and `NEXT_PUBLIC_SITE_URL` points to your domain. OG image path is relative: `/og-image.png`.
+Check that `generateMetadata` sets `metadataBase` and `NEXT_PUBLIC_SITE_URL` points to your domain. The Open Graph image path is relative: `/og-image.png`.
 
 ### Sitemap shows wrong domain
 
@@ -946,7 +942,7 @@ Check `dictionary/ar.json` has a translated `Metadata` namespace. `generateMetad
 
 1. Fork the repository
 2. Create a branch: `git checkout -b feature/your-feature`
-3. Make changes (update all dictionary files if adding translation keys)
+3. Make changes. Update every dictionary file when adding translation keys.
 4. Verify: `bun run lint && bun run build`
 5. Commit: `git commit -am 'Add feature'`
 6. Push: `git push origin feature/your-feature`
@@ -966,10 +962,10 @@ Open source libraries and community projects that made this starter possible: [A
 
 ---
 
-## AI / LLM context
+## Instructions for coding assistants
 
-Machine-readable project reference for AI coding assistants: [llms.txt](https://next-app-i18n-starter.vercel.app/llms.txt). It documents this repository; it is not a Google Search ranking signal.
+The repository uses standard `AGENTS.md` files so coding assistants can follow the same project conventions across models and editors. Start with [AGENTS.md](AGENTS.md), then read the nearest scoped guide for the files you are changing. The `.cursor/rules/` files are optional Cursor adapters that point to those shared instructions.
 
-Includes repository conventions, the localized SEO metadata helper, sitemap and crawler behavior, and project-specific implementation notes.
+For SEO audits or implementation, use the reusable [Next.js i18n SEO skill](.agents/skills/nextjs-i18n-seo/SKILL.md). In agents that support repository skills, invoke `nextjs-i18n-seo`; otherwise, read the `SKILL.md` directly. It covers this template and its forks without assuming that template defaults are correct for every site's audience or deployment.
 
-**Cursor IDE:** agent onboarding in [AGENTS.md](AGENTS.md); scoped rules in [`.cursor/rules/`](.cursor/rules/) (see [`.cursor/README.md`](.cursor/README.md)).
+The public [llms.txt](https://next-app-i18n-starter.vercel.app/llms.txt) is a project overview for tools that read it. Repository instructions live in `AGENTS.md`; `llms.txt` is not a Google Search ranking signal.
