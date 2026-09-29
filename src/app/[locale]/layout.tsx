@@ -46,7 +46,6 @@ export default async function RootLayout({
 
   setRequestLocale(locale);
 
-  const isArabic = locale === "ar";
   const useGeist = localeConfig[locale].font === "geist";
   const messages = await getMessages();
   const timeZone = await getTimeZone();
@@ -58,7 +57,7 @@ export default async function RootLayout({
   return (
     <html
       lang={localeConfig[locale].languageTag}
-      dir={isArabic ? "rtl" : "ltr"}
+      dir={localeConfig[locale].dir}
       className={initialTheme}
     >
       <head>

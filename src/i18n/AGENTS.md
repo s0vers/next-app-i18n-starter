@@ -10,5 +10,5 @@ For substantial next-intl implementation or troubleshooting, read `.agents/skill
 - Route keys such as `zh` are distinct from BCP 47 language tags such as `zh-Hans-CN`. Use `localeConfig[locale].languageTag` for HTML `lang` and `hreflang`, and its Open Graph tag for social metadata.
 - Currency, timezone, and number/date formats are derived from `localeConfig` and `src/i18n/regional.ts`. Use next-intl formatters instead of manually formatting localized values.
 - Request messages are loaded in `src/i18n/request.ts`. Keep fallback behavior explicit. The route layout must reject unsupported locales.
-- The current Arabic locale is RTL. When adding or changing an RTL locale, update document direction and component behavior together; test mixed-direction text, numbers, code, and controls.
+- Direction lives in `localeConfig[locale].dir`. The layout, `LanguageSwitcher`, and `HomeIndex` read it, so do not add a language check. The current Arabic locale is RTL. When adding or changing an RTL locale, update document direction and component behavior together; test mixed-direction text, numbers, code, and controls.
 - If routing, language tags, regional defaults, or locale detection changes, update the relevant README and SEO notes.

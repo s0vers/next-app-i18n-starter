@@ -89,17 +89,38 @@ export function getLocaleUrl(
   return new URL(pathname, siteConfig.url).toString();
 }
 
-export function getAlternateLanguages(href: "/" | `/${string}` = "/") {
+type Pathname = "/" | `/${string}`;
+
+type AlternateOptions = {
+  // Locales that have a reviewed translation of this page. Defaults to every
+  // configured locale, which is right only for fully translated pages.
+  locales?: readonly AppLocale[];
+  // Internal pathname of the page in each locale, for content whose slug
+  // differs per locale. Defaults to the same pathname everywhere.
+  hrefFor?: (locale: AppLocale) => Pathname;
+};
+
+export function getAlternateLanguages(
+  href: Pathname = "/",
+  { locales = routing.locales, hrefFor = () => href }: AlternateOptions = {},
+) {
   const languages = Object.fromEntries(
-    routing.locales.map((locale) => [
+    locales.map((locale) => [
       localeConfig[locale].languageTag,
-      getLocaleUrl(locale, href),
+      getLocaleUrl(locale, hrefFor(locale)),
     ]),
   );
 
+  // x-default marks the deliberate fallback. Emit it only when the default
+  // locale actually has this page.
+  if (!locales.includes(routing.defaultLocale)) return languages;
+
   return {
     ...languages,
-    "x-default": getLocaleUrl(routing.defaultLocale, href),
+    "x-default": getLocaleUrl(
+      routing.defaultLocale,
+      hrefFor(routing.defaultLocale),
+    ),
   };
 }
 
@@ -108,14 +129,32 @@ export function createLocalizedMetadata({
   title,
   description,
   pathname,
+  locales,
+  hrefFor,
+  type = "website",
+  image = "/og-image.png",
+  publishedTime,
+  modifiedTime,
 }: {
   locale: AppLocale;
   title: string;
   description: string;
-  pathname: "/" | `/${string}`;
+  pathname: Pathname;
+  locales?: readonly AppLocale[];
+  hrefFor?: (locale: AppLocale) => Pathname;
+  type?: "website" | "article";
+  image?: string;
+  publishedTime?: string;
+  modifiedTime?: string;
 }): Metadata {
+  // An alternate set that omits the page itself breaks hreflang reciprocity.
+  if (locales && !locales.includes(locale)) {
+    throw new Error(
+      `createLocalizedMetadata: "${locale}" is missing from the locales that have ${pathname}.`,
+    );
+  }
+
   const canonical = getLocaleUrl(locale, pathname);
-  const image = "/og-image.png";
 
   return {
     metadataBase: new URL(siteConfig.url),
@@ -129,7 +168,7 @@ export function createLocalizedMetadata({
       : undefined,
     alternates: {
       canonical,
-      languages: getAlternateLanguages(pathname),
+      languages: getAlternateLanguages(pathname, { locales, hrefFor }),
     },
     openGraph: {
       title,
@@ -138,7 +177,9 @@ export function createLocalizedMetadata({
       siteName: siteConfig.name,
       images: [{ url: image, width: 1200, height: 630, alt: title }],
       locale: localeConfig[locale].ogLocale,
-      type: "website",
+      ...(type === "article"
+        ? { type, publishedTime, modifiedTime }
+        : { type }),
     },
     twitter: {
       card: "summary_large_image",

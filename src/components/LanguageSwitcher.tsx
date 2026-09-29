@@ -21,7 +21,7 @@ const LanguageSwitcher = () => {
   const [keyboardMenu, setKeyboardMenu] = useState(false);
 
   return (
-    <DropdownMenu dir={currentLanguage === "ar" ? "rtl" : "ltr"}>
+    <DropdownMenu dir={localeConfig[currentLanguage].dir}>
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"

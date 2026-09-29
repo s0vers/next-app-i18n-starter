@@ -5,6 +5,7 @@ export const localeConfig = {
     ogLocale: "en_US",
     currency: "USD",
     timeZone: "America/New_York",
+    dir: "ltr",
     font: "geist",
   },
   ar: {
@@ -13,6 +14,7 @@ export const localeConfig = {
     ogLocale: "ar_SA",
     currency: "SAR",
     timeZone: "Asia/Riyadh",
+    dir: "rtl",
     font: "system",
   },
   zh: {
@@ -21,6 +23,7 @@ export const localeConfig = {
     ogLocale: "zh_CN",
     currency: "CNY",
     timeZone: "Asia/Shanghai",
+    dir: "ltr",
     font: "system",
   },
   es: {
@@ -29,6 +32,7 @@ export const localeConfig = {
     ogLocale: "es_ES",
     currency: "EUR",
     timeZone: "Europe/Madrid",
+    dir: "ltr",
     font: "geist",
   },
   ja: {
@@ -37,11 +41,14 @@ export const localeConfig = {
     ogLocale: "ja_JP",
     currency: "JPY",
     timeZone: "Asia/Tokyo",
+    dir: "ltr",
     font: "system",
   },
 } as const;
 
 export type AppLocale = keyof typeof localeConfig;
+
+export type Direction = (typeof localeConfig)[AppLocale]["dir"];
 
 export const locales = Object.keys(localeConfig) as AppLocale[];
 

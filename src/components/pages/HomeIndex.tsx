@@ -6,6 +6,7 @@ import { Check, Copy, Globe, Star } from "lucide-react";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 
 import { Link } from "@/i18n/navigation";
+import { localeConfig } from "@/i18n/locales";
 import { siteConfig } from "@/lib/site";
 import LanguageSwitcher from "../LanguageSwitcher";
 import LocalizationTab from "../LocalizationTab";
@@ -149,7 +150,7 @@ export default function HomeIndex({
   const f = useTranslations("Footer");
   const locale = useLocale();
   const format = useFormatter();
-  const isRTL = locale === "ar";
+  const isRTL = localeConfig[locale].dir === "rtl";
 
   const stars =
     starCount !== null ? format.number(starCount, "compact") : null;
