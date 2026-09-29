@@ -1,13 +1,8 @@
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
-import {
-  getMessages,
-  getNow,
-  getTimeZone,
-  getTranslations,
-} from "next-intl/server";
-import { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
+import type { Metadata, Viewport } from "next";
 import { cookies } from "next/headers";
 import { ThemeProvider } from "@/components/theme-provider";
 import { localeConfig } from "@/i18n/locales";
@@ -44,9 +39,6 @@ export default async function RootLayout({
   }
 
   const useGeist = localeConfig[locale].font === "geist";
-  const messages = await getMessages();
-  const timeZone = await getTimeZone();
-  const now = await getNow();
 
   const cookieStore = await cookies();
   const initialTheme = resolveSSRTheme(cookieStore.get(THEME_COOKIE_NAME)?.value);
@@ -57,17 +49,12 @@ export default async function RootLayout({
       dir={localeConfig[locale].dir}
       className={initialTheme}
     >
-      <head>
-        <link rel="icon" href="/favicon.ico" />
-        <meta name="theme-color" content="#000000" />
-      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${useGeist ? "font-sans" : ""} antialiased [font-synthesis:none]`}
       >
         <ThemeProvider initialTheme={initialTheme}>
-          <NextIntlClientProvider messages={messages} timeZone={timeZone} now={now}>
-            {children}
-          </NextIntlClientProvider>
+          {/* Inherits the locale, messages, time zone, and formats from src/i18n/request.ts */}
+          <NextIntlClientProvider>{children}</NextIntlClientProvider>
         </ThemeProvider>
         <Analytics />
         <SpeedInsights />
@@ -75,6 +62,13 @@ export default async function RootLayout({
     </html>
   );
 }
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#000000" },
+  ],
+};
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
