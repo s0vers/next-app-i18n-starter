@@ -50,7 +50,7 @@ Edit `dictionary/{locale}/Metadata` in all 5 JSON files (`title`, `description`)
 Never hardcode `/en` or `/ar`. Use `getLocaleUrl` / `getAlternateLanguages` from `@/lib/site`; they build on `getPathname` from `@/i18n/navigation`. With `localePrefix: as-needed`, English is `/` (no prefix), others are `/ar`, `/zh`, etc.
 
 ### What is proxy.ts vs middleware?
-Next.js 16 renamed middleware to proxy. This project uses `src/proxy.ts` with `createMiddleware` from `next-intl/middleware`. Same role: locale detection, redirects, cookie handling.
+Next.js 16 renamed middleware to proxy. This project uses `src/proxy.ts` with `createMiddleware` from `next-intl/middleware` to route locale URLs. Automatic locale detection is disabled.
 
 ---
 
@@ -99,7 +99,7 @@ Request
   → src/proxy.ts (next-intl middleware)
   → src/i18n/routing.ts (locales, localePrefix: as-needed)
   → src/i18n/request.ts (getRequestConfig)
-       ├── locale from URL / cookie / Accept-Language
+       ├── locale from URL (default locale at `/`)
        ├── timeZone from regional.ts
        ├── formats (currency, dateTime, compact) from regional.ts
        └── messages from dictionary/{locale}.json
@@ -120,7 +120,7 @@ Request
 | es | `/es` | ltr |
 | ja | `/ja` | ltr |
 
-`localeDetection: true` — browser language used on first visit.
+`localeDetection: false` — the default URL does not redirect based on cookies or browser language; users choose a locale with the language switcher.
 
 ---
 

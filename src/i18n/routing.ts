@@ -4,6 +4,8 @@ import { locales } from "./locales";
 export const routing = defineRouting({
   locales,
   defaultLocale: "en",
-  localeDetection: true,
+  // Keep the default-locale URL stable instead of redirecting it from a saved
+  // locale cookie or Accept-Language preference. Users can switch via links.
+  localeDetection: false,
   localePrefix: "as-needed",
 });

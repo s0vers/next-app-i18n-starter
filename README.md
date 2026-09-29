@@ -174,7 +174,7 @@ import { locales } from "./locales";
 export const routing = defineRouting({
   locales,
   defaultLocale: "en",
-  localeDetection: true,
+  localeDetection: false,
   localePrefix: "as-needed",
 });
 ```
@@ -191,7 +191,7 @@ With `localePrefix: "as-needed"`:
 | `ja`   | `/ja` |                              |
 
 
-`src/proxy.ts` handles locale detection for application routes using the URL, cookie, or `Accept-Language` header.
+`src/proxy.ts` routes locale-prefixed URLs and serves the default locale at `/`. Automatic locale detection from cookies or `Accept-Language` is disabled so the default URL stays stable; visitors can switch languages with the locale switcher.
 
 **Always use navigation from `@/i18n/navigation`**, not `next/link` or `next/navigation` directly:
 
@@ -748,6 +748,8 @@ AI search services rely on pages they can crawl and index. Keep useful page cont
 
 The current `robots.ts` allows all user agents. Search discovery and model-training crawlers have different purposes, and site owners should choose those policies explicitly. For example, OpenAI distinguishes `OAI-SearchBot` from `GPTBot`; Anthropic distinguishes `Claude-SearchBot` from `ClaudeBot`; Perplexity distinguishes `PerplexityBot` from its user-request fetcher. Review each provider's current documentation before setting rules: [OpenAI](https://developers.openai.com/api/docs/bots), [Anthropic](https://support.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler), and [Perplexity](https://docs.perplexity.ai/docs/resources/perplexity-crawlers). This starter does not impose a model-training policy for a fork.
 
+Locale routing keeps the default-language URL stable: `localeDetection` is disabled, so `/` does not redirect based on a visitor's saved locale cookie or `Accept-Language`. Visitors can choose a language through the visible switcher, and each locale keeps a directly crawlable URL. This avoids cookie-dependent content and follows Google's guidance to expose language versions at distinct URLs. Enable automatic detection only if it is an intentional product choice and verify that every locale remains directly accessible and self-canonical.
+
 For measurement, verify the domain and sitemap in [Google Search Console](https://search.google.com/search-console) and [Bing Webmaster Tools](https://www.bing.com/webmasters). Bing Webmaster Tools provides an AI Performance report. ChatGPT referrals may include `utm_source=chatgpt.com`; analytics can use that value when the selected provider captures query parameters. None of these steps guarantees indexing, rankings, or AI citations.
 
 ### SEO implementation plan
@@ -812,6 +814,7 @@ Add `metaTitle` and `metaDescription` keys to the `About` namespace in all dicti
 - [ ] Test social previews with [opengraph.xyz](https://www.opengraph.xyz/) or Twitter Card Validator
 - [ ] Confirm `/robots.txt` and `/sitemap.xml` return 200 in production
 - [ ] Add new pages to `sitemap.ts` with locale alternates
+- [ ] Confirm the language and region targets in `src/i18n/locales.ts` match real audience and market research; translation alone does not establish local search intent
 
 ### Verifying SEO output
 
