@@ -5,7 +5,7 @@ The repository-level `AGENTS.md` applies here too.
 - Put user-facing pages under `src/app/[locale]/`. Keep root metadata routes such as `robots.ts` and `sitemap.ts` at `src/app/`.
 - In Next.js 16, route `params` and `searchParams` are promises. Await them before reading values.
 - Validate locale route params with `hasLocale(routing.locales, locale)` and call `notFound()` for unsupported locales.
-- Call `setRequestLocale(locale)` in locale Server Components that use translations or need static rendering. Load server translations with `getTranslations({ locale, namespace })`.
+- The locale reaches server code through `next/root-params` (`src/i18n/request.ts`), so do not call `setRequestLocale`, which next-intl deprecated in 4.13.5. Load server translations with `getTranslations({ locale, namespace })`.
 - Use `generateStaticParams` from the supported routing configuration when enumerating locale routes. Keep catch-all invalid routes returning `notFound()`.
 - For page metadata, load translated title and description and call `createLocalizedMetadata` from `@/lib/site` with the page's actual localized route. Do not inherit the homepage canonical for a child page.
 - Add every indexable localized page variant to `src/app/sitemap.ts`, and give each translation a matching canonical and reciprocal alternate map. Include only locale variants that actually exist. Include `lastModified` only when an actual content timestamp is available.

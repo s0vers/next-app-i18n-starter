@@ -1,6 +1,5 @@
 import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
-import { setRequestLocale } from "next-intl/server";
 import HomeIndex from "@/components/pages/HomeIndex";
 import { getGithubStarCount } from "@/lib/github";
 import { siteConfig } from "@/lib/site";
@@ -20,7 +19,6 @@ export default async function HomePage({
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
-  setRequestLocale(locale);
 
   const starCount = await getGithubStarCount();
 

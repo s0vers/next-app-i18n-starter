@@ -289,19 +289,20 @@ Currency, dates, and time zones follow the active locale. The demo does not prov
 `src/i18n/request.ts` applies them on every request:
 
 ```ts
-export default getRequestConfig(async ({ requestLocale }) => {
-  const requested = await requestLocale;
-  const locale = hasLocale(routing.locales, requested)
-    ? requested
-    : routing.defaultLocale;
-  const { currency, timeZone } = localeConfig[locale];
+export default getRequestConfig(async ({ locale }) => {
+  // Page renders read the locale from the [locale] route segment. Route
+  // Handlers and Server Actions pass one explicitly.
+  const requested = locale ?? (await rootParams.locale());
+  if (!hasLocale(routing.locales, requested)) notFound();
+
+  const { currency, timeZone } = localeConfig[requested];
 
   return {
-    locale,
+    locale: requested,
     timeZone,
     now: new Date(),
     formats: createRegionalFormats(currency),
-    messages: (await import(`../../dictionary/${locale}.json`)).default,
+    messages: (await import(`../../dictionary/${requested}.json`)).default,
   };
 });
 ```
@@ -377,13 +378,12 @@ Add each new key to every dictionary. TypeScript checks keys used in code agains
 ```tsx
 import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
-import { setRequestLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
-  setRequestLocale(locale);
 
   const t = await getTranslations({ locale, namespace: "Index" });
   return <h1>{t("title")}</h1>;
@@ -432,7 +432,7 @@ Example: adding French (`fr`)
 // src/app/[locale]/about/page.tsx
 import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
-import { setRequestLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 
 export default async function AboutPage({
@@ -442,7 +442,6 @@ export default async function AboutPage({
 }) {
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
-  setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: "About" });
 
   return <h1>{t("title")}</h1>;

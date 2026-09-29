@@ -42,7 +42,7 @@ export default getRequestConfig(async ({ locale }) => {
 
 The `({ locale })` form is deliberate. Route Handlers and Server Actions pass a locale explicitly, and this form lets it through. The getter name comes from the folder name, so `[locale]` gives `locale`. Kebab-case folder names do not work.
 
-Legacy path (this template today): read `requestLocale`, fall back to `routing.defaultLocale` when `hasLocale` fails. The fallback exists for execution paths outside a locale route. It must never make an invalid public route look valid, so `[locale]/layout.tsx` keeps its own `hasLocale` plus `notFound()`.
+Legacy path (older projects and forks that have not migrated): read `requestLocale`, fall back to `routing.defaultLocale` when `hasLocale` fails. The fallback exists for execution paths outside a locale route. It must never make an invalid public route look valid, so `[locale]/layout.tsx` keeps its own `hasLocale` plus `notFound()`.
 
 ## Static rendering
 

@@ -6,7 +6,6 @@ import {
   getNow,
   getTimeZone,
   getTranslations,
-  setRequestLocale,
 } from "next-intl/server";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
@@ -43,8 +42,6 @@ export default async function RootLayout({
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
-
-  setRequestLocale(locale);
 
   const useGeist = localeConfig[locale].font === "geist";
   const messages = await getMessages();

@@ -29,7 +29,7 @@ If the config already does what the user asks, the fault is the deployment or a 
 | Root params | Next >= 16.3 and `[locale]` hosts `<html>` | `next/root-params`, automatic inside `getTranslations` |
 | Legacy | `requestLocale` in `request.ts`, `setRequestLocale` in pages | Explicit `setRequestLocale(locale)` before any next-intl call |
 
-`requestLocale` and `setRequestLocale` are deprecated since next-intl 4.13.6 and 4.13.5. They still work. On an installed version older than 4.13.5 the deprecation does not apply yet, and the legacy path is simply current. This template still uses the legacy path, and the root `AGENTS.md` requires `setRequestLocale`, so keep it in ordinary edits. Migrate only when the task says so, and follow the migration steps in [architecture](references/architecture-and-rendering.md#migrate-to-root-params).
+`requestLocale` and `setRequestLocale` are deprecated since next-intl 4.13.6 and 4.13.5. They still work. On an installed version older than 4.13.5 the deprecation does not apply yet, and the legacy path is simply current. This template moved to root params on 2026-09-30 (`src/i18n/request.ts`), so do not reintroduce `setRequestLocale` here. A fork or older project may still use the legacy path. Migrate one only when the task says so, and follow the migration steps in [architecture](references/architecture-and-rendering.md#migrate-to-root-params).
 
 ## Read next
 
