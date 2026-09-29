@@ -1,8 +1,8 @@
 # Commerce and product SEO
 
-Use when a task involves a store, catalog, category, product page, variants, prices, stock, reviews, a product feed, comparison content, or AI shopping surfaces. Field-level markup rules live in [structured data](structured-data.md#product-and-offer-fields). This page decides which pages to build, index, and mark up.
+Use when a task involves a store, catalog, category, product page, variants, prices, stock, reviews, a product feed, comparison content, or AI shopping surfaces. Field-level markup rules live in structured data (`nextjs-seo-structured-data`). This page decides which pages to build, index, and mark up.
 
-Evidence tags: see [evidence and reporting](evidence-and-reporting.md).
+Evidence tags: see evidence and reporting (`nextjs-seo-technical`).
 
 ## Gate: what does the business do
 
@@ -83,11 +83,11 @@ This template's locales are language-only, and `localeConfig` ties one currency 
 3. Each product gets `/en-gb/...` with its own `Offer` in GBP, shipping, and returns, and alternates `en-US` and `en-GB`, plus a language-only `en` if you want a catch-all.
 4. Confirm `<html lang>`, the price format, and the sitemap entry.
 
-Never hide the market behind a cookie or IP. See [international SEO](international-seo.md).
+Never hide the market behind a cookie or IP. See international SEO (`nextjs-seo-international`).
 
 ## Markup and feeds
 
-Pick the type with [structured data](structured-data.md#choose-the-type). Rules that matter here:
+Pick the type with structured data (`nextjs-seo-structured-data`). Rules that matter here:
 
 - Build `Product`, `Offer`, the visible price, the feed export, and any Merchant API push from one `getProduct()`. Two sources drift, and a mismatch between page and feed triggers disapproval.
 - Render offers in initial HTML. Google warns that script-generated markup makes Shopping crawls less frequent and less reliable for fast-changing price and stock. [doc]
@@ -97,7 +97,7 @@ Pick the type with [structured data](structured-data.md#choose-the-type). Rules 
 
 ### AI shopping surfaces
 
-Google says AI Overviews and AI Mode need no special markup, only current Merchant Center and Business Profile data. [doc] ChatGPT (a feed to OpenAI's spec, with `OAI-SearchBot` allowed), Google's agentic checkout (a Merchant Center `native_commerce` attribute and a UCP manifest), Copilot Checkout, and Perplexity's Merchant Program each take a feed or a program enrollment, and each is early access or US first. These change monthly, so read the program's own page before advising, record which ones the owner enrolled, and mark the rest not verified. [unverified] The same clean GTIN, brand, price, availability, shipping, and return data serves every surface. Set crawler policy per bot in [AI crawler reference](ai-crawler-reference.md).
+Google says AI Overviews and AI Mode need no special markup, only current Merchant Center and Business Profile data. [doc] ChatGPT (a feed to OpenAI's spec, with `OAI-SearchBot` allowed), Google's agentic checkout (a Merchant Center `native_commerce` attribute and a UCP manifest), Copilot Checkout, and Perplexity's Merchant Program each take a feed or a program enrollment, and each is early access or US first. These change monthly, so read the program's own page before advising, record which ones the owner enrolled, and mark the rest not verified. [unverified] The same clean GTIN, brand, price, availability, shipping, and return data serves every surface. Set crawler policy per bot in AI crawler reference (`nextjs-seo-ai-search`).
 
 ## Page checklists
 
@@ -113,7 +113,7 @@ Policy pages: real terms per market, linked from the footer and product pages, m
 
 - `generateMetadata` in `[locale]/products/[slug]/page.tsx`. Share the fetch with `React.cache`. Emit alternates only for locales where the product exists.
 - With Cache Components, keep the Offer price in the same cache unit as the visible price. Use a short `cacheLife` or invalidate by tag from an inventory webhook. A price in a cached shell is stale until revalidation.
-- Decide existence before streaming (see [technical SEO](technical-seo.md#status-codes-and-soft-404s)). Next.js has no built-in 410, so return `new Response(null, { status: 410 })` from `proxy`.
+- Decide existence before streaming (see technical SEO (`nextjs-seo-technical`)). Next.js has no built-in 410, so return `new Response(null, { status: 410 })` from `proxy`.
 - Sitemaps for large catalogs: `generateSitemaps()` splits at 50,000 URLs, and in Next 16 `id` is a promise, so coerce with `Number(await id)`. List the resulting files in a sitemap index or `robots.ts`. Each entry can carry `alternates.languages`.
 - Disallow facet, sort, and search parameters in `robots.ts`. Keep `_next/static` crawlable. Set `robots: { index: false }` in `generateMetadata` for non-indexable filter routes.
 

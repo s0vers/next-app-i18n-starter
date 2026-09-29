@@ -2,7 +2,7 @@
 
 Use when a task involves a blog, article template, publication workflow, archive, author page, feed, syndication, news, or a content refresh. A blog is not automatically a news site. Choose the reader task first and the search feature second.
 
-Evidence tags: see [evidence and reporting](evidence-and-reporting.md).
+Evidence tags: see evidence and reporting (`nextjs-seo-technical`).
 
 ## Gate: should this article exist
 
@@ -57,11 +57,11 @@ Google does not recommend a cross-domain canonical for syndication. The effectiv
 
 ## Translating editorial content
 
-Use the tree in [localized content](../../next-intl-i18n/references/localized-content.md#translate-transcreate-or-skip). Emit alternates only among items whose `status` is `published`. Research each market's keywords, and never translate the source keyword. Scaled unreviewed translation is a spam risk. [doc]
+Use the tree in localized content (`next-intl-i18n`). Emit alternates only among items whose `status` is `published`. Research each market's keywords, and never translate the source keyword. Scaled unreviewed translation is a spam risk. [doc]
 
 ## Content model and Next.js
 
-Use the field names from [localized content](../../next-intl-i18n/references/localized-content.md#content-model) so both skills describe one model, and add the editorial fields below.
+Use the field names from localized content (`next-intl-i18n`) so both skills describe one model, and add the editorial fields below.
 
 | Field | Purpose |
 | --- | --- |

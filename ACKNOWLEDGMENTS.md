@@ -62,7 +62,7 @@ The i18n architecture in this starter (locale-scoped App Router, `localePrefix: 
 | Resource | Role in this repo | Links |
 | -------- | ----------------- | ----- |
 | [`AGENTS.md`](AGENTS.md) | Shared instructions for coding assistants across models and editors | — |
-| [Next.js i18n SEO skill](.agents/skills/nextjs-i18n-seo/SKILL.md) | Reusable SEO workflow for this template and its forks | — |
+| [Next.js SEO skills](.agents/skills/) | Seven focused SEO skills for this template and its forks | — |
 | [llms.txt](https://llmstxt.org) | Public project reference for tools that read it (`public/llms.txt`) | [Spec](https://llmstxt.org) |
 | [Cursor](https://cursor.com) | Optional adapters under `.cursor/rules/` | — |
 

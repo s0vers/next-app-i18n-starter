@@ -1,0 +1,55 @@
+{
+  "skill": "nextjs-seo-technical",
+  "note": "Run each prompt with the skill and with the previous version or no skill. Grade every assertion as pass or fail from the transcript and the resulting diff. A good assertion fails without the skill. should_trigger prompts must load this skill. should_not_trigger prompts are near misses that belong to another skill and must not load this one.",
+  "evals": [
+    {
+      "id": "missing-from-google",
+      "prompt": "Our /es page is not showing up on Google. Fix it.",
+      "assertions": [
+        "Asks for the URL Inspection result before attributing a cause",
+        "Runs the indexable gate: status, robots, noindex, canonical, links and sitemap",
+        "Labels any repository finding as a hypothesis when there is no live evidence",
+        "Does not edit code on speculation",
+        "Ends with a Not verified line naming the missing production evidence"
+      ]
+    },
+    {
+      "id": "multilingual-sitemap",
+      "source": "user-report: issue 2, sitemap generation",
+      "prompt": "How do I generate a sitemap for this multilingual site? Should I use next-sitemap?",
+      "assertions": [
+        "Recommends the built-in Next.js sitemap.ts, and does not require next-sitemap",
+        "Emits one entry per indexable URL per locale with reciprocal alternates.languages",
+        "Uses getLocaleUrl and getAlternateLanguages from src/lib/site.ts",
+        "Sets lastModified only from a real content date, never from new Date()",
+        "Lists only locales where the page exists, and states that a sitemap does not guarantee indexing",
+        "Mentions submitting the sitemap in Search Console and Bing Webmaster Tools"
+      ]
+    },
+    {
+      "id": "head-and-jsonld",
+      "source": "user-report: issue 4, manual head content despite generateMetadata",
+      "prompt": "Why do I need to write head tags by hand when I already use generateMetadata? How should hreflang and JSON-LD be done?",
+      "assertions": [
+        "Says canonical, alternates.languages, Open Graph, and robots belong in generateMetadata or createLocalizedMetadata",
+        "Says JSON-LD is a script in a Server Component, not part of the Metadata object",
+        "Says to escape < when serializing JSON-LD",
+        "Says JSON-LD must describe only content visible on the page",
+        "Says hreflang comes from one source and the proxy alternateLinks header stays off"
+      ]
+    }
+  ],
+  "should_trigger": [
+    "Our /es page is not showing up on Google. Fix it.",
+    "Why does this page return 200 for a deleted product?",
+    "Check robots.ts and the sitemap before we launch.",
+    "We are moving from example.com to example.org. What breaks?",
+    "Is generateMetadata setting the canonical correctly?"
+  ],
+  "should_not_trigger": [
+    "Which hreflang value should Spanish for Mexico use?",
+    "Add FAQ schema to our product pages.",
+    "Organic traffic dropped 40 percent last month. Why?",
+    "Add a German locale."
+  ]
+}

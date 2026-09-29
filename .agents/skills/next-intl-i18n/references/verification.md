@@ -44,7 +44,7 @@ When no server may run, or nothing renders the change yet (a message with no con
 | Digits differ from the `lang` tag | The formatting locale versus the tag. See [RTL and scripts](rtl-and-scripts.md#numerals-and-formatting-locale). |
 | Link flashes a prefixed URL | `Link` with a `locale` prop under `as-needed`. Expected, and it resolves to the canonical URL. |
 | Slug switch 404s | The switcher builds URLs from routing, not from content data |
-| Google shows the wrong language version | Hand off to [international SEO](../../nextjs-i18n-seo/references/international-seo.md) |
+| Google shows the wrong language version | Hand off to the `nextjs-seo-international` skill |
 
 ## Report shape
 

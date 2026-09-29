@@ -1,6 +1,6 @@
 ---
 name: next-intl-i18n
-description: Implement, migrate, or debug next-intl in a Next.js App Router project. Use when a change touches a locale URL, proxy, request config, message file, ICU message, formatted number, date, or list, RTL or CJK layout, localized CMS content, a locale switcher, or a translated error page. Not for canonicals, hreflang, sitemaps, or indexing; use nextjs-i18n-seo for those, and load both when a route or locale is added.
+description: Implement, migrate, or debug next-intl in a Next.js App Router project. Use when a change touches a locale URL, proxy, request config, message file, ICU message, formatted number, date, or list, RTL or CJK layout, localized CMS content, a locale switcher, or a translated error page. Not for canonicals, hreflang, sitemaps, or indexing; use nextjs-seo-technical or nextjs-seo-international for those, and load next-intl-i18n with nextjs-seo-international when a locale is added.
 ---
 
 # next-intl in a Next.js App Router project
@@ -43,7 +43,7 @@ If the config already does what the user asks, the fault is the deployment or a 
 | Metadata, Open Graph, manifests, Server Actions, error pages, tests, Pages Router | [Integrations and workflows](references/integrations-and-workflows.md) |
 | Proving the change works, or diagnosing a symptom | [Verification](references/verification.md) |
 
-Load a second reference only when the change crosses into it. A new locale needs routing, messages, RTL and scripts, and localized content, and also the [SEO skill](../nextjs-i18n-seo/SKILL.md) for tags and alternates. A new translated string needs only messages. A string with a count also needs the plural table in [RTL and scripts](references/rtl-and-scripts.md#plural-categories).
+Load a second reference only when the change crosses into it. A new locale needs routing, messages, RTL and scripts, and localized content, and also the `nextjs-seo-international` skill for tags and alternates. A new translated string needs only messages. A string with a count also needs the plural table in [RTL and scripts](references/rtl-and-scripts.md#plural-categories).
 
 ## Hard rules
 

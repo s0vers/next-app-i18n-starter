@@ -41,7 +41,7 @@ A 200 with a "not found" body is a soft 404, and a redirect to an unrelated page
 - Set the origin once through `metadataBase` and the validated site config. Canonical, Open Graph URL, sitemap URLs, and redirects agree.
 - Generate `sitemap.ts` and `robots.ts` from the same source as routes and locale URLs. Absolute URLs. Only indexable URLs. `lastModified` from a real content date, never `new Date()`.
 - A dynamic route sets its own metadata and body. A child route never inherits the homepage title, canonical, or structured data.
-- JSON-LD follows [structured data](structured-data.md).
+- JSON-LD follows structured data (`nextjs-seo-structured-data`).
 - Use `next/image` with explicit dimensions and keep image URLs absolute in metadata.
 - Preview and draft routes send `noindex` and stay out of the sitemap and `generateStaticParams`.
 
@@ -57,10 +57,10 @@ A 200 with a "not found" body is a soft 404, and a redirect to an unrelated page
 | Rich result missing | Feature eligibility, visible matching content, validation, policy issues. Check the search gallery: the feature may be removed. |
 | Crawler sees different content | Initial versus rendered HTML, blocked JS or CSS, locale redirects, user-agent-specific responses |
 | Core Web Vitals poor | Field report and URL group first. Then a lab trace for the source of LCP, INP, or CLS. |
-| Locale collapsed into English | Canonical of the locale, hreflang reciprocity, translated body. See [international SEO](international-seo.md). |
+| Locale collapsed into English | Canonical of the locale, hreflang reciprocity, translated body. See international SEO (`nextjs-seo-international`). |
 
 ## Verify
 
-Request representative URLs with `curl -sI` and `curl -s`, and read: status, redirects, `Link`, `X-Robots-Tag`, `<title>`, canonical, `<html lang>`, robots meta, JSON-LD. `node .agents/skills/nextjs-i18n-seo/scripts/verify-seo.mjs` does this across a sitemap. Then run `bun run lint` after TypeScript edits and `bun run build` after substantive changes.
+Request representative URLs with `curl -sI` and `curl -s`, and read: status, redirects, `Link`, `X-Robots-Tag`, `<title>`, canonical, `<html lang>`, robots meta, JSON-LD. `node .agents/skills/nextjs-seo-technical/scripts/verify-seo.mjs` does this across a sitemap. Then run `bun run lint` after TypeScript edits and `bun run build` after substantive changes.
 
 Sources, checked 2026-09-30: [Search Essentials](https://developers.google.com/search/docs/essentials), [crawling and indexing](https://developers.google.com/search/docs/crawling-indexing), [canonicalization](https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls), [redirects](https://developers.google.com/search/docs/crawling-indexing/301-redirects), [sitemaps](https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap), [block indexing](https://developers.google.com/search/docs/crawling-indexing/block-indexing), [HTTP status codes](https://developers.google.com/search/docs/crawling-indexing/http-network-errors), [Next.js Metadata API](https://nextjs.org/docs/app/api-reference/functions/generate-metadata), [Next.js sitemap](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap), [Next.js robots](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/robots), [Next.js JSON-LD](https://nextjs.org/docs/app/guides/json-ld).

@@ -12,8 +12,8 @@
     "start": "next start",
     "lint": "eslint .",
     "i18n:check": "node .agents/skills/next-intl-i18n/scripts/check-locales.mjs && node .agents/skills/next-intl-i18n/scripts/check-messages.mjs",
-    "seo:verify": "node .agents/skills/nextjs-i18n-seo/scripts/verify-seo.mjs",
-    "skills:check": "node .github/scripts/check-skills.mjs",
+    "seo:verify": "node .agents/skills/nextjs-seo-technical/scripts/verify-seo.mjs",
+    "skills:check": "node .github/scripts/check-skills.mjs && node .github/scripts/sync-shared.mjs --check",
     "check": "bun run lint && bun run i18n:check && bun run skills:check"
   },
   "dependencies": {

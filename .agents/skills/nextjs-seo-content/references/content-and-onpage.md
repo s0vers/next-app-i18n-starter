@@ -2,7 +2,7 @@
 
 Use when the work concerns what a page says, who it serves, how pages link to each other, or how a result describes the page. Markup cannot make up for a page that does not meet a real need.
 
-Evidence tags: see [evidence and reporting](evidence-and-reporting.md).
+Evidence tags: see evidence and reporting (`nextjs-seo-technical`).
 
 ## Build the page around one search task
 
@@ -26,7 +26,7 @@ Keyword numbers from tools are estimates. Label them as estimates, and never inv
 | Links | Ordinary `<a href>` with descriptive anchors. Never "click here". | Crawlers follow only anchors with an `href` [doc] |
 | Images | Relevant, with alt text that states the image's purpose in context. Decorative images get `alt=""`. | Alt text serves both accessibility and image search |
 | Dates and authors | Show them only when accurate | Fake freshness is a spam signal |
-| Structured data | Only per [structured data](structured-data.md) | Eligibility, not ranking |
+| Structured data | Only per structured data (`nextjs-seo-structured-data`) | Eligibility, not ranking |
 
 Do not add a `keywords` meta tag. Search engines ignore it.
 
@@ -39,7 +39,7 @@ Do not add a `keywords` meta tag. Search engines ignore it.
 
 ## Localized content
 
-Translate and review the whole page body for the audience, and the metadata with it. Research local terminology and intent before adapting titles. Read [international SEO](international-seo.md) for URLs, alternates, and tags.
+Translate and review the whole page body for the audience, and the metadata with it. Research local terminology and intent before adapting titles. Read international SEO (`nextjs-seo-international`) for URLs, alternates, and tags.
 
 ## Do not scale thin pages
 
@@ -55,7 +55,7 @@ Avoid these patterns. Google's spam updates in August and September 2026 targete
 
 Programmatic pages are acceptable only when each page carries substantive, proprietary, or useful data that a reader wants. Ask of any generated page: would this page be worth visiting if it were the only one? If not, do not publish it. A forced FAQ block, a word-count target, a keyword list, and a repeated summary all fail the same test.
 
-An FAQ block earns no rich result (see [structured data](structured-data.md)). Add one only when readers ask those questions.
+An FAQ block earns no rich result (see structured data (`nextjs-seo-structured-data`)). Add one only when readers ask those questions.
 
 ## AI-assisted drafting
 

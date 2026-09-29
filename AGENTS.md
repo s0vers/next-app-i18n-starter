@@ -16,7 +16,7 @@ These instructions apply to coding assistants of any model or editor. Read this 
 - `dictionary/en.json` defines translation message types. Add or rename message keys in every `dictionary/*.json` file. Keep locale copy accurate and have fluent speakers review production translations.
 - Locale routes live under `src/app/[locale]/`. Validate route locales with `hasLocale` before using them. The locale reaches server code through `next/root-params` in `src/i18n/request.ts`, so pages do not call `setRequestLocale`, which next-intl deprecated in 4.13.5.
 - Build locale URLs with helpers from `src/lib/site.ts`. Routing uses `localePrefix: "as-needed"`: English uses `/`, and other locales use `/{locale}`. Automatic locale detection is disabled so cookies and browser language do not redirect the default URL.
-- Use `createLocalizedMetadata` for page metadata and keep canonical, alternate-language, sitemap, and Open Graph URLs aligned. Follow the SEO guide in `README.md` and the SEO skill (`.agents/skills/nextjs-i18n-seo/SKILL.md`). Add structured data only when it describes visible page content; render JSON-LD in a Server Component and escape `<` in its serialized value.
+- Use `createLocalizedMetadata` for page metadata and keep canonical, alternate-language, sitemap, and Open Graph URLs aligned. Follow the SEO guide in `README.md` and the `nextjs-seo-*` skills in `.agents/skills/`. Add structured data only when it describes visible page content; render JSON-LD in a Server Component and escape `<` in its serialized value.
 - Prefer Server Components. Add `"use client"` only for client state, event handlers, or browser APIs. Theme initialization uses the existing cookie-based SSR implementation.
 - Follow the component, styling, accessibility, and RTL conventions in `src/components/AGENTS.md` when changing UI.
 - Keep documentation and instructions consistent with the implementation when changing a convention, route, locale, or environment variable.
@@ -35,7 +35,14 @@ These instructions apply to coding assistants of any model or editor. Read this 
 - `src/components/AGENTS.md`: React boundaries, styling, accessibility, theme, and RTL.
 - `src/lib/AGENTS.md`: shared helpers and canonical site metadata.
 - Read `.agents/skills/next-intl-i18n/SKILL.md` and only the relevant playbook before you add or change a locale, a message or plural, a formatted number, date, or list (including digits and calendars), RTL layout, the language switcher, the error page, or the proxy and routing config. `bun run i18n:check` validates the locale registry and dictionaries.
-- Read `.agents/skills/nextjs-i18n-seo/SKILL.md` and the relevant playbook before you touch hreflang, canonicals, the sitemap, `robots.ts`, JSON-LD, page metadata, product or blog pages, search analytics, or AI crawler policy, and before you answer a question about rankings, traffic, indexing, or Search Console. Its `scripts/verify-seo.mjs` checks alternates, canonicals, and sitemap agreement on a running site.
+- SEO is split into narrow skills in `.agents/skills/`. Read only the one that matches, and its relevant playbook:
+  - `nextjs-seo-technical`: not indexed, robots, sitemap, canonicals, redirects, status codes, page metadata, audits, launch checks. Its `scripts/verify-seo.mjs` checks alternates, canonicals, and sitemap agreement on a running site.
+  - `nextjs-seo-international`: hreflang, locale URLs, partial translation, translated metadata, market launches.
+  - `nextjs-seo-structured-data`: JSON-LD and rich results.
+  - `nextjs-seo-commerce`: product, category, variant, stock, currency, and feed pages.
+  - `nextjs-seo-content`: blog and article publishing, page copy, internal links, docs, SaaS, and local pages.
+  - `nextjs-seo-measurement`: Search Console, GA4, Bing, traffic drops.
+  - `nextjs-seo-ai-search`: AI citations, AI crawler policy in `robots.ts`, `llms.txt`.
 - `README.md`: human setup and implementation reference.
 - `public/llms.txt`: public project overview for tools that read it; it is secondary documentation, not an instruction source.
 - `.cursor/rules/`: optional Cursor adapters. The `AGENTS.md` files above are the canonical rules for every assistant.

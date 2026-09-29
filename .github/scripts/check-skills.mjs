@@ -8,6 +8,8 @@
 //     safe as an unquoted YAML value (no ": " or " #", which GitHub rejects)
 //   - SKILL.md stays under 500 lines
 //   - every relative markdown link resolves to a file, and every #anchor to a heading
+//   - no link leaves the skill folder, because an installed skill is copied alone
+//   - evals/evals.json parses, and a skill with trigger lists has both lists non-empty
 
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
@@ -85,11 +87,28 @@ for (const dirName of skillDirs) {
       if (/^(https?:|mailto:)/.test(link)) continue;
       const [path, anchor] = link.split("#");
       const target = path ? resolve(dirname(file), path) : file;
+      if (relative(join(root, dirName), target).startsWith("..")) {
+        fail(file, `link ${link} leaves the skill folder. Name the other skill in backticks instead`);
+        continue;
+      }
       if (!existsSync(target)) {
         fail(file, `broken link ${link}`);
       } else if (anchor && target.endsWith(".md") && !anchorsOf(target).has(anchor)) {
         fail(file, `broken anchor ${link}`);
       }
+    }
+  }
+
+  const evalsFile = join(root, dirName, "evals", "evals.json");
+  if (existsSync(evalsFile)) {
+    try {
+      const evals = JSON.parse(readFileSync(evalsFile, "utf8"));
+      if (evals.skill !== dirName) fail(evalsFile, `skill "${evals.skill}" must equal "${dirName}"`);
+      for (const key of ["should_trigger", "should_not_trigger"]) {
+        if (key in evals && !evals[key].length) fail(evalsFile, `${key} is empty`);
+      }
+    } catch (error) {
+      fail(evalsFile, `invalid JSON: ${error.message}`);
     }
   }
 }

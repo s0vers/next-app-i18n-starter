@@ -2,7 +2,7 @@
 
 Use when a request mentions AI Overviews, AI Mode, ChatGPT search, Claude, Perplexity, Copilot, answer engines, model crawlers, `llms.txt`, "GEO" or "AEO", or agents that browse and buy. These are separate systems. Name the product and the outcome before changing anything.
 
-Evidence tags: see [evidence and reporting](evidence-and-reporting.md).
+Evidence tags: see evidence and reporting (`nextjs-seo-technical`).
 
 Crawler tokens, policies, and `robots.ts` sketches are in [AI crawler reference](ai-crawler-reference.md).
 
@@ -84,7 +84,7 @@ One practitioner test found ChatGPT and Perplexity often linked English URLs for
 
 1. Logs: match user-agent tokens, then verify with the vendor's IP list or reverse DNS, because tokens are spoofable. Bucket training, search, and user-fetch. A crawl count is not visibility.
 2. Referrers: `chatgpt.com`, `perplexity.ai`, `claude.ai`, `copilot.microsoft.com`, `gemini.google.com`. Many AI clicks arrive with no referrer and land in Direct.
-3. GA4 has a default "AI Assistant" channel. Add a custom channel group for the rest. See [measurement](measurement.md).
+3. GA4 has a default "AI Assistant" channel. Add a custom channel group for the rest. See measurement (`nextjs-seo-measurement`).
 4. Search Console's Generative AI report and Bing AI Performance.
 5. Prompt sampling: a fixed prompt set per language, logged out, fresh sessions, repeated runs, and each cited URL and date recorded. Never read one miss as a code defect.
 

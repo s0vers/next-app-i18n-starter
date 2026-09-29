@@ -50,6 +50,6 @@ jobs:
             curl -sf http://localhost:3000/robots.txt > /dev/null && break
             sleep 2
           done
-          node .agents/skills/nextjs-i18n-seo/scripts/verify-seo.mjs \
+          node .agents/skills/nextjs-seo-technical/scripts/verify-seo.mjs \
             --base http://localhost:3000 \
             --origin "$NEXT_PUBLIC_SITE_URL"

@@ -1,0 +1,28 @@
+{
+  "skill": "nextjs-seo-measurement",
+  "note": "Run each prompt with the skill and with the previous version or no skill. Grade every assertion as pass or fail from the transcript and the resulting diff. A good assertion fails without the skill. should_trigger prompts must load this skill. should_not_trigger prompts are near misses that belong to another skill and must not load this one.",
+  "evals": [
+    {
+      "id": "traffic-drop",
+      "prompt": "Organic traffic to our Arabic pages dropped 40 percent last month. Why?",
+      "assertions": [
+        "Asks which report shows the drop and separates Search Console from GA4",
+        "Checks the Search Console data anomalies page and update dates",
+        "Segments by locale with a page regex, remembering the default locale has no prefix",
+        "Considers a tracking or consent change before blaming search",
+        "Names a cause class with a confidence level and says the answer is inconclusive if data is missing",
+        "Never adds Search Console clicks to GA4 sessions"
+      ]
+    }
+  ],
+  "should_trigger": [
+    "Organic traffic to our Arabic pages dropped 40 percent last month. Why?",
+    "Set up Search Console and GA4 for a multilingual site.",
+    "Our German locale gets zero impressions."
+  ],
+  "should_not_trigger": [
+    "Fix the canonical on /de.",
+    "Add product markup.",
+    "Do we show up in ChatGPT?"
+  ]
+}

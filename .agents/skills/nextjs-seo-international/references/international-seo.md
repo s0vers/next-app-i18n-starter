@@ -2,7 +2,7 @@
 
 Use when a task adds, changes, or audits locale routes, `hreflang`, language or country targeting, translated metadata, a locale switcher, or a market launch. A language switcher is a product feature. International SEO also needs the right audience, URL, content, and search intent per market.
 
-Evidence tags: see [evidence and reporting](evidence-and-reporting.md).
+Evidence tags: see evidence and reporting (`nextjs-seo-technical`).
 
 ## Gate: market or translation demo
 
@@ -118,7 +118,7 @@ A Vercel-hosted `/zh` mostly serves Simplified readers outside mainland China on
 
 ## Failure checks
 
-`node .agents/skills/nextjs-i18n-seo/scripts/verify-seo.mjs` covers invalid codes, missing self or return links, non-200 alternates, relative URLs, disagreeing sources, non-self canonicals, and redirects by language. For partial translation pass `--urls` with a full, a partial, and an untranslated page. It cannot judge these, so check them by hand:
+`node .agents/skills/nextjs-seo-technical/scripts/verify-seo.mjs` covers invalid codes, missing self or return links, non-200 alternates, relative URLs, disagreeing sources, non-self canonicals, and redirects by language. For partial translation pass `--urls` with a full, a partial, and an untranslated page. It cannot judge these, so check them by hand:
 
 | Failure | Check |
 | --- | --- |
@@ -129,6 +129,6 @@ A Vercel-hosted `/zh` mostly serves Simplified readers outside mainland China on
 
 ## Done when
 
-For each affected locale, the rendered body, `<html lang dir>`, title, description, canonical, alternates, sitemap entry, and switcher behavior agree, and a fluent reviewer checked meaning and market assumptions. Report which are verified in code, which on a live host, and which need Search Console. Hand off to `next-intl-i18n` for routing and messages, and to [structured data](structured-data.md) for localized JSON-LD.
+For each affected locale, the rendered body, `<html lang dir>`, title, description, canonical, alternates, sitemap entry, and switcher behavior agree, and a fluent reviewer checked meaning and market assumptions. Report which are verified in code, which on a live host, and which need Search Console. Hand off to `next-intl-i18n` for routing and messages, and to structured data (`nextjs-seo-structured-data`) for localized JSON-LD.
 
 Sources, checked 2026-09-30: [localized versions](https://developers.google.com/search/docs/specialty/international/localized-versions), [multi-regional sites](https://developers.google.com/search/docs/specialty/international/managing-multi-regional-sites), [locale-adaptive pages](https://developers.google.com/search/docs/specialty/international/locale-adaptive-pages), [spam policies](https://developers.google.com/search/docs/essentials/spam-policies), [crawlable links](https://developers.google.com/search/docs/crawling-indexing/links-crawlable), [Yandex locale pages](https://yandex.com/support/webmaster/en/yandex-indexing/locale-pages), [W3C language tags](https://www.w3.org/International/questions/qa-choosing-language-tags), [next-intl alternate links](https://next-intl.dev/docs/routing/configuration#alternate-links).
