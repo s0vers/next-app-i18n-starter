@@ -14,4 +14,13 @@ updates:
     groups:
       minor-and-patch:
         update-types: [minor, patch]
+    # Major bumps of the toolchain need eslint-config-next and Next.js to
+    # support them first. Upgrade these by hand and run `bun run check`.
+    ignore:
+      - dependency-name: eslint
+        update-types: ["version-update:semver-major"]
+      - dependency-name: typescript
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
     open-pull-requests-limit: 5
