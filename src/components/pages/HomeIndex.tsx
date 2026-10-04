@@ -1,4 +1,3 @@
-import type { ReactNode } from "react";
 import { Star } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 
@@ -66,10 +65,8 @@ function InstallationStep({
 
 export default function HomeIndex({
   starCount,
-  guide,
 }: {
   starCount: number | null;
-  guide: ReactNode;
 }) {
   const t = useTranslations("Index");
   const l = useTranslations("Localization");
@@ -215,7 +212,6 @@ export default function HomeIndex({
           </section>
         </div>
       </div>
-      {guide}
     </>
   );
 }

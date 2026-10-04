@@ -42,10 +42,8 @@ export default async function HomePage({
           dangerouslySetInnerHTML={{ __html: serializeJsonLd(websiteJsonLd) }}
         />
       )}
-      <HomeIndex
-        starCount={starCount}
-        guide={<SeoGuide locale={locale} />}
-      />
+      <HomeIndex starCount={starCount} />
+      <SeoGuide locale={locale} />
     </>
   );
 }
