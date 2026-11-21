@@ -23,9 +23,9 @@
     "@vercel/speed-insights": "^2.1.0",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.5.2",
-    "lucide-react": "^1.71.0",
+    "lucide-react": "^1.74.0",
     "next": "^16.4.6",
-    "next-intl": "4.14.10",
+    "next-intl": "4.15.1",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "server-only": "^0.0.1"
